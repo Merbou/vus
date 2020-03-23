@@ -12,5 +12,8 @@ Route::post('/register', "api\Auth\AuthController@register");
 
 Route::post('/login', "api\Auth\AuthController@login");
 
-// Route::middleware(['auth:api'])->group(function () {
-// });
+Route::middleware(['auth:api'])->group(function () {
+
+    Route::post("/mail-send/{id}", "api\mail\confirmationController@send");
+    Route::post("/mail-confirmation/{id}", "api\mail\confirmationController@confirm");
+});

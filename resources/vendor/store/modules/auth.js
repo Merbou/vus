@@ -61,7 +61,7 @@ export default {
                         commit("SET_TOKEN", response.token);
                         setToken(response.token);
                         commit("SET_USER", response.user);
-                        resolve()
+                        resolve(response.user.id)
                     })
                     .catch(error => {
                         reject(error);

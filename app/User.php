@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
-{ 
+{
     use Notifiable, HasApiTokens;
 
     /**
@@ -17,7 +17,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'username', 'email', 'password',
+        'username', 'email', 'password', "firstName",
+        'lastName',"phone","picture_path","sex","is_active"
     ];
 
     /**
@@ -37,4 +38,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function userActivation()
+    {
+        return $this->hasOne('App\userActivation');
+    }
 }

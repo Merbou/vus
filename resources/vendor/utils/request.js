@@ -8,8 +8,8 @@ import { getToken, setToken } from "@/utils/token"
 const service = axios.create({
     //set url MIX_BASE_API variable from .env   
     baseURL: process.env.MIX_BASE_API,
-    //timeout of request 3s
-    timeout: 3000
+    //timeout of request 10s
+    timeout: 10000
 })
 
  
@@ -23,7 +23,7 @@ service.interceptors.request.use(
         return config
 
     }, error => {
-        return Promise.reject(error)
+        return Promise.reject(error.response)
     })
 
 

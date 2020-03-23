@@ -8,6 +8,6 @@ export default {
             { path: '/register', view: 'auth/register/index' },
         ],
         // home: [{ path: '/home', view: 'home/index' }],
-        welcome: [{path: '/', view: 'layout/index', name: "welcome" }]
+        welcome: [{ path: '/', view: 'layout/index', name: "welcome" }]
     },
 }

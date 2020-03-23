@@ -30,5 +30,7 @@ return [
     'max_age' => false,
 
     'supports_credentials' => false,
+    
+    'Access-Control-Expose-Headers' => ['X-My-Custom-Header', 'X-Another-Custom-Header']
 
 ];
