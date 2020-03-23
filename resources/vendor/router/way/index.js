@@ -37,9 +37,10 @@ export default class way {
         const init_ro = this._ro.init || [],
             public_ro = this._ro.public || [],
             auth_ro = this._ro.auth || [],
-            private_ro = this._ro.private || []
+            private_ro = this._ro.private || [],
+            welcome_ro = this._ro.welcome || []
 
-        return [...init_ro, ...public_ro, ...auth_ro, ...private_ro]
+        return [...init_ro, ...public_ro, ...auth_ro, ...private_ro, ...welcome_ro]
     }
 
     public() {
@@ -52,7 +53,12 @@ export default class way {
         return this._ro.private || []
     }
     home() {
-        return config && config.home
+        let __home = this._ro.home || []
+        return [...__home].pop()
+    }
+    welcome() {
+        let __welcome = this._ro.welcome || []
+        return [...__welcome].pop()
     }
 
     pathPublic() {

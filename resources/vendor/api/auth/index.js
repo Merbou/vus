@@ -18,3 +18,10 @@ export function register(data) {
     })
 }
 
+export function userInfo() {
+    return request({
+        url: "/user",
+        method: "get",
+    })
+}
+
