@@ -17,3 +17,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post("/mail-send/{id}", "api\mail\confirmationController@send");
     Route::post("/mail-confirmation/{id}", "api\mail\confirmationController@confirm");
 });
+
+Route::middleware(['auth:api', 'verified'])->group(function () {
+    Route::get("/users-account", "api\user\handleAccountController@index");
+    Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
+
+});

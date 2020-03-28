@@ -7,31 +7,99 @@ use Illuminate\Http\Request;
 use App\Mail\mailConfirmation;
 use Illuminate\Support\Facades\Mail;
 use App\User;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-use function Psy\debug;
+
 
 class confirmationController extends Controller
 {
+
+
+
+
     public function send($id)
     {
 
-        $user = User::findOrfail($id);
-        $userActivation = $user->userActivation()->create([
-            'code' => rand(10000, 9999999),
-        ]);
+        try {
 
-        Mail::to(User::findOrfail($id))->send(new mailConfirmation($userActivation->code));
 
-        return  response()->json(204);
+
+            $user = User::where('id', $id)->with('userActivation')->first();
+
+
+            //create activation Code for a secifique user
+            //if a reedy exit assignment a new code activation Code
+            $code = $this->setActiviationCode($user);
+
+
+
+            Mail::to($user)->send(new mailConfirmation($code));
+
+
+
+            return  response()->json(202);
+        } catch (ModelNotFoundException $e) {
+
+
+
+            return response()->json($e, 400);
+        }
     }
+
+
+
+
+
+
 
     public function confirm($id, Request $request)
     {
 
-        $user = User::where('id',$id)->with('userActivation')->first();
-         if ($user->userActivation->code == $request->code) {
-            $user->email_verified_at = now();
-            return  response()->json(204);
-        } else return  response()->json(406);
+        try {
+
+
+
+            $user = User::where('id', $id)->with('userActivation')->first();
+
+
+
+            if ($user->userActivation->code == $request->code) {
+
+
+
+                $user->email_verified_at = now();
+
+
+                $user->save();
+
+
+                return  response()->json(204);
+            } else throw new Exception("code activation not acceptable !");
+        } catch (Exception $e) {
+
+
+
+
+            return response()->json($e, 406);
+        }
+    }
+
+
+
+
+
+
+    private function setActiviationCode($user)
+    {
+
+
+
+        return $user->userActivation()->updateOrCreate(
+
+            ['user_id' => $user->id],
+            ['code' => rand(10000, 9999999)],
+
+        )->code;
     }
 }

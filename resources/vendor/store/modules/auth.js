@@ -1,6 +1,6 @@
 'use strict';
 import { getToken, setToken, removeToken } from "@/utils/token"
-import { login, register,userInfo } from "@/api/auth"
+import { login, register, userInfo } from "@/api/auth"
 import { isEmpty } from "lodash"
 export default {
     state: {
@@ -76,17 +76,21 @@ export default {
          */
 
         userInfo: ({ commit, state }) => {
-            if (isEmpty(state.user))
-                return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => {
+                if (isEmpty(state.user)) {
+
                     userInfo()
                         .then(response => {
                             commit("SET_USER", response);
-                            resolve()
+                            resolve(response)
                         })
                         .catch(error => {
                             reject(error);
                         })
-                });
+                }
+                else resolve(state.user)
+
+            });
         },
 
 

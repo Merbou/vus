@@ -6,7 +6,7 @@
       autocomplete="on"
       v-on:keyup.enter="validate"
     >
-      <v-card max-width="400" class="mx-auto" :loading="loading">
+      <v-card max-width="400" class="mx-auto" :loading="loading" :disabled="loading">
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
             <div>Login</div>
@@ -26,6 +26,7 @@
                   v-model="RegisterForm.email"
                   :error-messages="errorRender(errors,BackErrors.email)"
                   :success="(valid)?null:valid"
+                  :loading="loading"
                   label="Email"
                   outlined
                   required
@@ -43,6 +44,7 @@
                   v-model="RegisterForm.username"
                   :error-messages="errorRender(errors,BackErrors.username)"
                   :success="(valid)?null:valid"
+                  :loading="loading"
                   label="Pseudo"
                   outlined
                   required
@@ -61,6 +63,7 @@
                   v-model="RegisterForm.password"
                   :error-messages="errorRender(errors,BackErrors.password)"
                   :success="(valid)?null:valid"
+                  :loading="loading"
                   :counter="30"
                   label="password"
                   @click:append="show = !show"
@@ -80,6 +83,7 @@
                             valid
                         }"
                   outlined
+                  :loading="loading"
                   v-model="RegisterForm.password_configuration"
                   :error-messages="errorRender(errors,BackErrors.password_configuration)"
                   :success="(valid)?null:valid"
@@ -97,7 +101,7 @@
         <v-card-actions>
           <v-layout>
             <v-flex xs12 md12 lg12 sm12 class="text-right">
-              <v-btn class="ma-2 white--text" color="blue" @click="validate">login</v-btn>
+              <v-btn class="ma-2 white--text" color="blue" @click="validate">Register</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
@@ -148,8 +152,6 @@ export default {
         .dispatch("register", this.RegisterForm)
         .then(id => {
           this.loading = false;
-          debugger;
-          this.sendMail(id);
           this.$router.push({ path: "/mail-confirmation" });
         })
         .catch(error => {
@@ -158,17 +160,6 @@ export default {
             Object.assign(this.BackErrors, error.data.errors);
           } else if (error && error.status == 401) {
           }
-        });
-    },
-    sendMail(id) {
-      this.loading = true;
-      this.$store;
-      send(id)
-        .then(response => {
-          this.loading = false;
-        })
-        .catch(error => {
-          this.loading = false;
         });
     },
     async validate() {

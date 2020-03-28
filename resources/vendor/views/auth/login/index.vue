@@ -6,7 +6,7 @@
       autocomplete="on"
       v-on:keyup.enter="validate"
     >
-      <v-card max-width="400" class="mx-auto" :loading="loading">
+      <v-card max-width="400" class="mx-auto" :loading="loading" :disabled="loading">
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
             <div>Login</div>
@@ -19,6 +19,7 @@
               <ValidationProvider name="email" rules="email|required">
                 <v-text-field
                   outlined
+                  :loading="loading"
                   autocomplete="on"
                   slot-scope="{
                             errors,
@@ -45,6 +46,7 @@
                   :error-messages="errorRender(errors,BackErrors.password)"
                   :success="(valid)?null:valid"
                   label="password"
+                  :loading="loading"
                   @click:append="show = !show"
                   :append-icon="show ? 'visibility' : 'visibility_off'"
                   :type="show ? 'text' : 'password'"
@@ -53,14 +55,12 @@
             </v-flex>
           </v-layout>
         </v-card-text>
-        <v-card-actions>
-          <v-layout>
-            <v-flex xs12 md12 lg12 sm12 class="text-right">
-              <v-btn class="ma-2 white--text" color="blue" @click="validate">login</v-btn>
-            </v-flex>
-          </v-layout>
+        <v-card-actions class="d-flex justify-space-between">
+          <v-btn text small>
+            <router-link to="/register">Register</router-link>
+          </v-btn>
+          <v-btn class="ma-2 white--text" color="blue" @click="validate">login</v-btn>
         </v-card-actions>
-        <router-link to="/">Hello WORLD</router-link>
       </v-card>
     </ValidationObserver>
   </div>
@@ -104,14 +104,16 @@ export default {
         .dispatch("login", this.loginForm)
         .then(response => {
           this.loading = false;
-           this.$router.push({ path:"/" });
+          this.$router.push({ path: "/" });
         })
         .catch(error => {
           this.loading = false;
           if (error && error.status == 422) {
             Object.assign(this.BackErrors, error.data.errors);
-          } else if (error && error.status == 401) {
+          } else if (error && error.status == 403) {
+            alert("email or password is wrong!")
           }
+          
         });
     },
     async validate() {

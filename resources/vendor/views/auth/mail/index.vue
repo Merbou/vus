@@ -1,7 +1,7 @@
 <template>
   <div>
     <ValidationObserver ref="form" class="container" autocomplete="on" v-on:keyup.enter="validate">
-      <v-card max-width="400" class="mx-auto" :loading="loading">
+      <v-card max-width="400" class="mx-auto" :loading="loading" :disabled="loading">
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
             <div>Activation</div>
@@ -13,6 +13,7 @@
             <v-flex xs12 md12 lg12 sm12>
               <ValidationProvider name="code" rules="integer|required">
                 <v-text-field
+                  :loading="loading"
                   outlined
                   autocomplete="on"
                   slot-scope="{errors}"
@@ -25,13 +26,9 @@
             </v-flex>
           </v-layout>
         </v-card-text>
-        <v-card-actions>
-          <v-layout>
-            <v-flex xs12 md12 lg12 sm12 justify-space-around align-self-end>
-              <v-btn class="ma-2 white--text" color="blue" @click="sendMail">Resend</v-btn>
-              <v-btn class="ma-2 white--text" color="blue" @click="validate">Verifie</v-btn>
-            </v-flex>
-          </v-layout>
+        <v-card-actions class="d-flex justify-space-between">
+          <v-btn text small @click="sendMail">Resend</v-btn>
+          <v-btn class="ma-2 white--text" color="blue" @click="validate">Verifie</v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>
@@ -39,19 +36,15 @@
 </template>
 
 <script>
-import {
-  ValidationObserver,
-  ValidationProvider,
-  withValidation
-} from "vee-validate";
+import { ValidationObserver, ValidationProvider } from "vee-validate";
 import { integer } from "../validate";
 import { confirm, send } from "@/api/mail";
+import { mapGetters } from "vuex";
 export default {
   name: "confirmation",
   components: {
     ValidationObserver,
-    ValidationProvider,
-    withValidation
+    ValidationProvider
   },
 
   data() {
@@ -65,11 +58,20 @@ export default {
       loading: false
     };
   },
+
+  mounted() {
+    this.sendMail();
+  },
+
+  computed: {
+    ...mapGetters(["user"])
+  },
+
   methods: {
     confirmation() {
       this.loading = true;
-      const id = this.$store.getters.user.id;
-      confirm(id)
+      const id = this.user.id;
+      confirm(id,this.form.code)
         .then(response => {
           this.loading = false;
           this.$router.push({ path: "/home" });
@@ -83,10 +85,8 @@ export default {
         });
     },
     sendMail() {
-      const id = this.$store.getters.user.id;
-
+      const id = this.user.id;
       this.loading = true;
-      this.$store;
       send(id)
         .then(response => {
           this.loading = false;

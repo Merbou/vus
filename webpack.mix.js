@@ -10,7 +10,6 @@ const mix = require('laravel-mix');
 
 
 
-
 mix.webpackConfig({
    resolve: {
       extensions: ['.js', '.vue', '.json'],

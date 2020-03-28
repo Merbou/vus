@@ -10,9 +10,12 @@ export function send(id) {
     })
 }
 
-export function confirm(id) {
+export function confirm(id, code) {
     return request({
         url: `/mail-confirmation/${id}`,
-        method: "post"
+        method: "post",
+        data: {
+            code
+        }
     })
 }

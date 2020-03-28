@@ -9,7 +9,7 @@ const service = axios.create({
     //set url MIX_BASE_API variable from .env   
     baseURL: process.env.MIX_BASE_API,
     //timeout of request 10s
-    timeout: 10000
+    timeout: 30000
 })
 
  
@@ -39,6 +39,5 @@ service.interceptors.response.use(response => {
 }, error => {
     return Promise.reject(error.response)
 })
-
 
 export default service;
