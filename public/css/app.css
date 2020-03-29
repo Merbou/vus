@@ -30,12 +30,10 @@ var map = {
 		0
 	],
 	"./user/account": [
-		"./resources/vendor/api/user/account.js",
-		2
+		"./resources/vendor/api/user/account.js"
 	],
 	"./user/account.js": [
-		"./resources/vendor/api/user/account.js",
-		2
+		"./resources/vendor/api/user/account.js"
 	]
 };
 function webpackAsyncContext(req) {

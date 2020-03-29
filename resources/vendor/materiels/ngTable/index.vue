@@ -1,13 +1,21 @@
 <template>
   <v-container>
-    <structure :headers="headers" :response="response" @renderData="fetchData" :loading="loading">
-      <slot></slot>
+    <structure
+      ref="_str"
+      :headers="headers"
+      :response="response"
+      @renderData="fetchData"
+      :loading="loading"
+    >
+      <template v-for="header in headers" v-slot:[header.value]="{ item }">
+        <slot :name="header.value" :item="item"></slot>
+      </template>
     </structure>
   </v-container>
 </template>
 
 <script>
-import structure from "./structure";
+import structure from "./component/structure";
 
 export default {
   name: "materielTable",
@@ -54,13 +62,16 @@ export default {
     renderApiFunction() {
       //import dynamically api Functions
       //useing asyn function import
-      import("../../../api/" + this.modulePath).then(_m => {
+      import("../../api/" + this.modulePath).then(_m => {
         //save names of api function
         this.apiFunctionsKeys = Object.keys(_m);
         //save api function
         this.apiFunctions = _m;
         this.fetchData();
       });
+    },
+    getData() {
+      return this.$refs._str.getData();
     }
   }
 };

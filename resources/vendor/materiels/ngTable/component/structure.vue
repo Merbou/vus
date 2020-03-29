@@ -29,13 +29,10 @@
           hide-default-footer
           :search="search"
         >
-          <template slot="items" slot-scope="props">
-            <td v-for="header in headers" :key="header.value">
-              <p v-if="header.value=='is_active'">true</p>
-            </td>
+          <template v-for="header in headers" v-slot:[itemCase(header.value)]="{ item }">
+            <slot :item="item" :name="header.value">{{item[header.value]}}</slot>
           </template>
         </v-data-table>
-
         <div class="text-center pt-2">
           <v-container>
             <v-pagination
@@ -109,6 +106,12 @@ export default {
           Response.last_page *
           parseInt(countItem / this.pagination.itemsPerPage);
       }
+    },
+    itemCase(value) {
+      return `item.${value}`;
+    },
+    getData(){
+      return this.data
     }
   }
 };
