@@ -14,12 +14,32 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <script>
 import ngTable from "@/materiels/ngTable";
 import { blockUserApi } from "@/api/user/account";
 
 export default {
   components: { ngTable },
+
   data() {
     return {
       headers: [
@@ -28,7 +48,7 @@ export default {
           align: "left",
           value: "email"
         },
-        { text: "name", value: "name" },
+        { text: "name", value: "username" },
         { text: "creationDate", value: "created_at" },
         {
           text: "accountVerified",
@@ -45,6 +65,7 @@ export default {
       data: []
     };
   },
+
   methods: {
     blockItem(item) {
       const editedIndex = this.getData().indexOf(item);

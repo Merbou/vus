@@ -7,7 +7,10 @@ export default {
             { path: '/login', view: 'auth/login/index' },
             { path: '/register', view: 'auth/register/index' },
         ],
-        // home: [{ path: '/home', view: 'home/index' }],
+        mail: [{ path: '/mail-confirmation', view: 'auth/mail/index' },
+        ],
+        
         welcome: [{ path: '/', view: 'layout/index', name: "welcome" }]
     },
+    home: { path: '/home', view: 'home/index', name: "dashboard" },
 }

@@ -14,9 +14,19 @@ NProgress.configure({ showSpinner: true });
 async function privateField(to, form, next) {
     return new Promise(async (resolve, reject) => {
         const res = await store.dispatch("userInfo")
-        if (to.path == "/mail-confirmation") {
-            if (res.email_verified_at) resolve({ path: "/home" });
-        }
+
+        if (res.email_verified_at) {
+
+            store.dispatch("initRoutes", route.closeRoutes())
+
+            const mail = route.mail()
+            if (to.path == mail.path) {
+
+                resolve({ path: "/home" })
+            };
+
+        } else resolve({ path: mail.path });
+
         reject()
     })
 
@@ -50,7 +60,7 @@ router.beforeEach((to, from, next) => {
 
 
 
-        if (route.pathPrivate().indexOf(to.path) > -1) {
+        if (route.pathClose().indexOf(to.path) > -1) {
             ///AUTH ROUTES
 
 
