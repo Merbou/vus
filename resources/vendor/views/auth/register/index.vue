@@ -117,7 +117,6 @@ import {
   withValidation
 } from "vee-validate";
 import { required, email, min, confirmed } from "../validate";
-import { send } from "@/api/mail";
 
 export default {
   name: "Login",
@@ -152,7 +151,7 @@ export default {
         .dispatch("register", this.RegisterForm)
         .then(id => {
           this.loading = false;
-          this.$router.push({ path: "/mail-confirmation" });
+          this.$router.push({ path: "/mail-confirmation" }).catch(err => {});
         })
         .catch(error => {
           this.loading = false;

@@ -15,17 +15,22 @@ async function privateField(to, form, next) {
     return new Promise(async (resolve, reject) => {
         const res = await store.dispatch("userInfo")
 
+        const mail = route.mail()
         if (res.email_verified_at) {
-
             store.dispatch("initRoutes", route.closeRoutes())
 
-            const mail = route.mail()
             if (to.path == mail.path) {
 
-                resolve({ path: "/home" })
+                //redirection to your path
+                resolve({ path: "/dashboard" })
             };
 
-        } else resolve({ path: mail.path });
+        } else {
+
+            if (to.path !== mail.path) {
+                resolve({ path: mail.path });
+            }else resolve()
+        }
 
         reject()
     })
@@ -49,15 +54,11 @@ router.beforeEach((to, from, next) => {
 
             } else next()
         })
-        NProgress.done()
     } else {
 
 
 
         ///PUBLIC ROUTES 
-
-
-
 
 
         if (route.pathClose().indexOf(to.path) > -1) {
@@ -68,7 +69,6 @@ router.beforeEach((to, from, next) => {
             next("/login")
         } else next()
 
-        NProgress.done()
 
     }
 

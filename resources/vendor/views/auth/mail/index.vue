@@ -27,7 +27,7 @@
           </v-layout>
         </v-card-text>
         <v-card-actions class="d-flex justify-space-between">
-          <v-btn text small @click="sendMail">Resend</v-btn>
+          <v-btn text small @click="sendMail(true)">Resend</v-btn>
           <v-btn class="ma-2 white--text" color="blue" @click="validate">Verifie</v-btn>
         </v-card-actions>
       </v-card>
@@ -60,7 +60,7 @@ export default {
   },
 
   mounted() {
-    this.sendMail();
+    this.sendMail(false);
   },
 
   computed: {
@@ -71,10 +71,13 @@ export default {
     confirmation() {
       this.loading = true;
       const id = this.user.id;
-      confirm(id,this.form.code)
+      confirm(id, this.form.code)
         .then(response => {
+          
           this.loading = false;
-          this.$router.push({ path: "/home" });
+          this.$store.dispatch("mailVerifed", response).then(() => {
+            this.$router.push({ path: "/home" }).catch(err => {});
+          });
         })
         .catch(error => {
           this.loading = false;
@@ -84,10 +87,10 @@ export default {
           }
         });
     },
-    sendMail() {
+    sendMail(resend) {
       const id = this.user.id;
       this.loading = true;
-      send(id)
+      send(id,resend)
         .then(response => {
           this.loading = false;
         })
@@ -110,5 +113,3 @@ export default {
   }
 };
 </script>
- 
- 

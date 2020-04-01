@@ -3,10 +3,13 @@
 
 import request from "@/utils/request";
 
-export function send(id) {
+export function send(id, resend) {
     return request({
         url: `/mail-send/${id}`,
-        method: "post"
+        method: "post",
+        data: {
+            resend
+        }
     })
 }
 

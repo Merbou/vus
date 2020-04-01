@@ -9,8 +9,9 @@ export default {
         ],
         mail: [{ path: '/mail-confirmation', view: 'auth/mail/index' },
         ],
-        
-        welcome: [{ path: '/', view: 'layout/index', name: "welcome" }]
+
+        welcome: [{ path: '/', view: 'welcome/index', name: "welcome" }],
     },
-    home: { path: '/home', view: 'home/index', name: "dashboard" },
+
+    layout: { view: 'layout/index', is_layout: true },
 }

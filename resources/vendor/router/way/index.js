@@ -35,12 +35,15 @@ export default class way {
     */
     routeCase(routes) {
         return routes.map(_ro => {
-            //if compenent need Adoption of layout
-            if (_ro.layout) _ro = this.homeAdoption(_ro)
-            
+
+            if (_ro.is_layout) return;
+            //Me:Layout if compenent need Adoption then adopte him PLS
+            if (_ro.withLayout) _ro = this.layoutAdoption(_ro)
+
             return {
                 path: _ro.path.toLowerCase(),
                 redirect: _ro.redirect,
+                is_layout: !!_ro.is_layout,
                 name: _ro.name,
                 component: () => import(`@/views/${_ro.view}.vue`),
                 children: _ro.children && this.routeCase(_ro.children)
@@ -52,18 +55,21 @@ export default class way {
      * layout Adoption of child 
      * @param {object} _ro 
      */
-    homeAdoption(_ro) {
-        const { layout, ...child } = _ro
+    layoutAdoption(_ro) {
+        const { withLayout, ...child } = _ro
 
-        const _ro_temp = config && config.home
+        const _ro_temp = Object.assign({}, config && config.layout)
 
-        _ro_temp["children"] = [child]
+        _ro_temp.path = child.path
+        _ro_temp["children"] = [{ ...child }]
+        _ro_temp["children"].path = "index"
+
 
         return _ro_temp
     }
 
     /**
-     * upload route of confing file 
+     * upload route of confing file
      */
     init() {
         let initRoutes = config && config.routes
@@ -106,16 +112,7 @@ export default class way {
      * return object VueRouter according to close middleware
      */
     closeRoutes() {
-        console.log(this._ro.close)
-        return this._ro.close || []
-    }
-    /**
-     * return object VueRouter according to home middleware
-     */
-    home() {
-        // let __home = this._ro.home || []
-        // return [...__home].pop()
-        return config && config.home
+        return this._ro.close.map(e => { return (e.is_layout && e.children.length) ? [...e.children].pop() : e }) || []
     }
     /**
      * return object VueRouter according to mail middleware
@@ -135,8 +132,10 @@ export default class way {
     /**
      * return string path according to open middleware
      */
-    pathOpen() {
-        return this.openRoutes().map(e => {
+    pathOpen(_ro) {
+        const _rs = _ro || this.auth()
+
+        return this._rs.map(e => {
             e.children = e.children && this.pathopen(e.children)
             return e.path
         }) || []
@@ -144,8 +143,9 @@ export default class way {
     /**
      * return string path according to Auth middleware
      */
-    pathAuth() {
-        return this.auth().map(e => {
+    pathAuth(_ro) {
+        const _rs = _ro || this.auth()
+        return _rs.map(e => {
             e.children = e.children && this.pathAuth(e.children)
             return e.path
         }) || []
@@ -153,8 +153,9 @@ export default class way {
     /**
      * return string path according to close middleware
      */
-    pathClose() {
-        return this.closeRoutes().map(e => {
+    pathClose(_ro) {
+        const _rs = _ro || this.closeRoutes()
+        return _rs.map(e => {
             e.children = e.children && this.pathclose(e.children)
             return e.path
         }) || []

@@ -13,26 +13,6 @@
 </template>   
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <script>
 import ngTable from "@/materiels/ngTable";
 import { blockUserApi } from "@/api/user/account";

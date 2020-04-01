@@ -104,7 +104,7 @@ export default {
         .dispatch("login", this.loginForm)
         .then(response => {
           this.loading = false;
-          this.$router.push({ path: "/" });
+          this.$router.push({ path: "/home" }).catch(err => {});
         })
         .catch(error => {
           this.loading = false;

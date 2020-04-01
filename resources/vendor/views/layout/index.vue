@@ -1,12 +1,21 @@
 <template>
   <div>
-    <router-link to="/login">Login</router-link>
+    <side-bar :key="'sideBar'" />
+    <nav-bar />
+    <v-content>
+      <app-main :key="'appMain'" />
+    </v-content>
   </div>
 </template>
 
 <script>
-export default {};
-</script>
-
-<style>
-</style>
+import { appMain, navBar, sideBar } from "./component/";
+export default {
+  components: {
+    appMain,
+    sideBar,
+    navBar
+  },
+  name: "home"
+};
+</script> 

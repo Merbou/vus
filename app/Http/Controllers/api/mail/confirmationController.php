@@ -18,14 +18,16 @@ class confirmationController extends Controller
 
 
 
-    public function send($id)
+    public function send($id, Request $request)
     {
 
         try {
 
 
-
             $user = User::where('id', $id)->with('userActivation')->first();
+            //resend a code only if request is resend Code or is first send code  
+            if ($this->ifUserHasMailCode($request->resend, $user))
+                return  response()->json(202);
 
 
             //create activation Code for a secifique user
@@ -50,6 +52,11 @@ class confirmationController extends Controller
 
 
 
+    private function ifUserHasMailCode($resend, $user)
+    {
+        if (!$resend && ($user->userActivation) ? $user->userActivation->code : false)
+            return true;
+    }
 
 
 
@@ -74,7 +81,7 @@ class confirmationController extends Controller
                 $user->save();
 
 
-                return  response()->json(204);
+                return  response()->json(["email_verified_at" => $user->email_verified_at], 200);
             } else throw new Exception("code activation not acceptable !");
         } catch (Exception $e) {
 

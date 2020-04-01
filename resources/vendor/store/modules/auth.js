@@ -13,6 +13,9 @@ export default {
         },
         SET_USER: (state, user) => {
             state.user = user
+        },
+        SE_EMAIL_VERIFIED: (state, email_verified_at) => {
+            state.user.email_verified_at = email_verified_at
         }
     },
     actions: {
@@ -90,6 +93,21 @@ export default {
                 }
                 else resolve(state.user)
 
+            });
+        },
+
+
+        /**
+         * @param {callback}
+         * 
+         * @param null  
+         */
+
+        mailVerifed: ({ commit }, { email_verified_at }) => {
+
+            return new Promise((resolve) => {
+                commit("SE_EMAIL_VERIFIED", email_verified_at);
+                resolve()
             });
         },
 
