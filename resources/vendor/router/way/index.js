@@ -45,7 +45,7 @@ export default class way {
                 redirect: _ro.redirect,
                 is_layout: !!_ro.is_layout,
                 name: _ro.name,
-                component: () => import(`@/views/${_ro.view}.vue`),
+                component: () => import(`@/views/${this.ComponentAdoption(_ro)}.vue`),
                 children: _ro.children && this.routeCase(_ro.children)
             }
         })
@@ -67,6 +67,29 @@ export default class way {
 
         return _ro_temp
     }
+    /**
+     * layout Adoption of child 
+     * @param {object} _ro 
+     */
+    ComponentAdoption(_ro) {
+        let view
+
+        try {
+
+            if (_ro.withLayout) {
+                if (!_ro.view && _ro.children)
+                    view = config && config.layout && config.layout.view
+            } else
+                view = _ro.view
+
+            if (!view) throw new Error()
+
+            return view
+        } catch (error) {
+            return "layout/index"
+        }
+    }
+
 
     /**
      * upload route of confing file
