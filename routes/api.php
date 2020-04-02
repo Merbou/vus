@@ -21,5 +21,6 @@ Route::middleware(['auth:api'])->group(function () {
 Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get("/users-account", "api\user\handleAccountController@index");
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
+    Route::get("/count-account", "api\user\chartAccountController@count");
 
 });

@@ -10,7 +10,8 @@ export default new way(function () {
 
     this.route("close", [
         { path: '/dashboard', view: 'dashboard/index', name: "dashboard", withLayout: true },
-        { path: '/users', view: 'user/account/index', name: "user", withLayout: true }
+        { path: '/users', view: 'user/account/table', name: "user", withLayout: true },
+        { path: '/chart', view: 'user/account/chart', name: "chart", withLayout: true }
     ])
 
 }) 

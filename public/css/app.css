@@ -34,6 +34,14 @@ var map = {
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js"
+	],
+	"./user/chart": [
+		"./resources/vendor/api/user/chart.js",
+		2
+	],
+	"./user/chart.js": [
+		"./resources/vendor/api/user/chart.js",
+		2
 	]
 };
 function webpackAsyncContext(req) {
