@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <structure
+      :select="select"
       ref="_str"
       :headers="headers"
       :response="response"
@@ -9,6 +10,9 @@
     >
       <template v-for="header in headers" v-slot:[header.value]="{ item }">
         <slot :name="header.value" :item="item"></slot>
+      </template>
+      <template v-slot:top="{selected}">
+        <slot name="top" :selected="selected"></slot>
       </template>
     </structure>
   </v-container>
@@ -28,6 +32,10 @@ export default {
     modulePath: {
       type: String,
       required: true
+    },
+    select: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -62,7 +70,7 @@ export default {
     renderApiFunction() {
       //import dynamically api Functions
       //useing asyn function import
-      import("../../api/" + this.modulePath).then(_m => {
+      import("@/api/" + this.modulePath).then(_m => {
         //save names of api function
         this.apiFunctionsKeys = Object.keys(_m);
         //save api function
@@ -72,6 +80,9 @@ export default {
     },
     getData() {
       return this.$refs._str.getData();
+    },
+    setSelected($array) {
+      this.$refs._str.setSelected($array);
     }
   }
 };

@@ -45,6 +45,7 @@ export default class way {
                 redirect: _ro.redirect,
                 is_layout: !!_ro.is_layout,
                 name: _ro.name,
+                icon: _ro.icon,
                 component: () => import(`@/views/${this.ComponentAdoption(_ro)}.vue`),
                 children: _ro.children && this.routeCase(_ro.children)
             }

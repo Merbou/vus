@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ngChart :series="series" :loading="loading" />
+    <ngChart :series="series" type="line" :loading="loading" />
   </div>
 </template>
 

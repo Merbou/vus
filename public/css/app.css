@@ -13,35 +13,53 @@ var map = {
 	"./auth/index.js": [
 		"./resources/vendor/api/auth/index.js"
 	],
+	"./contact": [
+		"./resources/vendor/api/contact/index.js",
+		0
+	],
+	"./contact/": [
+		"./resources/vendor/api/contact/index.js",
+		0
+	],
+	"./contact/index": [
+		"./resources/vendor/api/contact/index.js",
+		0
+	],
+	"./contact/index.js": [
+		"./resources/vendor/api/contact/index.js",
+		0
+	],
 	"./mail": [
 		"./resources/vendor/api/mail/index.js",
-		0
+		1
 	],
 	"./mail/": [
 		"./resources/vendor/api/mail/index.js",
-		0
+		1
 	],
 	"./mail/index": [
 		"./resources/vendor/api/mail/index.js",
-		0
+		1
 	],
 	"./mail/index.js": [
 		"./resources/vendor/api/mail/index.js",
-		0
+		1
 	],
 	"./user/account": [
-		"./resources/vendor/api/user/account.js"
+		"./resources/vendor/api/user/account.js",
+		3
 	],
 	"./user/account.js": [
-		"./resources/vendor/api/user/account.js"
+		"./resources/vendor/api/user/account.js",
+		3
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		2
+		4
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		2
+		4
 	]
 };
 function webpackAsyncContext(req) {

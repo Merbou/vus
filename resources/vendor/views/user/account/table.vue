@@ -29,7 +29,7 @@ export default {
           value: "email"
         },
         { text: "name", value: "username" },
-        { text: "creationDate", value: "created_at" },
+        { text: "creation date", value: "created_at" },
         {
           text: "accountVerified",
           value: "email_verified_at"

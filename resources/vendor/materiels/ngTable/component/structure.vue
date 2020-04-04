@@ -20,6 +20,7 @@
           <v-text-field v-model="search" label="search" single-line hide-details></v-text-field>
         </v-card-title>
         <v-data-table
+          v-model="selected"
           :headers="headers"
           :items="data"
           :items-per-page="pagination.itemsPerPage"
@@ -28,9 +29,13 @@
           :page.sync="pagination.page"
           hide-default-footer
           :search="search"
+          :show-select="select"
         >
           <template v-for="header in headers" v-slot:[itemCase(header.value)]="{ item }">
             <slot :item="item" :name="header.value">{{item[header.value]}}</slot>
+          </template>
+          <template  v-slot:top>
+            <slot :selected="selected" name="top"></slot>
           </template>
         </v-data-table>
         <div class="text-center pt-2">
@@ -62,6 +67,10 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    select: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -74,7 +83,8 @@ export default {
       },
       search: "",
       editedIndex: -1,
-      data: []
+      data: [],
+      selected: [],
     };
   },
   watch: {
@@ -110,8 +120,11 @@ export default {
     itemCase(value) {
       return `item.${value}`;
     },
-    getData(){
-      return this.data
+    getData() {
+      return this.data;
+    },
+    setSelected($array) {
+      this.selected=$array;
     }
   }
 };
