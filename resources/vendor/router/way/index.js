@@ -160,7 +160,7 @@ export default class way {
         const _rs = _ro || this.auth()
 
         return this._rs.map(e => {
-            e.children = e.children && this.pathopen(e.children)
+            // e.children = e.children && this.pathopen(e.children)
             return e.path
         }) || []
     }
@@ -170,7 +170,7 @@ export default class way {
     pathAuth(_ro) {
         const _rs = _ro || this.auth()
         return _rs.map(e => {
-            e.children = e.children && this.pathAuth(e.children)
+            // e.children = e.children && this.pathAuth(e.children)
             return e.path
         }) || []
     }
@@ -180,7 +180,7 @@ export default class way {
     pathClose(_ro) {
         const _rs = _ro || this.closeRoutes()
         return _rs.map(e => {
-            e.children = e.children && this.pathclose(e.children)
+            // e.children = e.children && this.pathClose(e.children)
             return e.path
         }) || []
     }

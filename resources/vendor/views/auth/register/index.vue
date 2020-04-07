@@ -67,7 +67,7 @@
                   :counter="30"
                   label="password"
                   @click:append="show = !show"
-                  :append-icon="show ? 'visibility' : 'visibility_off'"
+                  :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
                 ></v-text-field>
               </ValidationProvider>
@@ -91,7 +91,7 @@
                   :counter="30"
                   label="password configuration"
                   @click:append="show = !show"
-                  :append-icon="show ? 'visibility' : 'visibility_off'"
+                  :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
                 ></v-text-field>
               </ValidationProvider>

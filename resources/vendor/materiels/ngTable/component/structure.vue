@@ -3,18 +3,6 @@
     <v-flex xl12 sm12 xs12>
       <v-card :loading="loading">
         <v-card-title>
-          <v-slider
-            class="mt-5 pt-5"
-            v-model="pagination.itemsPerPage"
-            :value="pagination.itemsPerPage"
-            color="success"
-            label="items Per Page"
-            min="5"
-            step="5"
-            max="100"
-            thumb-label
-          ></v-slider>
-
           <v-spacer></v-spacer>
 
           <v-text-field v-model="search" label="search" single-line hide-details></v-text-field>
@@ -23,18 +11,18 @@
           v-model="selected"
           :headers="headers"
           :items="data"
-          :items-per-page="pagination.itemsPerPage"
+          :items-per-page="50"
           class="elevation-1"
-          @page-count="pagination.pageCount = $event"
           :page.sync="pagination.page"
           hide-default-footer
           :search="search"
           :show-select="select"
         >
+          <!-- @page-count="pagination.pageCount = $event" -->
           <template v-for="header in headers" v-slot:[itemCase(header.value)]="{ item }">
             <slot :item="item" :name="header.value">{{item[header.value]}}</slot>
           </template>
-          <template  v-slot:top>
+          <template v-slot:top>
             <slot :selected="selected" name="top"></slot>
           </template>
         </v-data-table>
@@ -43,7 +31,7 @@
             <v-pagination
               v-model="pagination.page"
               :length="pagination.pageCount"
-              @input="onPageChange"
+              @input="onPageChange(pagination.page)"
             ></v-pagination>
           </v-container>
         </div>
@@ -79,12 +67,14 @@ export default {
         Backpage: 1,
         page: 1,
         pageCount: 0,
-        itemsPerPage: 20
+        perPage: 0,
+        itemsPerPage: 50,
+        totla: 0
       },
       search: "",
       editedIndex: -1,
       data: [],
-      selected: [],
+      selected: []
     };
   },
   watch: {
@@ -93,28 +83,20 @@ export default {
     }
   },
   methods: {
-    onPageChange() {
-      let Varientpage = parseInt(
-        this.data.length / this.pagination.itemsPerPage
-      );
-
-      if (this.pagination.page >= Varientpage) {
-        this.pagination.Backpage++;
-        this.$emit("renderData", this.pagination.Backpage);
-      }
+    onPageChange(page) {
+      if (page <= this.pagination.last_page) this.$emit("renderData", page);
     },
 
     initData(Response) {
       if (Response.current_page <= Response.last_page) {
-        var countItem = this.data.length;
-        var table = this.data.concat(Response.data);
-        this.data = table;
-        this.pagination.page =
-          Response.current_page +
-          parseInt(countItem / this.pagination.itemsPerPage);
-        this.pagination.pageCount =
-          Response.last_page *
-          parseInt(countItem / this.pagination.itemsPerPage);
+        let { data, ...res } = Response;
+
+        this.pagination = Object.assign(this.pagination, res);
+        this.data = this.data.concat(data);
+
+        this.pagination.pageCount = Math.round(
+          this.pagination.total / this.pagination.itemsPerPage + 0.4
+        );
       }
     },
     itemCase(value) {
@@ -124,7 +106,7 @@ export default {
       return this.data;
     },
     setSelected($array) {
-      this.selected=$array;
+      this.selected = $array;
     }
   }
 };

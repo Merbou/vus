@@ -5,10 +5,24 @@ import { isEmpty } from "lodash"
 export default {
     state: {
         routes: [],
+        dialog: {
+            open: false,
+            value: false,
+            message: "Message",
+            title: "Title",
+            accepte: "Ok",
+            cancel: "Cancel",
+        }
     },
     mutations: {
         SET_ROUTES: (state, routes) => {
             state.routes = routes
+        },
+        SET_DIALOG: (state, dialog) => {
+            state.dialog = Object.assign(state.dialog, dialog)
+        },
+        TOGGLE_DIALOG: (state, opVal) => {
+            state.dialog = Object.assign(state.dialog, opVal)
         },
     },
     actions: {
@@ -25,6 +39,33 @@ export default {
             commit('SET_ROUTES', RoutesBrokes(routes))
 
         },
+
+        /**
+         * Store dialog Object
+         * @param {callback}
+         * 
+         * @param {Object} routes 
+         */
+
+        initDialog({ commit }, dialog) {
+
+            commit('SET_DIALOG', dialog)
+
+        },
+
+
+        /**
+         * Store toggleDialog Object
+         * @param {callback}
+         * 
+         * @param {Object} routes 
+         */
+
+        toggleDialog({ commit }, opVal) {
+            commit('TOGGLE_DIALOG', opVal)
+        },
+
+
 
 
 

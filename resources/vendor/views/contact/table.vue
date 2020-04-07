@@ -1,18 +1,7 @@
 <template>
   <div>
-    <v-dialog v-model="dialogDelete" max-width="290">
-      <v-card>
-        <v-card-title>delete Message</v-card-title>
+    <dialog-contact :dialog="showContent" :item="item" @close="closeDialog" />
 
-        <v-card-actions>
-          <div class="flex-grow-1"></div>
-
-          <v-btn color="secondary" @click="deleteItems">Yes</v-btn>
-
-          <v-btn color="warning " @click="dialogDelete = false">No</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <ng-table :headers="headers" :modulePath="modulePath" ref="table" :select="true">
       <template v-slot:top="{selected}">
         <v-tooltip top>
@@ -20,7 +9,7 @@
             <v-icon
               color="error"
               class="ml-4 mt-4"
-              v-show="selected && selected.length>0"
+              :disabled="!(selected && selected.length>0)"
               @click="ShowDeleteItem(selected)"
               v-on="on"
               depressed
@@ -62,14 +51,14 @@
       </template>
     </ng-table>
   </div>
-</template>   
-
-
+</template>
 <script>
+import dialogContact from "./component/dialogContact";
 import ngTable from "@/materiels/ngTable";
 import { deleteContactsApi, readContactApi } from "@/api/contact";
+import { mapGetters } from "vuex";
 export default {
-  components: { ngTable },
+  components: { ngTable, dialogContact },
   data() {
     return {
       headers: [
@@ -90,11 +79,19 @@ export default {
       modulePath: "contact/index.js",
       item: {},
       editedIndex: -1,
-      dialogDelete: false,
+      showContent: false,
       selected: []
     };
   },
-
+  mounted() {
+    this.initDialog();
+  },
+  computed: {
+    ...mapGetters(["dialog"]),
+    value() {
+      return this.dialog.value;
+    }
+  },
   methods: {
     readContact(item) {
       item.vu = 1;
@@ -106,13 +103,16 @@ export default {
     },
     readItem(item, type) {
       this.readContact(item);
-      this.editedIndex = this.getData().indexOf(item);
+      // this.editedIndex = this.getData().indexOf(item);
       this.item = item;
-      this.dialog = true;
+      this.showContent = true;
+    },
+    closeDialog() {
+      this.showContent = false;
     },
     ShowDeleteItem(selected) {
       this.selected = selected;
-      this.dialogDelete = true;
+      this.$store.dispatch("toggleDialog", { open: true,value:false });
     },
     deleteItems() {
       var ids = this.selected.map(item => item.id);
@@ -142,6 +142,19 @@ export default {
     },
     setSelected($array) {
       this.$refs.table.setSelected($array);
+    },
+    initDialog() {
+      this.$store.dispatch("initDialog", {
+        message: "Are you sure to delete this contact",
+        title: "Are you sure !",
+        accepte: "Yes",
+        cancel: "Cancel"
+      });
+    }
+  },
+  watch: {
+    value(val) {
+      if (val) this.deleteItems();
     }
   }
 };

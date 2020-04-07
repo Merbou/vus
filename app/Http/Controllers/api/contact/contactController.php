@@ -20,7 +20,7 @@ class contactController extends Controller
         try {
 
             $contacts = contact::where("to", Auth::id())->orderBy('created_at', 'asc')
-                ->paginate(100);
+                ->paginate(50);
 
             return response()->json($contacts, 206);
         } catch (ModelNotFoundException $e) {
