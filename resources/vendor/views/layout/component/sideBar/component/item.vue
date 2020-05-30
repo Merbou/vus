@@ -2,7 +2,7 @@
   <router-link style="text-decoration: none;" :to="item.path">
     <v-list-item>
       <v-list-item-icon>
-        <v-icon>{{item.icon}}</v-icon>
+        <v-icon>fas fa-{{item.icon}}</v-icon>
       </v-list-item-icon>
 
       <v-list-item-content>

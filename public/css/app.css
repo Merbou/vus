@@ -15,51 +15,51 @@ var map = {
 	],
 	"./contact": [
 		"./resources/vendor/api/contact/index.js",
-		0
+		1
 	],
 	"./contact/": [
 		"./resources/vendor/api/contact/index.js",
-		0
+		1
 	],
 	"./contact/index": [
 		"./resources/vendor/api/contact/index.js",
-		0
+		1
 	],
 	"./contact/index.js": [
 		"./resources/vendor/api/contact/index.js",
-		0
+		1
 	],
 	"./mail": [
 		"./resources/vendor/api/mail/index.js",
-		1
+		2
 	],
 	"./mail/": [
 		"./resources/vendor/api/mail/index.js",
-		1
+		2
 	],
 	"./mail/index": [
 		"./resources/vendor/api/mail/index.js",
-		1
+		2
 	],
 	"./mail/index.js": [
 		"./resources/vendor/api/mail/index.js",
-		1
+		2
 	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		3
+		6
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		3
+		6
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		4
+		7
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		4
+		7
 	]
 };
 function webpackAsyncContext(req) {

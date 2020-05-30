@@ -5,7 +5,7 @@
         <v-list-item-title>{{item.name | upperCaseFirst}}</v-list-item-title>
       </v-list-item-content>
       <v-list-item-icon>
-        <v-icon>{{item.icon}}</v-icon>
+        <v-icon>fas fa-{{item.icon}}</v-icon>
       </v-list-item-icon>
     </template>
 
@@ -18,7 +18,7 @@
       <v-list-item>
         <v-list-item-title>{{child.name | upperCaseFirst}}</v-list-item-title>
         <v-list-item-icon>
-          <v-icon>{{child.icon}}</v-icon>
+          <v-icon>fas fa-{{child.icon}}</v-icon>
         </v-list-item-icon>
       </v-list-item>
     </router-link>

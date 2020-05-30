@@ -16,3 +16,14 @@ export function blockUserApi(id) {
         method: "put",
     })
 }
+
+
+export function updateUserApi(data){
+    return request({
+        url:`update-user`,
+        method:'post',
+        data,
+        headers: { 'Content-Type': 'multipart/form-data' }
+
+    });
+}

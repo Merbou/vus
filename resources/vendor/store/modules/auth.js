@@ -95,6 +95,16 @@ export default {
 
             });
         },
+        /**
+         * @param {callback}
+         * 
+         * @param null  
+         */
+
+        setInfo: ({ commit }, data) => {
+            commit("SET_USER", data);
+
+        },
 
 
         /**

@@ -25,6 +25,8 @@ class AuthController extends Controller
 
         $user = $this->createWithHashing($request->all());
 
+        
+        $user->picture_path = $this->SetInitAvatar();
 
         // Creating a token
         $access_token = $user->createToken('access_token')->accessToken;
@@ -50,7 +52,7 @@ class AuthController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function login(Request $request)
+    public function login(loginRequest $request)
     {
 
 
@@ -58,7 +60,7 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
 
-        
+
         if (!\Auth::attempt($credentials)) {
 
 
@@ -75,7 +77,7 @@ class AuthController extends Controller
         $access_token = $user->createToken('access_token')->accessToken;
 
 
-        
+
         return response()->json(["user" => $user, "token" => $access_token], 200);
     }
 
@@ -97,5 +99,12 @@ class AuthController extends Controller
 
 
         return $user;
+    }
+
+
+    private function SetInitAvatar()
+    {
+        $root_path_avatar = config("auth.avatars");
+        return "$root_path_avatar/man.png";
     }
 }

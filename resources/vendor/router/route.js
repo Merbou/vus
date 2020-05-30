@@ -9,14 +9,15 @@ export default new way(function () {
      */
 
     this.route("close", [
-        { path: '/dashboard', view: 'dashboard/index', name: "dashboard", withLayout: true,icon:"fas fa-tachometer-alt" },
+        { path: '/dashboard', view: 'dashboard/index', name: "dashboard", withLayout: true, icon: "tachometer-alt" },
         {
-            path: '/users', name: "users",icon:"fas fa-users", children: [
-                { path: '/table', view: 'user/account/table', name: "table", icon:"fas fa-table"},
-                { path: '/chart', view: 'user/account/chart', name: "chart", icon:"fas fa-chart-line" }
+            path: '/users', name: "users", icon: "users", children: [
+                { path: '/table', view: 'user/account/table', name: "table", icon: "table" },
+                { path: '/chart', view: 'user/account/chart', name: "chart", icon: "chart-line" }
             ]
         },
-        { path: '/contacts', view: 'contact/table', name: "contacts",  withLayout: true ,icon:"fas fa-inbox"}
+        { path: '/contacts', view: 'contact/table', name: "contacts", withLayout: true, icon: "inbox" },
+        { path: '/setting', view: 'setting/index', name: "setting", withLayout: true, icon: "cogs" }
 
     ])
 

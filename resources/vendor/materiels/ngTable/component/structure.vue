@@ -92,7 +92,7 @@ export default {
         let { data, ...res } = Response;
 
         this.pagination = Object.assign(this.pagination, res);
-        this.data = this.data.concat(data);
+        this.data = this.data=data;
 
         this.pagination.pageCount = Math.round(
           this.pagination.total / this.pagination.itemsPerPage + 0.4

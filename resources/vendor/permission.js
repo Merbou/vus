@@ -40,6 +40,7 @@ async function privateField(to, form, next) {
 
 router.beforeEach((to, from, next) => {
     NProgress.start()
+
     if (getToken()) {
 
         ///PRIVATE ROUTES

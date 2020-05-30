@@ -12,7 +12,7 @@ const service = axios.create({
     timeout: 30000
 })
 
- 
+
 //config before request is handling
 service.interceptors.request.use(
     config => {
@@ -36,8 +36,8 @@ service.interceptors.response.use(response => {
         response.data.token = response.headers.Authorization
     }
     return response.data
-}, error => {
-    return Promise.reject(error.response)
-})
+    }, error => {
+        return Promise.reject(error.response)
+    })
 
 export default service;

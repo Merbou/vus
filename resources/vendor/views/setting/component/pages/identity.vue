@@ -1,0 +1,123 @@
+<template>
+  <v-card :loading="loading" :disabled="loading">
+    <v-card-text>
+      <v-col wrap>
+        <div xs12 md12 lg12 sm12>
+          <ValidationProvider name="lastname" rules="alpha_dash">
+            <v-text-field
+              @change="fireInfo"
+              slot-scope="{
+                            errors,
+                            valid
+                        }"
+              v-model="form.lastname"
+              :error-messages="errors"
+              @update:error="firePage(errors)"
+              :success="form.lastname?valid:null"
+              label="lastname"
+              outlined
+            ></v-text-field>
+          </ValidationProvider>
+        </div>
+        <div xs12 md12 lg12 sm12>
+          <ValidationProvider name="firstname" rules="alpha_dash">
+            <v-text-field
+              @change="fireInfo"
+              slot-scope="{
+                            errors,
+                            valid
+                        }"
+              v-model="form.firstname"
+              :error-messages="errors"
+              @update:error="firePage(errors)"
+              :success="form.firstname?valid:null"
+              label="firstname"
+              outlined
+            ></v-text-field>
+          </ValidationProvider>
+        </div>
+        <div xs12 md12 lg12 sm12>
+          <ValidationProvider name="username" rules="alpha_dash">
+            <v-text-field
+              @change="fireInfo"
+              slot-scope="{
+                            errors,
+                            valid
+                        }"
+              v-model="form.username"
+              :error-messages="errors"
+              @update:error="firePage(errors)"
+              :success="form.username?valid:null"
+              label="username"
+              outlined
+            ></v-text-field>
+          </ValidationProvider>
+        </div>
+      </v-col>
+    </v-card-text>
+  </v-card>
+</template>
+
+<script>
+import { confirmed, alpha_dash } from "../../validate";
+
+import { ValidationProvider } from "vee-validate";
+
+export default {
+  name: "identity",
+  components: {
+    ValidationProvider
+  },
+  props: {
+    user: {
+      type: Object
+    },
+    loading: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      form: {
+        lastname: "",
+        firstname: "",
+        username: ""
+      },
+      show: false
+    };
+  },
+  mounted() {
+    this.initform(this.user);
+  },
+  methods: {
+    fireInfo() {
+      this.$emit("fireInfo", {
+        lastname: this.form.lastname,
+        firstname: this.form.firstname,
+        username: this.form.username
+      });
+    },
+    initform(form) {
+      this.form.lastname = form.lastname;
+      this.form.firstname = form.firstname;
+      this.form.username = form.username;
+    },
+    firePage(error) {
+      if (error.length) this.$emit("alarm", true);
+      else this.$emit("alarm", false);
+      return error;
+    }
+  },
+  watch: {
+    user(val) {
+      this.initform(val);
+    }
+  }
+};
+</script>
+
+<style>
+</style>
+<style>
+</style>
