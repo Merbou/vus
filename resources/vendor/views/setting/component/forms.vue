@@ -23,7 +23,13 @@
               ></personal-information>
             </v-tab-item>
             <v-tab-item value="tab-2">
-              <passwd @alarm="handleAlarm" @fireInfo="assignForm" :user="user" :loading="loading"></passwd>
+              <passwd
+                @alarm="handleAlarm"
+                :errors="errors&&errors.password?errors.password:[]"
+                @fireInfo="assignForm"
+                :user="user"
+                :loading="loading"
+              ></passwd>
             </v-tab-item>
           </v-tabs-items>
         </v-tabs>
@@ -34,7 +40,7 @@
           <file-form
             @processFile="setAvatar"
             :picture_path="form.picture_path"
-            :errors="!is_empty(errors)?errors.avatar:[]"
+            :errors="errors&&errors.avatar?errors.avatar:[]"
             :loading="loading"
           />
         </v-row>
@@ -115,8 +121,8 @@ export default {
     handleAlarm(bool) {
       this.alarm = bool;
     },
-    is_empty(val){
-      return isEmpty(val)
+    is_empty(val) {
+      return isEmpty(val);
     }
   },
   watch: {

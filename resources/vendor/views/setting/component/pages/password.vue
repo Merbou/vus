@@ -2,7 +2,33 @@
   <v-card raised :disabled="loading" :loading="loading">
     <v-card-text>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider name="password" vid="password" ref="password" rules="min:8|alpha_dash">
+        <ValidationProvider name="last_password" rules="min:8|alpha_dash">
+          <v-text-field
+            slot-scope="{
+                            errors,
+                            valid
+                        }"
+            outlined
+            v-model="form.last_password"
+            @change="fireInfo"
+            @update:error="firePage(errors)"
+            :error-messages="errors_d?errors_d:errors"
+            :success="form.last_password?valid:null"
+            :counter="30"
+            label="Password"
+            @click:append="show = !show"
+            :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
+            :type="show ? 'text' : 'password'"
+          ></v-text-field>
+        </ValidationProvider>
+      </v-flex>
+      <v-flex xs12 md12 lg12 sm12>
+        <ValidationProvider
+          name="New password"
+          vid="password"
+          ref="password"
+          rules="min:8|alpha_dash"
+        >
           <v-text-field
             slot-scope="{
                             errors,
@@ -15,7 +41,7 @@
             :error-messages="errors"
             :success="form.password?valid:null"
             :counter="30"
-            label="Password"
+            label="New password"
             @click:append="show = !show"
             :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
             :type="show ? 'text' : 'password'"
@@ -66,22 +92,26 @@ export default {
     loading: {
       type: Boolean,
       default: false
+    },
+    errors: {
+      type: Array,
+      default: []
     }
   },
   data() {
     return {
       form: {
+        last_password: "",
         password: "",
-        new_password: "",
         password_confirmation: ""
       },
       show: false,
-      rule: "",
+      errors_d: []
     };
   },
   computed: {
     _c_rule() {
-      return this.rule + "|";
+      return this.form.password ? "required|" : "";
     }
   },
   mounted() {
@@ -89,29 +119,32 @@ export default {
   },
   methods: {
     fireInfo() {
-      if (this.form.password) this.rule = "required";
+      this.errors_d = [];
+
       this.$emit("fireInfo", {
+        last_password: this.form.last_password,
         password: this.form.password,
         password_confirmation: this.form.password_confirmation
       });
     },
     initform(form) {
+      this.form.last_password = form.last_password;
       this.form.password = form.password;
       this.form.password_confirmation = form.password_confirmation;
     },
     firePage(error) {
-      if (error.length) this.$emit("alarm",true)
-      else this.$emit("alarm",false)
+      if (error.length) this.$emit("alarm", true);
+      else this.$emit("alarm", false);
       return error;
     }
   },
   watch: {
     user(val) {
       this.initform(val);
+    },
+    errors(val) {
+      this.errors_d = val;
     }
   }
 };
 </script>
-
-<style>
-</style>

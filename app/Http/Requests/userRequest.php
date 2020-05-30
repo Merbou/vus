@@ -56,9 +56,12 @@ class userRequest extends FormRequest
             $array['sex'] = 'boolean';
 
         if ($this->avatar)
-            $array['avatar'] = 'mimes:jpeg,jpg,png | max:900';
+            $array['avatar'] = 'image | max:900';
 
-        if ($this->password)
+        // if ($this->new_password)
+        //     $array['password'] = 'confirmed | min:8 | string';
+
+            if ($this->password)
             $array['password'] = 'confirmed | min:8 | string';
 
 

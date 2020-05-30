@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Http\Requests\userRequest;
 use \Auth;
+use Hash;
 
 
 class handleAccountController extends Controller
@@ -94,9 +95,12 @@ class handleAccountController extends Controller
                     $user->sex = $request->sex;
             }
 
-            if ($request->password)
-                $user->password = bcrypt($request->password);
-
+            if ($request->password) {
+                if (Hash::check($request->last_password, $user->password)) {
+                    $user->password = bcrypt($request->password);
+                } else
+                    return response()->json(["errors" => ["password" => ["password does not match"]]], 422);
+            }
 
             $user->save();
             return response()->json($user, 200);

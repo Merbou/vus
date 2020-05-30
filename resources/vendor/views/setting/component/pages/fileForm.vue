@@ -1,5 +1,10 @@
 <template>
-  <v-card raised style="border-radius: 50%;" class="mb-2" :color="errors_d.length?'red lighten-1':''">
+  <v-card
+    raised
+    style="border-radius: 50%;"
+    class="mb-2"
+    :color="errors_d.length?'red lighten-1':''"
+  >
     <v-avatar size="110" class="ma-1">
       <v-img
         @click="launchFilePicker()"
@@ -65,7 +70,7 @@ export default {
   data() {
     return {
       url: "",
-      errors_d:[]
+      errors_d: []
     };
   },
   computed: {
@@ -82,15 +87,20 @@ export default {
       this.$refs.avatar.click();
     },
     processFile(event, errors) {
-      this.errors_d=[]
+      this.errors_d = [];
+
       const file = event.target.files[0];
-      this.url = URL.createObjectURL(file);
+
+      if (this.getExten(file) === "image") this.url = URL.createObjectURL(file);
       this.$emit("processFile", event.target.files[0]);
+    },
+    getExten(file) {
+      return file.type.split("/")[0];
     }
   },
-  watch:{
-    errors(val){
-      this.errors_d=val
+  watch: {
+    errors(val) {
+      this.errors_d = val;
     }
   }
 };

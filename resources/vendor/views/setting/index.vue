@@ -15,7 +15,7 @@ export default {
     return {
       loading: false,
       userInfo: {},
-      errors:{}
+      errors: {}
     };
   },
   computed: {
@@ -35,7 +35,8 @@ export default {
         })
         .catch(rej => {
           this.loading = false;
-          this.errors=rej.data.errors
+          this.errors = rej && rej.data && rej.data.errors;
+
         });
     },
     initUser(data) {
