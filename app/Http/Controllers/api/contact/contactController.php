@@ -19,7 +19,7 @@ class contactController extends Controller
     {
         try {
 
-            $contacts = contact::where("to", Auth::id())->orderBy('created_at', 'asc')
+            $contacts = contact::where([["to", Auth::id()], ["deleted", 0]])->orderBy('created_at', 'asc')
                 ->paginate(50);
 
             return response()->json($contacts, 206);
@@ -39,8 +39,9 @@ class contactController extends Controller
     {
         try {
 
-            if (contact::destroy($request->ids))
-                return response()->json(204);
+            $contacts = contact::whereIn('id', $request->ids)->update(['deleted' => 1]);
+
+            return response()->json(204);
         } catch (ModelNotFoundException $e) {
             return response()->json($e, 404);
         }

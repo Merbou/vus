@@ -29,4 +29,9 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get("/contacts", "api\contact\contactController@index");
     Route::delete("/destroy-contacts", "api\contact\contactController@destroy");
     Route::put("/contact/{id}", "api\contact\contactController@read");
+
+    //Trash
+    Route::get("/trash-contacts", "trash\contactController@index");
+    Route::delete("/trash-contacts/trash", "trash\contactController@destroy");
+    Route::post("/trash-contacts/recycle", "trash\contactController@recycle");
 });

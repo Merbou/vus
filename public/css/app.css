@@ -45,21 +45,29 @@ var map = {
 		"./resources/vendor/api/mail/index.js",
 		2
 	],
+	"./trash/contact": [
+		"./resources/vendor/api/trash/contact.js",
+		7
+	],
+	"./trash/contact.js": [
+		"./resources/vendor/api/trash/contact.js",
+		7
+	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		6
+		8
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		6
+		8
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		7
+		9
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		7
+		9
 	]
 };
 function webpackAsyncContext(req) {

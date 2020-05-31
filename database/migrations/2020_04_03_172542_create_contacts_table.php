@@ -23,6 +23,8 @@ class CreateContactsTable extends Migration
             $table->text('description')->nullable();
             $table->boolean('vu')->default(0);
             $table->string('type')->nullable();
+            $table->boolean("deleted")->default(0);
+
 
 
             $table->foreign('to')->references('id')->on('users');

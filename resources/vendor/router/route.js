@@ -17,7 +17,8 @@ export default new way(function () {
             ]
         },
         { path: '/contacts', view: 'contact/table', name: "contacts", withLayout: true, icon: "inbox" },
-        { path: '/setting', view: 'setting/index', name: "setting", withLayout: true, icon: "cogs" }
+        { path: '/setting', view: 'setting/index', name: "setting", withLayout: true, icon: "cogs" },
+        { path: '/trash', view: 'trash/index', name: "trash", withLayout: true, icon: "trash" },
 
     ])
 

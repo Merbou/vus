@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
-use App\User;
 use Illuminate\Support\Facades\DB;
 
 

@@ -13,5 +13,6 @@ class contact extends Model
         "description",
         "vu",
         "type",
+        "deleted"
     ];
 }
