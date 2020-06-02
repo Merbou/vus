@@ -9,7 +9,7 @@ import getters from "./getters";
 Vue.use(Vuex);
 
 const opts = {
-    modules: { auth,app },
+    modules: { auth, app },
     getters
 }
 

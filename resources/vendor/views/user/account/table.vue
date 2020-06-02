@@ -9,6 +9,23 @@
       <v-chip @click="blockItem(item)" v-if="item.is_active" color="green" dark>yes</v-chip>
       <v-chip @click="blockItem(item)" v-else color="red" dark>no</v-chip>
     </template>
+
+    <template v-slot:is_active="{item}">
+      <v-chip @click="blockItem(item)" v-if="item.is_active" color="green" dark>yes</v-chip>
+      <v-chip @click="blockItem(item)" v-else color="red" dark>no</v-chip>
+    </template>
+    <template v-slot:fullname="{item}">{{item.lastname}} {{item.firstname}}</template>
+
+    <template v-slot:sex="{item}">
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-icon v-on="on" v-if="item.sex">fas fa-male</v-icon>
+          <v-icon v-on="on" v-else>fas fa-female</v-icon>
+        </template>
+        <span v-if="item.sex">Man</span>
+        <span v-else>Woman</span>
+      </v-tooltip>
+    </template>
   </ng-table>
 </template>   
 
@@ -28,7 +45,9 @@ export default {
           align: "left",
           value: "email"
         },
-        { text: "name", value: "username" },
+        { text: "username", value: "username" },
+        { text: "Full name", value: "fullname" },
+        { text: "sex", value: "sex" },
         { text: "creation date", value: "created_at" },
         {
           text: "accountVerified",

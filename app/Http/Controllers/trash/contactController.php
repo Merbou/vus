@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\contact;
 use Auth;
+
 class contactController extends Controller
 {
     /**
@@ -16,10 +17,14 @@ class contactController extends Controller
     public function index()
     {
 
-        $contacts = contact::where([["to", auth::id()], ["deleted", 1]])->orderBy('created_at', 'asc')
-            ->paginate(50);
+        try {
+            $contacts = contact::where([["to", auth::id()], ["deleted", 1]])->orderBy('created_at', 'asc')
+                ->paginate(50);
 
-        return response()->json($contacts, 200);
+            return response()->json($contacts, 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json($e, 400);
+        }
     }
 
     /**
@@ -37,7 +42,7 @@ class contactController extends Controller
 
             return response()->json(204);
         } catch (ModelNotFoundException $e) {
-            return response()->json($e, 404);
+            return response()->json($e, 400);
         }
     }
 
@@ -54,7 +59,7 @@ class contactController extends Controller
             if (contact::destroy($request->ids))
                 return response()->json(204);
         } catch (ModelNotFoundException $e) {
-            return response()->json($e, 404);
+            return response()->json($e, 400);
         }
     }
 }

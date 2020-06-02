@@ -24,7 +24,7 @@ class contactController extends Controller
 
             return response()->json($contacts, 206);
         } catch (ModelNotFoundException $e) {
-            return response()->json($e, 404);
+            return response()->json($e, 400);
         }
     }
 
@@ -43,7 +43,7 @@ class contactController extends Controller
 
             return response()->json(204);
         } catch (ModelNotFoundException $e) {
-            return response()->json($e, 404);
+            return response()->json($e, 400);
         }
     }
 
@@ -64,7 +64,7 @@ class contactController extends Controller
             if (contact::find($id)->update(["vu" => 1]))
                 return response()->json(204);
         } catch (ModelNotFoundException $e) {
-            return response()->json($e, 404);
+            return response()->json($e, 400);
         }
     }
 }

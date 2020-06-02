@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api\user;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Database\QueryException;
 
 class chartAccountController extends Controller
 {
@@ -21,8 +21,8 @@ class chartAccountController extends Controller
                 });
 
             return response()->json($users_created, 206);
-        } catch (ModelNotFoundException $e) {
-            return response()->json($e, 404);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
         }
     }
 }

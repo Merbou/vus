@@ -13,7 +13,7 @@
       v-for="(child, i) in item.children"
       :key="i"
       style="text-decoration: none;"
-      :to="child.path"
+      :to="item.path+'/'+child.path"
     >
       <v-list-item>
         <v-list-item-title>{{child.name | upperCaseFirst}}</v-list-item-title>

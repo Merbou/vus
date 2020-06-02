@@ -18,9 +18,13 @@
           :search="search"
           :show-select="select"
         >
-          <!-- @page-count="pagination.pageCount = $event" -->
           <template v-for="header in headers" v-slot:[itemCase(header.value)]="{ item }">
-            <slot :item="item" :name="header.value">{{item[header.value]}}</slot>
+            <slot
+              v-if="header.value!='created_at'"
+              :item="item"
+              :name="header.value"
+            >{{item[header.value]}}</slot>
+            <slot v-else :item="item" :name="header.value">{{pareDate(item[header.value])}}</slot>
           </template>
           <template v-slot:top>
             <slot :selected="selected" name="top"></slot>
@@ -41,6 +45,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   name: "structure",
   props: {
@@ -72,7 +77,6 @@ export default {
         totla: 0
       },
       search: "",
-      editedIndex: -1,
       data: [],
       selected: []
     };
@@ -92,12 +96,15 @@ export default {
         let { data, ...res } = Response;
 
         this.pagination = Object.assign(this.pagination, res);
-        this.data = this.data=data;
+        this.data = this.data = data;
 
         this.pagination.pageCount = Math.round(
           this.pagination.total / this.pagination.itemsPerPage + 0.4
         );
       }
+    },
+    pareDate(date) {
+      return moment(date).format("YYYY MM DD LT");
     },
     itemCase(value) {
       return `item.${value}`;

@@ -132,13 +132,28 @@ export default class way {
     auth() {
         return this._ro.auth || []
     }
+
+    PermissionsRoutes(_permissions, roles, superAdmin) {
+
+        const _routes = this.closeRoutes()
+
+        if (roles.indexOf(superAdmin) > -1) return _ro_close
+
+        return PdropRoutes(_routes, _permissions)
+
+    }
+
     /**
      * return object VueRouter according to close middleware
      */
     closeRoutes() {
-        return this._ro.close.map(e => { return (e.is_layout && e.children.length) ? [...e.children].pop() : e }) || []
+
+        return this._ro.close.map(e => {
+            return (e.is_layout && e.children.length) ? [...e.children].pop() : e
+        }) || []
+
     }
-    /**
+    /** 
      * return object VueRouter according to mail middleware
      */
     mail() {
@@ -190,3 +205,23 @@ export default class way {
 }
 
 
+function PdropRoutes(_routes, _permissions) {
+
+    return _routes.map(_ro => {
+        if (_ro.children) {
+            const child_perm = _permissions.
+                filter(e => e.split(".")[0] == _ro.name)
+                .map(e => e.split(".").slice(1).join("."))
+
+            const children = PdropRoutes(_ro.children, child_perm)
+            if (children) {
+                _ro.children = children
+                return _ro
+            }
+        }
+        else
+            if (_permissions.indexOf(_ro.name) > -1) return _ro
+
+    }).filter(e => e)
+
+}

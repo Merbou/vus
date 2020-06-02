@@ -1,10 +1,11 @@
 'use strict';
 
 import { isEmpty } from "lodash"
-
+import { sidebar, setSidebar } from "@/utils/sidebar"
 export default {
     state: {
         routes: [],
+        sidebar: sidebar(),
         dialog: {
             open: false,
             value: false,
@@ -23,6 +24,11 @@ export default {
         },
         TOGGLE_DIALOG: (state, opVal) => {
             state.dialog = Object.assign(state.dialog, opVal)
+        },
+        TOGGLE_SIDEBAR: (state) => {
+            state.sidebar = state.sidebar ? 0 : 1
+            setSidebar(state.sidebar)
+
         },
     },
     actions: {
@@ -63,6 +69,19 @@ export default {
 
         toggleDialog({ commit }, opVal) {
             commit('TOGGLE_DIALOG', opVal)
+        },
+
+
+        /**
+         * toggle sideBar
+         * @param {callback}
+         * 
+         * @param None 
+         */
+
+        toggleSideBar({ commit }) {
+            commit('TOGGLE_SIDEBAR')
+
         },
 
 

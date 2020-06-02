@@ -1,5 +1,5 @@
 <template>
-  <v-navigation-drawer app dark width="200" v-model="open" class="side-bar">
+  <v-navigation-drawer app dark width="200" v-model="state" class="side-bar">
     <ng-list :items="routes" />
   </v-navigation-drawer>
 </template>
@@ -14,11 +14,23 @@ export default {
   },
   data() {
     return {
-      open: true,
+      state: 0
     };
   },
   computed: {
-    ...mapGetters(["routes"])
+    ...mapGetters(["routes", "sidebar"]),
+    stateSidebar(){
+      return this.sidebar
+    }
+  },
+  created() {
+    this.state = this.sidebar;
+  },
+  watch: {
+    stateSidebar(val) {
+      this.state=this.sidebar
+      this.state = val;
+    }
   }
 };
 </script>

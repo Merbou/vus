@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\registerRequest;
 use App\Http\Requests\Auth\loginRequest;
 use App\User;
+use Auth;
+
 
 
 class AuthController extends Controller
@@ -24,7 +26,7 @@ class AuthController extends Controller
 
         $user = $this->createWithHashing($request->all());
 
-        
+
         $user->picture_path = $this->SetInitAvatar();
 
         // Creating a token
@@ -60,7 +62,7 @@ class AuthController extends Controller
 
 
 
-        if (!\Auth::attempt($credentials)) {
+        if (!Auth::attempt($credentials)) {
 
 
 
@@ -69,7 +71,7 @@ class AuthController extends Controller
 
 
 
-        $user = \Auth::user();
+        $user = User::where("id", Auth::id())->with("roles.permissions")->first();
 
 
         // Creating a token
@@ -79,8 +81,6 @@ class AuthController extends Controller
 
         return response()->json(["user" => $user, "token" => $access_token], 200);
     }
-
-
 
 
 
@@ -94,6 +94,7 @@ class AuthController extends Controller
 
 
         $user = User::create($data);
+        $user->assignRole('writer');
 
 
 

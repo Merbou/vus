@@ -78,7 +78,6 @@ export default {
       ],
       modulePath: "contact/index.js",
       item: {},
-      editedIndex: -1,
       showContent: false,
       selected: []
     };
@@ -103,7 +102,6 @@ export default {
     },
     readItem(item, type) {
       this.readContact(item);
-      // this.editedIndex = this.getData().indexOf(item);
       this.item = item;
       this.showContent = true;
     },

@@ -2,15 +2,16 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\User;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return \Auth::user();
+    return User::where("id", Auth::id())->with("roles.permissions")->first();
 });
 
 Route::post('/register', "api\Auth\AuthController@register");
 
 Route::post('/login', "api\Auth\AuthController@login");
+
 
 Route::middleware(['auth:api'])->group(function () {
 
@@ -19,6 +20,8 @@ Route::middleware(['auth:api'])->group(function () {
 });
 
 Route::middleware(['auth:api', 'verified'])->group(function () {
+    //accessibility
+    // Route::get("/permissions", "api\user\accessibilityController@index");
     //Account
     Route::get("/users-account", "api\user\handleAccountController@index");
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");

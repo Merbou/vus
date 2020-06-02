@@ -7,8 +7,9 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Http\Requests\userRequest;
 use \Auth;
+use Exception;
 use Hash;
-
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class handleAccountController extends Controller
 {
@@ -23,12 +24,12 @@ class handleAccountController extends Controller
 
 
 
-            $users = User::orderBy('created_at', 'asc')
+            $users = User::where("id", "!=", Auth::id())->orderBy('created_at', 'asc')
                 ->paginate(100);
 
             return response()->json($users, 206);
         } catch (ModelNotFoundException $e) {
-            return response()->json($e, 404);
+            return response()->json($e, 400);
         }
     }
 
@@ -45,14 +46,17 @@ class handleAccountController extends Controller
     {
 
         try {
-
+            if ($id == Auth::id()) throw new Exception();
             $user = User::findOrFail($id);
             $user->is_active = !$user->is_active;
             $user->save();
             return response()->json(204);
         } catch (ModelNotFoundException $e) {
 
-            return response()->json($e, 404);
+            return response()->json($e, 400);
+        } catch (Exception $e) {
+
+            return response()->json($e, 400);
         }
     }
 
@@ -106,7 +110,7 @@ class handleAccountController extends Controller
             return response()->json($user, 200);
         } catch (ModelNotFoundException $e) {
 
-            return response()->json($e, 404);
+            return response()->json($e, 400);
         }
     }
 

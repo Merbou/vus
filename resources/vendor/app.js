@@ -5,9 +5,9 @@ import './permission'
 import vuetify from "./src/plugins/vuetify"
 import router from "./router"
 import store from "./store/index"
-import hamid from "./utils/mixin"
+import mixin from "./utils/mixin"
 
-Vue.mixin(hamid)
+Vue.mixin(mixin)
 
 
 new Vue({

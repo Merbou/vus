@@ -12,8 +12,8 @@ export default new way(function () {
         { path: '/dashboard', view: 'dashboard/index', name: "dashboard", withLayout: true, icon: "tachometer-alt" },
         {
             path: '/users', name: "users", icon: "users", children: [
-                { path: '/table', view: 'user/account/table', name: "table", icon: "table" },
-                { path: '/chart', view: 'user/account/chart', name: "chart", icon: "chart-line" }
+                { path: 'table', view: 'user/account/table', name: "table", icon: "table" },
+                { path: 'chart', view: 'user/account/chart', name: "chart", icon: "chart-line" }
             ]
         },
         { path: '/contacts', view: 'contact/table', name: "contacts", withLayout: true, icon: "inbox" },
