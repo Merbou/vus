@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import ngTrash from "./component/ngTrash";
+import ngTrash from "@/materiels/ngTrash";
 export default {
   components: {
     ngTrash

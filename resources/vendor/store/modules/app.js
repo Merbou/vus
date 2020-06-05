@@ -10,7 +10,7 @@ export default {
             open: false,
             value: false,
             message: "Message",
-            title: "Title",
+            title: "Are you sure !",
             accepte: "Ok",
             cancel: "Cancel",
         }
@@ -40,9 +40,13 @@ export default {
          * @param {Object} routes 
          */
 
-        initRoutes({ commit }, routes) {
-
-            commit('SET_ROUTES', RoutesBrokes(routes))
+        initRoutes({ commit, state }, routes) {
+            return new Promise((resolve) => {
+                if (state.routes.length < 1) {
+                    commit('SET_ROUTES', RoutesBrokes(routes))
+                    resolve(state.routes)
+                } 
+            })
 
         },
 

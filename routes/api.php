@@ -21,7 +21,13 @@ Route::middleware(['auth:api'])->group(function () {
 
 Route::middleware(['auth:api', 'verified'])->group(function () {
     //accessibility
-    // Route::get("/permissions", "api\user\accessibilityController@index");
+    Route::get("/roles", "api\user\privilege\\roleController@roles");
+    Route::get("/roles-only", "api\user\privilege\\roleController@only");
+    Route::post("/role", "api\user\privilege\\roleController@storeRole");
+    Route::delete("/role/{id}", "api\user\privilege\\roleController@deleteRole");
+
+    Route::get("/permissions", "api\user\privilege\permissionController@permissions");
+    Route::post("/permissions", "api\user\privilege\permissionController@storePermissions");
     //Account
     Route::get("/users-account", "api\user\handleAccountController@index");
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");

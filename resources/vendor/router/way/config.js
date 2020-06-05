@@ -7,7 +7,8 @@ export default {
             { path: '/login', view: 'auth/login/index' },
             { path: '/register', view: 'auth/register/index' },
         ],
-        mail: [{ path: '/mail-confirmation', view: 'auth/mail/index' },
+        mail: [
+            { path: '/mail-confirmation', view: 'auth/mail/index' },
         ],
 
         welcome: [{ path: '/', view: 'welcome/index', name: "welcome" }],

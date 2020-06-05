@@ -1,5 +1,5 @@
 import config from "./config"
-
+import { premissionsDrop } from "@/utils/permission"
 //_w : way
 //_ro : route
 //_rs : routes
@@ -107,7 +107,7 @@ export default class way {
      * 
      * return all routes as array of vue Router object(route)
      */
-    all() {
+    constant() {
         let {
             open = [],
             close = [],
@@ -133,15 +133,6 @@ export default class way {
         return this._ro.auth || []
     }
 
-    PermissionsRoutes(_permissions, roles, superAdmin) {
-
-        const _routes = this.closeRoutes()
-
-        if (roles.indexOf(superAdmin) > -1) return _ro_close
-
-        return PdropRoutes(_routes, _permissions)
-
-    }
 
     /**
      * return object VueRouter according to close middleware
@@ -200,28 +191,15 @@ export default class way {
         }) || []
     }
 
+    PermissionsRoutes(_permissions, roles, superAdmin) {
 
+        const _routes = this.closeRoutes()
 
-}
+        if (roles.indexOf(superAdmin) > -1) return _routes
 
+        return premissionsDrop(_routes, _permissions)
 
-function PdropRoutes(_routes, _permissions) {
+    }
 
-    return _routes.map(_ro => {
-        if (_ro.children) {
-            const child_perm = _permissions.
-                filter(e => e.split(".")[0] == _ro.name)
-                .map(e => e.split(".").slice(1).join("."))
-
-            const children = PdropRoutes(_ro.children, child_perm)
-            if (children) {
-                _ro.children = children
-                return _ro
-            }
-        }
-        else
-            if (_permissions.indexOf(_ro.name) > -1) return _ro
-
-    }).filter(e => e)
 
 }

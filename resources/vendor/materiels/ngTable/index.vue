@@ -36,6 +36,10 @@ export default {
     select: {
       type: Boolean,
       default: false
+    },
+    footer: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -70,6 +74,7 @@ export default {
     renderApiFunction() {
       //import dynamically api Functions
       //useing asyn function import
+
       import("@/api/" + this.modulePath).then(_m => {
         //save names of api function
         this.apiFunctionsKeys = Object.keys(_m);

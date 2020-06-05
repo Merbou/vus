@@ -300,35 +300,35 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	],
 	"./contact": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		1
 	],
 	"./contact/": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		1
 	],
 	"./contact/index": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		1
 	],
 	"./contact/index.js": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		1
 	],
 	"./mail": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		2
 	],
 	"./mail/": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		2
 	],
 	"./mail/index": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		2
 	],
 	"./mail/index.js": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		2
 	],
 	"./trash/contact": [
 		"./resources/vendor/api/trash/contact.js",
@@ -353,6 +353,14 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
 		10
+	],
+	"./user/privilege": [
+		"./resources/vendor/api/user/privilege.js",
+		11
+	],
+	"./user/privilege.js": [
+		"./resources/vendor/api/user/privilege.js",
+		11
 	]
 };
 function webpackAsyncContext(req) {

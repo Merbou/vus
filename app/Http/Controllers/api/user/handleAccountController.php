@@ -22,9 +22,12 @@ class handleAccountController extends Controller
     {
         try {
 
-
-
-            $users = User::where("id", "!=", Auth::id())->orderBy('created_at', 'asc')
+            $users = User::where("id", "!=", Auth::id())
+                ->with("roles")
+                ->whereDoesntHave('roles', function ($query) {
+                    $query->where('name', 'super-admin');
+                })
+                ->orderBy('created_at', 'asc')
                 ->paginate(100);
 
             return response()->json($users, 206);

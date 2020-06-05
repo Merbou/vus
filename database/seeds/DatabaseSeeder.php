@@ -23,19 +23,18 @@ class DatabaseSeeder extends Seeder
         Permission::create(['name' => 'dashboard']);
         Permission::create(['name' => 'users.table']);
         Permission::create(['name' => 'users.chart']);
-        Permission::create(['name' => 'contacts']);
+        Permission::create(['name' => 'users.privilege']);
         Permission::create(['name' => 'trash']);
         Permission::create(['name' => 'setting']);
-        Permission::create(['name' => '@delete contacts']);
-        Permission::create(['name' => '@read contacts']);
+        Permission::create(['name' => 'contacts.@delete contacts']);
+        Permission::create(['name' => 'contacts.@read contacts']);
 
         // create roles and assign existing permissions
         $role1 = Role::create(['name' => 'writer']);
         $role1->givePermissionTo('dashboard');
         $role1->givePermissionTo('users.chart');
         // $role1->givePermissionTo('users.table');
-        $role1->givePermissionTo('contacts');
-        $role1->givePermissionTo('@read contacts');
+        $role1->givePermissionTo('contacts.@read contacts');
         $role1->givePermissionTo('setting');
         $role1->givePermissionTo('trash');
 
@@ -43,9 +42,9 @@ class DatabaseSeeder extends Seeder
         $role2->givePermissionTo('dashboard');
         $role2->givePermissionTo('users.chart');
         $role2->givePermissionTo('users.table');
-        $role2->givePermissionTo('contacts');
-        $role2->givePermissionTo('@read contacts');
-        $role2->givePermissionTo('@delete contacts');
+        $role2->givePermissionTo('users.privilege');
+        $role2->givePermissionTo('contacts.@read contacts');
+        $role2->givePermissionTo('contacts.@delete contacts');
         $role2->givePermissionTo('setting');
         $role2->givePermissionTo('trash');
 

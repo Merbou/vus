@@ -14,7 +14,7 @@
           :items-per-page="50"
           class="elevation-1"
           :page.sync="pagination.page"
-          hide-default-footer
+          :hide-default-footer="footer"
           :search="search"
           :show-select="select"
         >
@@ -64,6 +64,10 @@ export default {
     select: {
       type: Boolean,
       default: false
+    },
+    footer: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

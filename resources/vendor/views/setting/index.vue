@@ -36,7 +36,6 @@ export default {
         .catch(rej => {
           this.loading = false;
           this.errors = rej && rej.data && rej.data.errors;
-
         });
     },
     initUser(data) {

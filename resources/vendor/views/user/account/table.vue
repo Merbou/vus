@@ -16,6 +16,11 @@
     </template>
     <template v-slot:fullname="{item}">{{item.lastname}} {{item.firstname}}</template>
 
+    <template v-slot:actions="{item}">
+      <assign-role :item="item" :roles="roles" @storeRole="assignRole" />
+    </template>
+    <template v-slot:fullname="{item}">{{item.lastname}} {{item.firstname}}</template>
+
     <template v-slot:sex="{item}">
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
@@ -33,10 +38,11 @@
 <script>
 import ngTable from "@/materiels/ngTable";
 import { blockUserApi } from "@/api/user/account";
+import { assignRole } from "./components";
+import { fetchOnlyRolesApi } from "@/api/user/privilege.js";
 
 export default {
-  components: { ngTable },
-
+  components: { ngTable, assignRole },
   data() {
     return {
       headers: [
@@ -56,16 +62,38 @@ export default {
         { text: "blocked", value: "is_active" },
         {
           text: "actions",
-          value: "action",
+          value: "actions",
           sortable: false
         }
       ],
       modulePath: "user/account.js",
-      data: []
+      roles: []
     };
   },
 
+  mounted() {
+    this.fetchOnlyRoles();
+  },
   methods: {
+    fetchOnlyRoles() {
+      fetchOnlyRolesApi()
+        .then(res => {
+          this.roles = res;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    assignRole(roles) {
+      console.log(roles)
+      // fetchOnlyRolesApi()
+      //   .then(res => {
+      //     this.roles = res;
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
+    },
     blockItem(item) {
       const editedIndex = this.getData().indexOf(item);
       let is_active = this.getData()[editedIndex].is_active;

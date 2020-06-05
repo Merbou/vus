@@ -13,13 +13,13 @@ export default new way(function () {
         {
             path: '/users', name: "users", icon: "users", children: [
                 { path: 'table', view: 'user/account/table', name: "table", icon: "table" },
-                { path: 'chart', view: 'user/account/chart', name: "chart", icon: "chart-line" }
+                { path: 'chart', view: 'user/account/chart', name: "chart", icon: "chart-line" },
+                { path: 'privilege', view: 'user/privilege/index', name: "privilege", icon: "star" },
             ]
         },
         { path: '/contacts', view: 'contact/table', name: "contacts", withLayout: true, icon: "inbox" },
         { path: '/setting', view: 'setting/index', name: "setting", withLayout: true, icon: "cogs" },
         { path: '/trash', view: 'trash/index', name: "trash", withLayout: true, icon: "trash" },
-
     ])
 
 }) 

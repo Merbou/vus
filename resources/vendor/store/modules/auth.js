@@ -2,6 +2,8 @@
 import { getToken, setToken, removeToken } from "@/utils/token"
 import { login, register, userInfo } from "@/api/auth"
 import { isEmpty } from "lodash"
+import { permissionsExtraction } from "@/utils/permission"
+
 export default {
     state: {
         token: getToken(),
@@ -20,7 +22,7 @@ export default {
             state.roles = roles.map(e => e.name)
         },
         SET_PERMISSIONS: (state, roles) => {
-            state.permissions = margePermissions(roles)
+            state.permissions = permissionsExtraction(roles)
         },
         SE_EMAIL_VERIFIED: (state, email_verified_at) => {
             state.user.email_verified_at = email_verified_at
@@ -29,7 +31,7 @@ export default {
             const { roles, permissions, ..._user } = user
             state.user = _user
             state.roles = roles.map(e => e.name)
-            state.permissions = margePermissions(roles)
+            state.permissions = permissionsExtraction(roles)
         }
     },
     actions: {
@@ -113,6 +115,7 @@ export default {
 
         userInfo: ({ commit, state }) => {
             return new Promise((resolve, reject) => {
+
                 if (isEmpty(state.user)) {
 
                     userInfo()
@@ -159,20 +162,6 @@ export default {
 
     },
 }
-
-function margePermissions(roles) {
-    let permissions = []
-
-    roles.map(e => e.permissions).forEach(element => {
-        permissions.push(...element)
-    });
-
-    return permissions.filter((item, index) =>
-        permissions.map(e => e.name)
-            .indexOf(item.name) === index)
-        .map(e => e.name)
-}
-
 
 function margeState(state) {
     const response = state.user
