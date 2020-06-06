@@ -21,8 +21,9 @@ class handleAccountController extends Controller
     public function index()
     {
         try {
+            $selected = ["id", "email", "username", "firstname", "lastname", "created_at", "sex", "email_verified_at", "is_active"];
 
-            $users = User::where("id", "!=", Auth::id())
+            $users = User::select($selected)->where("id", "!=", Auth::id())
                 ->with("roles")
                 ->whereDoesntHave('roles', function ($query) {
                     $query->where('name', 'super-admin');

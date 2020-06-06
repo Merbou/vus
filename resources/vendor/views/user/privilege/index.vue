@@ -10,7 +10,7 @@
       @close="closeDialog"
     />
     <v-row>
-      <v-col cols="12" lg="8" md="8" sm="12">
+      <v-col cols="12" lg="7" md="8" sm="12">
         <ng-table :headers="headers" :modulePath="modulePath" ref="table">
           <template v-slot:top>
             <v-toolbar flat>
@@ -47,8 +47,8 @@
           </template>
         </ng-table>
       </v-col>
-      <v-col cols="12" lg="4" md="4" sm="12">
-        <v-card :loading="loading"></v-card>
+      <v-col cols="12" lg="5" md="4" sm="12">
+        <pieChart/>
       </v-col>
     </v-row>
   </v-container>
@@ -59,18 +59,19 @@ import ngTable from "@/materiels/ngTable";
 import { mapGetters } from "vuex";
 import { toTree } from "@/utils/permission";
 
+import { storeRoleApi, deleteRoleApi } from "@/api/user/privilege/role.js";
 import {
   fetchPermissionsApi,
-  storeRoleApi,
-  deleteRoleApi,
   storePermissionsApi
-} from "@/api/user/privilege.js";
-import { newRole, assignPermissions } from "./components";
+} from "@/api/user/privilege/permission.js";
+
+import { newRole, assignPermissions, pieChart } from "./components";
 export default {
   components: {
     ngTable,
     newRole,
-    assignPermissions
+    assignPermissions,
+    pieChart
   },
   data() {
     return {
@@ -91,7 +92,7 @@ export default {
       ],
       roles: [],
       permissions: [],
-      modulePath: "user/privilege.js",
+      modulePath: "user/privilege/role.js",
       ItemIndex: -1,
       item: {
         id: "",

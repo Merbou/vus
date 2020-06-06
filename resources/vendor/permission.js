@@ -93,7 +93,6 @@ router.beforeEach((to, from, next) => {
             ///AUTH ROUTES
 
 
-
             next("/login")
         } else next()
 

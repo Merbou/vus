@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\User;
 
 class roleController extends Controller
 {
@@ -51,6 +52,25 @@ class roleController extends Controller
             return response()->json($e, 400);
         }
     }
+
+
+
+
+
+    public function assignRole(Request $request, $id)
+    {
+        try {
+            $request->validate(['roles.*' => 'required|string']);
+            $user = User::findOrFail($id);
+            $user->syncRoles($request->roles);
+            return response()->json(204);
+        } catch (\Exception $e) {
+            return response()->json($e, 400);
+        }
+    }
+
+
+
 
 
     public function deleteRole($id)

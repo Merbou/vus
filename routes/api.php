@@ -25,6 +25,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get("/roles-only", "api\user\privilege\\roleController@only");
     Route::post("/role", "api\user\privilege\\roleController@storeRole");
     Route::delete("/role/{id}", "api\user\privilege\\roleController@deleteRole");
+    Route::post("/role-assign/{id}", "api\user\privilege\\roleController@assignRole");
 
     Route::get("/permissions", "api\user\privilege\permissionController@permissions");
     Route::post("/permissions", "api\user\privilege\permissionController@storePermissions");
@@ -32,8 +33,11 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get("/users-account", "api\user\handleAccountController@index");
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
     Route::put("/update-user", "api\user\handleAccountController@update");
-    Route::get("/count-account", "api\user\chartAccountController@count");
 
+    //chart account
+    Route::get("/count-account", "api\user\chartAccountController@count");
+    Route::get("/roles-percentage", "api\user\chartAccountController@rolesUserPercentage");
+    
     //Contact
     Route::get("/contacts", "api\contact\contactController@index");
     Route::delete("/destroy-contacts", "api\contact\contactController@destroy");

@@ -332,35 +332,43 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	],
 	"./trash/contact": [
 		"./resources/vendor/api/trash/contact.js",
-		8
+		9
 	],
 	"./trash/contact.js": [
 		"./resources/vendor/api/trash/contact.js",
-		8
+		9
 	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		9
+		10
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		9
+		10
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		10
+		11
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		10
-	],
-	"./user/privilege": [
-		"./resources/vendor/api/user/privilege.js",
 		11
 	],
-	"./user/privilege.js": [
-		"./resources/vendor/api/user/privilege.js",
-		11
+	"./user/privilege/permission": [
+		"./resources/vendor/api/user/privilege/permission.js",
+		12
+	],
+	"./user/privilege/permission.js": [
+		"./resources/vendor/api/user/privilege/permission.js",
+		12
+	],
+	"./user/privilege/role": [
+		"./resources/vendor/api/user/privilege/role.js",
+		13
+	],
+	"./user/privilege/role.js": [
+		"./resources/vendor/api/user/privilege/role.js",
+		13
 	]
 };
 function webpackAsyncContext(req) {

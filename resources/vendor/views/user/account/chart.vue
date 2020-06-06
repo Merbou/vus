@@ -1,16 +1,16 @@
 <template>
   <div>
-    <ngChart :series="series" type="line" :loading="loading" />
+    <curve-chart :series="series" type="line" :loading="loading" />
   </div>
 </template>
 
 <script>
 import { fetchAccountCountApi } from "@/api/user/chart";
-import ngChart from "@/materiels/ngChart/index";
+import curveChart from "@/materiels/ngCharts/curveChart/index";
 export default {
   name: "chartUser",
   components: {
-    ngChart
+    curveChart
   },
   data() {
     return {

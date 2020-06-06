@@ -185,10 +185,18 @@ export default class way {
      */
     pathClose(_ro) {
         const _rs = _ro || this.closeRoutes()
-        return _rs.map(e => {
-            // e.children = e.children && this.pathClose(e.children)
-            return e.path
-        }) || []
+        const _close_path = []
+        _rs.forEach(elem => {
+            _close_path.push(elem.path)
+            if (elem.children) {
+                const childPath = this.pathClose(elem.children).map(e => elem.path + "/" + e)
+                _close_path.push(...childPath);
+            }
+        })
+
+
+        return _close_path
+
     }
 
     PermissionsRoutes(_permissions, roles, superAdmin) {

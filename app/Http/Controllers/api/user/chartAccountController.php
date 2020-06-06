@@ -25,4 +25,23 @@ class chartAccountController extends Controller
             return response()->json($e, 400);
         }
     }
+
+    public function rolesUserPercentage()
+    {
+
+        try {
+
+            $total = DB::table('model_has_roles')->count();
+            $roles_percentages = DB::table('users')
+                ->join('model_has_roles', 'users.id', '=', 'model_id')
+                ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
+                ->select(DB::raw("count(*)/$total as series"), DB::raw('roles.name as labels'))
+                ->groupBy("labels")
+                ->get();
+
+            return response()->json($roles_percentages, 206);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
+    }
 }

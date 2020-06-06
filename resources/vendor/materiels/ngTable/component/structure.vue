@@ -17,6 +17,7 @@
           :hide-default-footer="footer"
           :search="search"
           :show-select="select"
+          dense
         >
           <template v-for="header in headers" v-slot:[itemCase(header.value)]="{ item }">
             <slot
@@ -34,7 +35,7 @@
           <v-container>
             <v-pagination
               v-model="pagination.page"
-              :length="pagination.pageCount"
+              :length="pagination.last_page"
               @input="onPageChange(pagination.page)"
             ></v-pagination>
           </v-container>
@@ -75,7 +76,6 @@ export default {
       pagination: {
         Backpage: 1,
         page: 1,
-        pageCount: 0,
         perPage: 0,
         itemsPerPage: 50,
         totla: 0
@@ -102,9 +102,6 @@ export default {
         this.pagination = Object.assign(this.pagination, res);
         this.data = this.data = data;
 
-        this.pagination.pageCount = Math.round(
-          this.pagination.total / this.pagination.itemsPerPage + 0.4
-        );
       }
     },
     pareDate(date) {
