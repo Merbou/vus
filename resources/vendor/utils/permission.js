@@ -86,5 +86,5 @@ export function toTree(permissions) {
 
 
 function justPermissionsPage(_permissions) {
-    return _permissions.filter(e => e.split(".")[e.length - 1][0] !== "@")
+    return _permissions.filter(e => e.split(".")[e.split(".").length - 1][0] !== "@")
 }

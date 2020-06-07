@@ -82,19 +82,19 @@ class handleAccountController extends Controller
 
             $avatar = $request->avatar;
 
-            if ($request->firstname)
+            if (!empty($request->firstname) && $request->firstname !== "null")
                 $user->firstname = $request->firstname;
 
-            if ($request->lastname)
+            if (!empty($request->lastname) && $request->lastname !== "null")
                 $user->lastname = $request->lastname;
 
-            if ($request->username)
+            if (!empty($request->username) && $request->username !== "null")
                 $user->username = $request->username;
 
-            if ($request->phone)
+            if (!empty($request->phone) && $request->phone !== "null")
                 $user->phone = $request->phone;
 
-            if ($avatar) {
+            if (!empty($avatar) && $request->firstname !== "null") {
                 $user->picture_path = $this->store($avatar, Auth::id());
             } else {
                 #when sex is updated if(personal pict not exist) change pict according to sex
@@ -103,7 +103,7 @@ class handleAccountController extends Controller
                     $user->sex = $request->sex;
             }
 
-            if ($request->password) {
+            if (!empty($request->password) && $request->password !== "null") {
                 if (Hash::check($request->last_password, $user->password)) {
                     $user->password = bcrypt($request->password);
                 } else

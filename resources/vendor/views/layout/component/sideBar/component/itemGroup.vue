@@ -1,48 +1,65 @@
 <template>
-  <v-list-group sub-group>
-    <template v-slot:activator>
-      <v-list-item-content>
-        <v-list-item-title>{{item.name | upperCaseFirst}}</v-list-item-title>
-      </v-list-item-content>
-      <v-list-item-icon>
-        <v-icon>fas fa-{{item.icon}}</v-icon>
-      </v-list-item-icon>
-    </template>
+  <div>
+    <v-list-group v-if="item.children&&item.children.length" :sub-group="true">
+      <template v-slot:activator>
+        <v-list-item>
+          <item-icon :icon="item.icon" />
+          <item-title :title="item.name" />
+        </v-list-item>
+      </template>
 
-    <router-link
-      v-for="(child, i) in item.children"
-      :key="i"
-      style="text-decoration: none;"
-      :to="item.path+'/'+child.path"
-    >
-      <v-list-item>
-        <v-list-item-title>{{child.name | upperCaseFirst}}</v-list-item-title>
-        <v-list-item-icon>
-          <v-icon>fas fa-{{child.icon}}</v-icon>
-        </v-list-item-icon>
-      </v-list-item>
-    </router-link>
-  </v-list-group>
+      <template v-for="(child, i) in item.children">
+        <v-list-group :key="i" :sub-group="true" v-if="child.children&&child.children.length">
+          <template v-slot:activator>
+            <item-icon :icon="child.icon" />
+            <item-title :title="child.name" />
+          </template>
+
+          <ng-item-group
+            v-if="child.children"
+            :key="child.name"
+            :item="withParentPath(child.path,child.children)"
+          />
+        </v-list-group>
+        <v-list-item v-else :key="i" @click="to(item.path+'/'+child.path)">
+          <item-icon :icon="child.icon" />
+          <item-title :title="child.name" />
+        </v-list-item>
+      </template>
+    </v-list-group>
+    <v-list-item v-else @click="to(item.path)">
+      <item-icon :icon="item.icon" />
+      <item-title :title="item.name" />
+    </v-list-item>
+  </div>
 </template>
 
 <script>
+import ngItemGroup from "./itemGroup";
+import { itemTitle, itemIcon } from "./item/index";
+
 export default {
-  name: "ngItem",
+  name: "itemGroup",
+  components: { itemTitle, itemIcon, ngItemGroup },
   props: {
     item: {
       type: Object,
       required: true
     }
   },
-  filters: {
-    upperCaseFirst(val) {
-      return val && typeof val === "string"
-        ? val.charAt(0).toUpperCase() + val.slice(1)
-        : undefined;
+  methods: {
+    withParentPath(parentPath, childs) {
+      return childs.map(e => parentPath.path + "/" + e.path);
+    },
+    to(path) {
+      this.$router.push({ path }).catch(err => {});
     }
   }
 };
 </script>
 
 <style>
+.v-list-group.v-list-group--active.v-list-group--sub-group.primary--text {
+  color: #fff !important;
+}
 </style>

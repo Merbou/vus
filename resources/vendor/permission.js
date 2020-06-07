@@ -14,7 +14,6 @@ NProgress.configure({ showSpinner: true });
 function privateField(to, form, next) {
     return new Promise((resolve, reject) => {
         store.dispatch("userInfo").then(async ({ roles, permissions, ...res }) => {
-
             const asyncRoutes = route.PermissionsRoutes(permissions, roles, "super-admin")
 
 
@@ -33,6 +32,7 @@ function privateField(to, form, next) {
                     //redirection to your path
                     resolve({ path: "/dashboard" })
                 }
+
 
                 if (roles.indexOf("super-admin") == -1)
                     if (permissionsRoute(to, permissions))
@@ -74,7 +74,9 @@ router.beforeEach((to, from, next) => {
 
         }).catch((rej) => {
             if (route.pathAuth().indexOf(to.path) > -1) {
-
+                console.log(route.welcome())
+                if (from.path === route.welcome().path)
+                    next("/dashboard")
                 next(route.welcome());
 
             } else if (rej) {
@@ -83,7 +85,6 @@ router.beforeEach((to, from, next) => {
             } else next()
         })
     } else {
-
 
 
         ///PUBLIC ROUTES 

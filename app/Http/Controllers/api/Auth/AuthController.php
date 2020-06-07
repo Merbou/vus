@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\api\Auth;
 
+use Illuminate\Database\QueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\registerRequest;
 use App\Http\Requests\Auth\loginRequest;
+use Spatie\Permission\Models\Role;
 use App\User;
 use Auth;
 
@@ -22,19 +24,28 @@ class AuthController extends Controller
     public function register(registerRequest $request)
     {
 
+        try {
 
 
-        $user = $this->createWithHashing($request->all());
+            $user = $this->createWithHashing($request->all());
 
 
-        $user->picture_path = $this->SetInitAvatar();
+            if (!$user->assignRole("writer")) throw new Exception("Role did not grant user");;
 
-        // Creating a token
-        $access_token = $user->createToken('access_token')->accessToken;
+            $user->picture_path = $this->SetInitAvatar();
+            $roles = Role::where('name', 'writer')->with("permissions")->get();
+
+            // Creating a token
+            $access_token = $user->createToken('access_token')->accessToken;
 
 
-
-        return response()->json(["user" => $user, "token" => $access_token], 200);
+            return response()->json(["user" => $user, "roles"  => $roles, "token" => $access_token], 200);
+        } catch (\Exception $th) {
+            $user->delete();
+            return response()->json($th, 500);
+        } catch (\QueryException $th) {
+            return response()->json($th, 400);
+        }
     }
 
 
@@ -58,28 +69,33 @@ class AuthController extends Controller
 
 
 
-        $credentials = $request->only('email', 'password');
+        try {
+
+
+            $credentials = $request->only('email', 'password');
 
 
 
-        if (!Auth::attempt($credentials)) {
+            if (!Auth::attempt($credentials)) throw new Exception(["error" => "unauthenticated"], 1);
 
 
 
-            return response()->json(["error" => "unauthenticated"], 403);
+
+
+            $user = User::where("id", Auth::id())->with("roles.permissions")->first();
+
+
+            // Creating a token
+            $access_token = $user->createToken('access_token')->accessToken;
+
+
+
+            return response()->json(["user" => $user, "token" => $access_token], 200);
+        } catch (\Exception $th) {
+            return response()->json($th, 403);
+        } catch (\QueryException $th) {
+            return response()->json($th, 400);
         }
-
-
-
-        $user = User::where("id", Auth::id())->with("roles.permissions")->first();
-
-
-        // Creating a token
-        $access_token = $user->createToken('access_token')->accessToken;
-
-
-
-        return response()->json(["user" => $user, "token" => $access_token], 200);
     }
 
 
@@ -88,15 +104,9 @@ class AuthController extends Controller
     {
 
 
-
         $data["password"] = bcrypt($data["password"]);
 
-
-
         $user = User::create($data);
-        $user->assignRole('writer');
-
-
 
         return $user;
     }

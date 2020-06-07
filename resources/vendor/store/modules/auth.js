@@ -28,7 +28,10 @@ export default {
             state.user.email_verified_at = email_verified_at
         },
         SET_COMPLATE: (state, user) => {
-            const { roles, permissions, ..._user } = user
+            let picture_path = "public/root/avatars/"
+            const { roles, ..._user } = user
+            if (!_user.picture_path)
+                _user.picture_path = _user.sex ? picture_path + "man.png" : picture_path + "woman.png"
             state.user = _user
             state.roles = roles.map(e => e.name)
             state.permissions = permissionsExtraction(roles)
@@ -52,7 +55,6 @@ export default {
                         commit("SET_TOKEN", token);
                         setToken(token);
                         commit("SET_COMPLATE", user);
-
                         resolve()
                     })
                     .catch(error => {
@@ -79,11 +81,12 @@ export default {
             return new Promise((resolve, reject) => {
                 register({ username, email, password, password_configuration })
                     .then(response => {
-                        const { token, user } = response
+                        const { token, roles, user } = response
+                        user.roles = roles
                         commit("SET_TOKEN", token);
-                        setToken(token);
                         commit("SET_COMPLATE", user);
-                        resolve(user.id)
+                        setToken(token);
+                        resolve(user)
                     })
                     .catch(error => {
                         reject(error);
@@ -115,7 +118,6 @@ export default {
 
         userInfo: ({ commit, state }) => {
             return new Promise((resolve, reject) => {
-
                 if (isEmpty(state.user)) {
 
                     userInfo()

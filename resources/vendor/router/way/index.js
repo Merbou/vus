@@ -200,7 +200,6 @@ export default class way {
     }
 
     PermissionsRoutes(_permissions, roles, superAdmin) {
-
         const _routes = this.closeRoutes()
 
         if (roles.indexOf(superAdmin) > -1) return _routes
