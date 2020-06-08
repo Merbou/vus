@@ -1,11 +1,9 @@
 <template>
   <div>
-    <v-list-group v-if="item.children&&item.children.length" :sub-group="true">
+    <v-list-group v-if="item.children&&item.children.length">
       <template v-slot:activator>
-        <v-list-item>
-          <item-icon :icon="item.icon" />
-          <item-title :title="item.name" />
-        </v-list-item>
+        <item-icon :icon="item.icon" />
+        <item-title :title="item.name" />
       </template>
 
       <template v-for="(child, i) in item.children">
@@ -59,7 +57,9 @@ export default {
 </script>
 
 <style>
-.v-list-group.v-list-group--active.v-list-group--sub-group.primary--text {
+.v-list-group.v-list-group--active.v-list-group--sub-group.primary--text,
+.v-list-group__header.v-list-item.v-list-item--active.v-list-item--link.theme--dark {
   color: #fff !important;
 }
+
 </style>

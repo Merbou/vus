@@ -70,17 +70,20 @@ export default {
   methods: {
     confirmation() {
       this.loading = true;
+      this.vLoading(true);
+
       const id = this.user.id;
       confirm(id, this.form.code)
         .then(response => {
-          
           this.loading = false;
+          this.vLoading(false);
           this.$store.dispatch("mailVerifed", response).then(() => {
             this.$router.push({ path: "/home" }).catch(err => {});
           });
         })
         .catch(error => {
           this.loading = false;
+          this.vLoading(false);
           if (error && error.status == 422) {
             Object.assign(this.BackErrors, error.data.errors);
           } else if (error && error.status == 401) {
@@ -90,7 +93,7 @@ export default {
     sendMail(resend) {
       const id = this.user.id;
       this.loading = true;
-      send(id,resend)
+      send(id, resend)
         .then(response => {
           this.loading = false;
         })

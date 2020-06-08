@@ -104,6 +104,7 @@ export default {
         .dispatch("login", this.loginForm)
         .then(response => {
           this.loading = false;
+          this.snackbar({ text: "welcome back!", color: "success" });
           this.$router.push({ path: "/dashboard" }).catch(err => {});
         })
         .catch(error => {
@@ -111,9 +112,8 @@ export default {
           if (error && error.status == 422) {
             Object.assign(this.BackErrors, error.data.errors);
           } else if (error && error.status == 403) {
-            alert("email or password is wrong!")
+            alert("email or password is wrong!");
           }
-          
         });
     },
     async validate() {

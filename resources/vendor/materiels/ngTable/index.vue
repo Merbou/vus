@@ -61,13 +61,16 @@ export default {
       const fetchDataApiName = this.apiFunctionsKeys[this.fetchDataIndex];
       //get api function fetchdata from list of functions
       const fetchDataApi = this.apiFunctions[fetchDataApiName];
+      this.vLoading(true);
 
       fetchDataApi(page)
         .then(Response => {
+          this.vLoading(false);
           this.response = Response;
           this.loading = false;
         })
         .catch(error => {
+          this.vLoading(false);
           console.log(error);
         });
     },

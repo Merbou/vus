@@ -9,6 +9,7 @@ import { permissionsRoute } from "@/utils/permission"
 
 NProgress.configure({ showSpinner: true });
 
+const path = [...route.pathAuth()]
 
 
 function privateField(to, form, next) {
@@ -36,7 +37,7 @@ function privateField(to, form, next) {
 
                 if (roles.indexOf("super-admin") == -1)
                     if (permissionsRoute(to, permissions))
-                        reject({ path: "/dashboard" })
+                        resolve({ path: "/dashboard" })
 
             } else {
 
@@ -66,6 +67,7 @@ function privateField(to, form, next) {
 
 router.beforeEach((to, from, next) => {
     NProgress.start()
+
     if (getToken()) {
 
         ///PRIVATE ROUTES
@@ -73,32 +75,26 @@ router.beforeEach((to, from, next) => {
             next(res)
 
         }).catch((rej) => {
-            if (route.pathAuth().indexOf(to.path) > -1) {
-                console.log(route.welcome())
-                if (from.path === route.welcome().path)
-                    next("/dashboard")
-                next(route.welcome());
 
-            } else if (rej) {
-                next(rej)
+            next(rej)
 
-            } else next()
         })
     } else {
 
 
         ///PUBLIC ROUTES 
 
-
-        if (route.pathClose().indexOf(to.path) > -1) {
+        if (path.indexOf(to.path) === -1) {
             ///AUTH ROUTES
-
-
             next("/login")
-        } else next()
+        }
+        else next()
 
 
     }
+    if (to.path == from.path)
+        NProgress.done()
+
 
 })
 

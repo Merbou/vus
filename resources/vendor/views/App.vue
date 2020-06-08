@@ -1,15 +1,20 @@
 <template>
   <v-app>
-    <ngDialog />
+    <ng-loading />
+    <ng-snackbar />
+    <ng-asker />
     <router-view />
   </v-app>
 </template>
 
 <script>
-import ngDialog from "@/materiels/ngDialog";
+import { ngAsker, ngLoading, ngSnackbar } from "@/materiels/ngDialog/index.js";
+import { mapGetters } from "vuex";
 export default {
   components: {
-    ngDialog
+    ngAsker,
+    ngLoading,
+    ngSnackbar
   },
   name: "App"
 };

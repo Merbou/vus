@@ -6,6 +6,7 @@ export default {
     state: {
         routes: [],
         sidebar: sidebar(),
+        loading: false,
         dialog: {
             open: false,
             value: false,
@@ -13,6 +14,12 @@ export default {
             title: "Are you sure !",
             accepte: "Ok",
             cancel: "Cancel",
+        },
+        vSnackbar: {
+            state: false,
+            color: "success",
+            timeout: 3000,
+            text: "Hi :)"
         }
     },
     mutations: {
@@ -30,6 +37,12 @@ export default {
             setSidebar(state.sidebar)
 
         },
+        SET_LOADING: (state, val) => {
+            state.loading = val
+        },
+        SET_VSNACKBAR: (state, _snackbar) => {
+            state.vSnackbar = _snackbar
+        },
     },
     actions: {
 
@@ -45,7 +58,7 @@ export default {
                 if (state.routes.length < 1) {
                     commit('SET_ROUTES', RoutesBrokes(routes))
                     resolve(state.routes)
-                } 
+                }
             })
 
         },
@@ -87,7 +100,21 @@ export default {
             commit('TOGGLE_SIDEBAR')
 
         },
+        /**
+         * toggle sideBar
+         * @param {callback}
+         * 
+         * @param None 
+         */
 
+        loading({ commit }, val) {
+            commit('SET_LOADING', val)
+
+        },
+
+        snackbarStore({ commit }, _snackbar) {
+            commit('SET_VSNACKBAR', _snackbar)
+        },
 
 
 

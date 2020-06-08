@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class userRequest extends FormRequest
@@ -34,34 +35,31 @@ class userRequest extends FormRequest
 
         $array = [];
 
-        if ($this->firstname)
+        if (!empty($this->firstname) && $this->firstname !== "null")
             $array['firstname'] = 'string';
 
-        if ($this->lastname)
+        if (!empty($this->lastname) && $this->lastname !== "null")
             $array['lastname'] = 'string | max:255';
 
-        if ($this->username)
+        if (!empty($this->username) && $this->username !== "null")
             $array['username'] = 'string | max:255';
 
-        if ($this->phone)
-            $array['phone'] = 'string | max:255';
+        if (!empty($this->phone) && $this->phone !== "null")
+            $array['phone'] = "phone:" .  join(",", config("app.COUNTRYS_ISO_CODE"));
 
-        if ($this->picture_path)
+        if (!empty($this->picture_path) && $this->picture_path !== "null")
             $array['picture_path'] = 'string';
 
-        if ($this->picture_path)
-            $array['picture_path'] = 'string';
-
-        if ($this->sex)
+        if (!empty($this->sex) && $this->sex !== "null")
             $array['sex'] = 'boolean';
 
-        if ($this->avatar)
+        if (!empty($this->avatar) && $this->avatar !== "null")
             $array['avatar'] = 'image | max:900';
 
-        // if ($this->new_password)
-        //     $array['password'] = 'confirmed | min:8 | string';
+        if (!empty($this->last_password) && $this->last_password !== "null")
+            $array['password'] = 'confirmed | min:8 | string';
 
-            if ($this->password)
+        if (!empty($this->password) && $this->password !== "null")
             $array['password'] = 'confirmed | min:8 | string';
 
 

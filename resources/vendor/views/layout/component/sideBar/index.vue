@@ -1,5 +1,13 @@
 <template>
-  <v-navigation-drawer app dark width="200" v-model="state" class="side-bar">
+  <v-navigation-drawer
+    :mobile-break-point="0"
+    app
+    expand-on-hover
+    dark
+    width="200"
+    :value="sidebar"
+    class="side-bar"
+  >
     <ng-list :items="routes" />
   </v-navigation-drawer>
 </template>
@@ -12,34 +20,13 @@ export default {
   components: {
     ngList
   },
-  data() {
-    return {
-      state: 0
-    };
-  },
   computed: {
-    ...mapGetters(["routes", "sidebar"]),
-    stateSidebar(){
-      return this.sidebar
-    }
-  },
-  created() {
-    this.state = this.sidebar;
-  },
-  watch: {
-    stateSidebar(val) {
-      this.state=this.sidebar
-      this.state = val;
-    }
+    ...mapGetters(["routes", "sidebar"])
   }
 };
 </script>
 <style >
-.side-bar {
-  left: 0;
-  top: 0;
-  background: #eeeeee;
-  z-index: 0;
-  min-height: calc(100vh - 50px);
+nav.side-bar.v-navigation-drawer.v-navigation-drawer--fixed.v-navigation-drawer--mini-variant.v-navigation-drawer--open.v-navigation-drawer--open-on-hover.theme--dark {
+  width: 67px !important ;
 }
 </style>

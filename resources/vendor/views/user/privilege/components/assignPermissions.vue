@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="open" scrollable max-width="300px" @click:outside="close">
+  <v-dialog :value="open" scrollable max-width="300px" @click:outside="close">
     <v-card>
       <v-card-title>select</v-card-title>
       <v-divider></v-divider>

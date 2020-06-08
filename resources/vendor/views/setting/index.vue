@@ -26,14 +26,17 @@ export default {
   },
   methods: {
     updateUser(formData) {
+      this.vLoading(true);
       this.loading = true;
       updateUserApi(formData)
         .then(Response => {
           this.loading = false;
           this.$store.dispatch("setInfo", Response);
           this.initUser(Response);
+          this.vLoading(false);
         })
         .catch(rej => {
+          this.vLoading(false);
           this.loading = false;
           this.errors = rej && rej.data && rej.data.errors;
         });

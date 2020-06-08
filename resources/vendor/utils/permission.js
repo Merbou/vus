@@ -1,7 +1,9 @@
 
 export function premissionsDrop(_routes, _permissions) {
     //return routes according to permissions 
+    //["users","contacts.@delete","contacts.@read"] =>["users","contacts"]
     _permissions = justPermissionsPage(_permissions)
+    
     return _routes.map(_ro => {
 
         if (_ro.children) {
@@ -86,5 +88,12 @@ export function toTree(permissions) {
 
 
 function justPermissionsPage(_permissions) {
-    return _permissions.filter(e => e.split(".")[e.split(".").length - 1][0] !== "@")
+    _permissions = _permissions.map(e => {
+        const elm = e.split(".")
+        if (elm[elm.length - 1][0] === "@")
+            return elm.slice(0, elm.length - 1).join(".")
+        return elm.join(".")
+
+    })
+    return [...new Set(_permissions)]
 }

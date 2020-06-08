@@ -42,7 +42,6 @@ class DatabaseSeeder extends Seeder
         $role2->givePermissionTo('dashboard');
         $role2->givePermissionTo('users.chart');
         $role2->givePermissionTo('users.table');
-        $role2->givePermissionTo('users.privilege');
         $role2->givePermissionTo('contacts.@read contacts');
         $role2->givePermissionTo('contacts.@delete contacts');
         $role2->givePermissionTo('setting');
