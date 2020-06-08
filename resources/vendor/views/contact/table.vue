@@ -110,7 +110,7 @@ export default {
     },
     ShowDeleteItem(selected) {
       this.selected = selected;
-      this.$store.dispatch("toggleDialog", { open: true,value:false });
+      this.$store.dispatch("toggleDialog", { open: true, value: false });
     },
     deleteItems() {
       var ids = this.selected.map(item => item.id);
@@ -118,12 +118,24 @@ export default {
       this.dialogDelete = false;
 
       this.Removeitems();
+      this.vLoading(true);
       deleteContactsApi(ids)
         .then(Response => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "The operation completed successfully !",
+            color: "success"
+          });
           this.selected = [];
           this.setSelected([]);
         })
         .catch(error => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "The operation did not complete. Try again later!",
+            color: "error"
+          });
+
           this.getData().push(this.selected);
         });
     },

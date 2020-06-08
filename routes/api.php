@@ -37,11 +37,16 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     //chart account
     Route::get("/count-account", "api\user\chartAccountController@count");
     Route::get("/roles-percentage", "api\user\chartAccountController@rolesUserPercentage");
-    
+
     //Contact
     Route::get("/contacts", "api\contact\contactController@index");
     Route::delete("/destroy-contacts", "api\contact\contactController@destroy");
     Route::put("/contact/{id}", "api\contact\contactController@read");
+
+    //Notifications
+    Route::get("/notifications", "api\\notification\\notificationController@index");
+    Route::post("/notification/{id}", "api\\notification\\notificationController@store");
+    Route::put("/view-notifications", "api\\notification\\notificationController@view");
 
     //Trash
     Route::get("/trash-contacts", "trash\contactController@index");

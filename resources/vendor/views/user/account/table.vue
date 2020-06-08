@@ -33,14 +33,7 @@
                 color="green"
                 dark
               >yes</v-chip>
-              <v-chip
-                class="state"
-                @click="blockItem(item)"
-                v-on="on"
-                v-else
-                color="red"
-                dark
-              >no</v-chip>
+              <v-chip class="state" @click="blockItem(item)" v-on="on" v-else color="red" dark>no</v-chip>
             </template>
             <span>blocked</span>
           </v-tooltip>
@@ -125,8 +118,17 @@ export default {
       this.getData()[index].roles = data.roles;
 
       assignRoleApi(data)
-        .then(() => {})
+        .then(() => {
+          this.snackbar({
+            text: "the role was assigned to user successfully !",
+            color: "success"
+          });
+        })
         .catch(err => {
+          this.snackbar({
+            text: "The operation did not complete. Try again later!",
+            color: "error"
+          });
           this.getData()[index].roles = roles;
         });
     },
@@ -138,10 +140,16 @@ export default {
 
       blockUserApi(this.getData()[editedIndex].id)
         .then(Response => {
-          alert("success");
+          this.snackbar({
+            text: "The operation completed successfully !",
+            color: "success"
+          });
         })
         .catch(error => {
-          alert("fail");
+          this.snackbar({
+            text: "The operation did not complete. Try again later!",
+            color: "error"
+          });
           this.getData()[editedIndex].is_active = !is_active;
         });
     },

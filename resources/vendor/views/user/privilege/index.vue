@@ -48,7 +48,7 @@
         </ng-table>
       </v-col>
       <v-col cols="12" lg="5" md="4" sm="12">
-        <pieChart/>
+        <pieChart />
       </v-col>
     </v-row>
   </v-container>
@@ -123,13 +123,24 @@ export default {
         .catch(err => console.log(err));
     },
     storeRole(role) {
+      this.vLoading(true);
       const index = this.save(role);
       storeRoleApi(role)
         .then(res => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "The role is stored successfully !",
+            color: "success"
+          });
           this.getData()[index].id = res.id;
           this.open = false;
         })
         .catch(err => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "The operation did not complete. Try again later!",
+            color: "error"
+          });
           this.remove(index);
           this.open = false;
         });
@@ -139,9 +150,17 @@ export default {
       this.remove(index);
       deleteRoleApi(this.item.id)
         .then(() => {
+          this.snackbar({
+            text: "The operation completed successfully !",
+            color: "success"
+          });
           this.item = { id: "", name: "" };
         })
         .catch(err => {
+          this.snackbar({
+            text: "The operation did not complete. Try again later!",
+            color: "error"
+          });
           const index = this.save(this.item);
           this.item = { id: "", name: "" };
         });
@@ -158,11 +177,23 @@ export default {
         role_id: this.item.id,
         permissions_id: permissions
       };
+      this.vLoading(true);
+
       storePermissionsApi(data)
         .then(() => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "the permissions was assigned to role successfully !",
+            color: "success"
+          });
           this.item = { id: "", name: "" };
         })
         .catch(err => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "The operation did not complete. Try again later!",
+            color: "error"
+          });
           this.item = { id: "", name: "" };
         });
     },

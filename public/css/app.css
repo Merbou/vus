@@ -330,45 +330,61 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 		"./resources/vendor/api/mail/index.js",
 		2
 	],
+	"./notification": [
+		"./resources/vendor/api/notification/index.js",
+		3
+	],
+	"./notification/": [
+		"./resources/vendor/api/notification/index.js",
+		3
+	],
+	"./notification/index": [
+		"./resources/vendor/api/notification/index.js",
+		3
+	],
+	"./notification/index.js": [
+		"./resources/vendor/api/notification/index.js",
+		3
+	],
 	"./trash/contact": [
 		"./resources/vendor/api/trash/contact.js",
-		10
+		11
 	],
 	"./trash/contact.js": [
 		"./resources/vendor/api/trash/contact.js",
-		10
+		11
 	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		11
+		12
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		11
+		12
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		12
+		13
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		12
+		13
 	],
 	"./user/privilege/permission": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		13
+		14
 	],
 	"./user/privilege/permission.js": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		13
+		14
 	],
 	"./user/privilege/role": [
 		"./resources/vendor/api/user/privilege/role.js",
-		14
+		15
 	],
 	"./user/privilege/role.js": [
 		"./resources/vendor/api/user/privilege/role.js",
-		14
+		15
 	]
 };
 function webpackAsyncContext(req) {

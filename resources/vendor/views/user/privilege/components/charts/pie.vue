@@ -2,7 +2,7 @@
   <v-container>
     <v-card id="chart" :loading="loading" max-width="380">
       <v-card-text>
-        <apexchart type="donut" :options="chartOptions" :series="series" />
+        <apexchart type="pie" :options="chartOptions" :series="series" />
       </v-card-text>
     </v-card>
   </v-container>
@@ -50,7 +50,7 @@ export default {
           _res.forEach(element => {
             this.chartOptions.labels.push(element.labels);
           });
-          this.series = _res.map(e => parseFloat(e.series) * 100);
+          this.series = _res.map(e => parseFloat(e.series).toFixed(2) * 100);
         })
         .catch(err => {
           this.loading = false;

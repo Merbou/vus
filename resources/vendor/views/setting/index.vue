@@ -30,12 +30,20 @@ export default {
       this.loading = true;
       updateUserApi(formData)
         .then(Response => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "The setting was updated successfully !",
+            color: "success"
+          });
           this.loading = false;
           this.$store.dispatch("setInfo", Response);
           this.initUser(Response);
-          this.vLoading(false);
         })
         .catch(rej => {
+          this.snackbar({
+            text: "The setting was not updated. Try again later!",
+            color: "error"
+          });
           this.vLoading(false);
           this.loading = false;
           this.errors = rej && rej.data && rej.data.errors;

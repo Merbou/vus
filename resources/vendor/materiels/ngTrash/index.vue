@@ -124,14 +124,26 @@ export default {
       });
     },
     handleItems(callbackApi) {
+      this.vLoading(true);
+
       var ids = this.selected.map(item => item.id);
       this.Removeitems();
       callbackApi(ids)
         .then(Response => {
+          this.vLoading(false);
+          this.snackbar({
+            text: "The operation completed successfully !",
+            color: "success"
+          });
           this.selected = [];
           this.setSelected([]);
         })
         .catch(error => {
+          this.vLoading(false);
+           this.snackbar({
+            text: "The operation did not complete. Try again later!",
+            color: "error"
+          });
           this.getData().push(this.selected);
         });
     },

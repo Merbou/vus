@@ -6,8 +6,7 @@ export default {
             this.$store.dispatch("loading", val)
         },
         snackbar(val) {
-            val["state"] = true
-            this.$store.dispatch("snackbarStore", val)
+            this.$store.dispatch("snackbarStore", { ...val, state: true })
         }
     }
 }

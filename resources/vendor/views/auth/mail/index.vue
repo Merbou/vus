@@ -78,6 +78,11 @@ export default {
           this.loading = false;
           this.vLoading(false);
           this.$store.dispatch("mailVerifed", response).then(() => {
+            this.snackbar({
+              text: "welcome to your dashboard :)",
+              color: "success"
+            });
+
             this.$router.push({ path: "/home" }).catch(err => {});
           });
         })

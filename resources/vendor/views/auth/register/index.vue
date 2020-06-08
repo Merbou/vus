@@ -147,14 +147,22 @@ export default {
   methods: {
     handleRegister() {
       this.loading = true;
+      this.vLoading(true);
+
       this.$store
         .dispatch("register", this.RegisterForm)
         .then(id => {
           this.loading = false;
+          this.vLoading(false);
+          this.snackbar({
+            text: "Please confirm your email address",
+            color: "info"
+          });
           this.$router.push({ path: "/mail-confirmation" }).catch(err => {});
         })
         .catch(error => {
           this.loading = false;
+          this.vLoading(false);
           if (error && error.status == 422) {
             Object.assign(this.BackErrors, error.data.errors);
           } else if (error && error.status == 401) {

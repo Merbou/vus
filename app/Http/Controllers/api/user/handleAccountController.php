@@ -30,9 +30,11 @@ class handleAccountController extends Controller
                 })
                 ->orderBy('created_at', 'asc')
                 ->paginate(100);
+                
+            if (!$users) throw new  Exception("Error Processing Request");
 
             return response()->json($users, 206);
-        } catch (ModelNotFoundException $e) {
+        } catch (Exception $e) {
             return response()->json($e, 400);
         }
     }

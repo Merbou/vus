@@ -100,15 +100,19 @@ export default {
   methods: {
     handleLogin() {
       this.loading = true;
+      this.vLoading(true);
+
       this.$store
         .dispatch("login", this.loginForm)
         .then(response => {
           this.loading = false;
+          this.vLoading(false);
           this.snackbar({ text: "welcome back!", color: "success" });
           this.$router.push({ path: "/dashboard" }).catch(err => {});
         })
         .catch(error => {
           this.loading = false;
+          this.vLoading(false);
           if (error && error.status == 422) {
             Object.assign(this.BackErrors, error.data.errors);
           } else if (error && error.status == 403) {

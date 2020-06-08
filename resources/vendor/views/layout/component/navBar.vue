@@ -1,8 +1,10 @@
 <template>
   <v-app-bar color="white" mb-5 dark flat app fade-img-on-scroll dense>
-    <v-app-bar-nav-icon color="grey darken-4" @click.stop="toggleSideBar"></v-app-bar-nav-icon>
+    <v-app-bar-nav-icon class="ml-1" color="grey darken-4" @click.stop="toggleSideBar"></v-app-bar-nav-icon>
 
     <v-spacer></v-spacer>
+    <notification/>
+
     <v-menu :close-on-content-click="false" bottom offset-y>
       <template v-slot:activator="{ on }">
         <v-btn color="grey darken-4" text dark v-on="on">my Account</v-btn>
@@ -50,8 +52,10 @@
 
 <script>
 import { mapGetters } from "vuex";
+import notification from "./notification";
 export default {
   name: "navBar",
+  components: { notification },
   computed: {
     ...mapGetters(["user"])
   },
