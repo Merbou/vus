@@ -1,5 +1,5 @@
 <template>
-  <v-menu offset-y  :close-on-content-click="false">
+  <v-menu offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on }">
       <v-badge color="green" :content="view" v-show="view>0" overlap left>
         <v-icon
@@ -12,27 +12,8 @@
       </v-badge>
       <v-icon dark color="grey darken-4" v-show="view==0" class="mx-3" v-on="on">far fa-bell</v-icon>
     </template>
-    <v-list width="400" v-if="notifications.length>0" two-line>
-      <template v-for="(notification,index) in notifications">
-        <!-- <v-subheader v-if="item.header" :key="item.header">{{ item.header }}</v-subheader> -->
-        <v-list-item :key="notification.title" @click="to(notification.link)">
-          <v-list-item-avatar>
-            <v-icon>{{`fas fa-${notification.icon}`}}</v-icon>
-          </v-list-item-avatar>
-          <v-list-item-content>
-            <v-list-item-title>{{notification.title}}</v-list-item-title>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-list-item-subtitle v-on="on" class="font-weight-bold">
-                  <p>{{notification.description}}</p>
-                </v-list-item-subtitle>
-              </template>
-              <p>{{notification.description}}</p>
-            </v-tooltip>
-          </v-list-item-content>
-        </v-list-item>
-        <v-divider v-if="index<notifications.length-1" :key="index" :inset="true"></v-divider>
-      </template>
+    <v-list width="400" height="400" style="overflow-y:auto" v-if="notifications.length>0" two-line>
+      <notify-item :notifications="notifications" />
       <v-list-item
         @click="moreNotifications"
         v-if="pagination.page < pagination.last_page"
@@ -53,15 +34,34 @@
 
 <script>
 import { fetchNotificationsApi, viewNotificationApi } from "@/api/notification";
+import { mapGetters } from "vuex";
+import { notify } from "@/sound";
+import { notifyBrowser, clearNotify } from "@/utils/notify";
+import notifyItem from "./components/notifyItem.vue";
 export default {
+  components: {
+    notifyItem
+  },
   data: () => ({
     loading: false,
     notifications: [],
     pagination: { page: 1, last_page: 0 },
     view: 0
   }),
+  computed: {
+    ...mapGetters(["user"])
+  },
   mounted() {
     this.fetchNotifications(this.pagination.page);
+  },
+
+  created() {
+    Echo.private(`App.User.${this.user.id}`).listen("notificationEvent", e => {
+      this.notifications.push(e.notification);
+      this.view++;
+      notifyBrowser();
+      notify();
+    });
   },
   methods: {
     fetchNotifications(page) {
@@ -70,6 +70,8 @@ export default {
         .then(({ view, notifications }) => {
           this.loading = false;
           this.view = view;
+          if (this.view) notifyBrowser();
+
           this.notifications.push(...notifications.data);
           this.pagination.page = notifications.current_page;
           this.pagination.last_page = notifications.last_page;
@@ -85,6 +87,7 @@ export default {
         this.fetchNotifications(this.pagination.page);
     },
     viewNotification() {
+      clearNotify();
       const view = this.view;
       this.view = 0;
       viewNotificationApi()
@@ -93,14 +96,11 @@ export default {
           this.view = view;
           console.log(err);
         });
-    },
-    to(path) {
-      if (path) {
-        const link = this.$router.resolve({ path });
-        if (link && link.href !== "/") this.$router.push(path).catch(err => {});
-
-        window.open(path);
-      }
+    }
+  },
+  watch: {
+    view(val) {
+      if (this.val) notifyBrowser();
     }
   }
 };
@@ -110,7 +110,6 @@ export default {
 .v-icon.v-icon:after {
   background-color: #fff !important ;
 }
-div#list-item-133,
 .loadigData {
   zoom: 0.7;
 }

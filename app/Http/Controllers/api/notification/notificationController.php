@@ -5,6 +5,7 @@ namespace App\Http\Controllers\api\notification;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\notification;
+use App\Events\notificationEvent;
 
 class notificationController extends Controller
 {
@@ -33,23 +34,28 @@ class notificationController extends Controller
     public function store(Request $request, $id)
     {
         try {
-            $request->validate([
-                'title' => 'required|string',
-                'description' => 'required|string',
-                'icon' => 'required|string',
-            ]);
+            // $request->validate([
+            //     'title' => 'required|string',
+            //     'description' => 'required|string',
+            //     'icon' => 'required|string',
+            // ]);
+
+            // $notifications = new notification();
+            // $notifications->to = $id;
+            // $notifications->title = $request->title;
+            // $notifications->description = $request->description;
+            // $notifications->icon = $request->icon;
 
             $notifications = new notification();
-            $notifications->to = $id;
-            $notifications->title = $request->title;
-            $notifications->description = $request->description;
-            $notifications->icon = $request->icon;
+            $notifications->to = 2;
+            $notifications->title = "Notification test";
+            $notifications->description = "Notification test";
+            $notifications->icon = "book-open";
 
-
-
-            if ($notifications->save())
+            if ($notifications->save()) {
+                event(new notificationEvent($notifications));
                 return response()->json(204);
-            else  throw new  Exception("Error Processing Request");
+            } else  throw new  Exception("Error Processing Request");
         } catch (Exception $e) {
             return response()->json($e, 400);
         }

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>DashBoard</title>
     <!-- Fonts -->
+    <link rel="icon"  id="favicon"href="{{ URL::asset('/images/favicon.png') }}" type="image/x-icon"/>
 
 </head>
 

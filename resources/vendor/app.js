@@ -6,6 +6,7 @@ import vuetify from "./src/plugins/vuetify"
 import router from "./router"
 import store from "./store/index"
 import mixin from "./utils/mixin"
+import './src/plugins/laravel-echo'
 
 Vue.mixin(mixin)
 

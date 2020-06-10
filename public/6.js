@@ -414,43 +414,43 @@ var map = {
 	],
 	"./trash/contact": [
 		"./resources/vendor/api/trash/contact.js",
-		11
+		12
 	],
 	"./trash/contact.js": [
 		"./resources/vendor/api/trash/contact.js",
-		11
+		12
 	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		12
+		13
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		12
+		13
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		13
+		14
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		13
+		14
 	],
 	"./user/privilege/permission": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		14
+		15
 	],
 	"./user/privilege/permission.js": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		14
+		15
 	],
 	"./user/privilege/role": [
 		"./resources/vendor/api/user/privilege/role.js",
-		15
+		16
 	],
 	"./user/privilege/role.js": [
 		"./resources/vendor/api/user/privilege/role.js",
-		15
+		16
 	]
 };
 function webpackAsyncContext(req) {
