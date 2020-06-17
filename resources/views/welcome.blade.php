@@ -4,15 +4,15 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>DashBoard</title>
+    <title>{{env("APP_NAME")}}</title>
     <!-- Fonts -->
-    <link rel="icon"  id="favicon"href="{{ URL::asset('/images/favicon.png') }}" type="image/x-icon"/>
+    <link rel="icon" id="favicon" href="{{ URL::asset('/images/favicon.png') }}" type="image/x-icon" />
 
 </head>
 
 <body>
-    <div id="app">
-    </div>
+    <div id="app"></div>
+    <audio id="audioPlayer" muted></audio>
 </body>
 <script src="/js/app.js"></script>
 

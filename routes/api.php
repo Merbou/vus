@@ -46,10 +46,10 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     //Notifications
     Route::get("/notifications", "api\\notification\\notificationController@index");
     Route::put("/view-notifications", "api\\notification\\notificationController@view");
+    Route::get("/notification/{id}", "api\\notification\\notificationController@store");
     
     //Trash
     Route::get("/trash-contacts", "trash\contactController@index");
     Route::delete("/trash-contacts/trash", "trash\contactController@destroy");
     Route::post("/trash-contacts/recycle", "trash\contactController@recycle");
 });
-Route::get("/notification/{id}", "api\\notification\\notificationController@store");

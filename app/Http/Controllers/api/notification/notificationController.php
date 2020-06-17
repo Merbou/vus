@@ -34,23 +34,17 @@ class notificationController extends Controller
     public function store(Request $request, $id)
     {
         try {
-            // $request->validate([
-            //     'title' => 'required|string',
-            //     'description' => 'required|string',
-            //     'icon' => 'required|string',
-            // ]);
-
-            // $notifications = new notification();
-            // $notifications->to = $id;
-            // $notifications->title = $request->title;
-            // $notifications->description = $request->description;
-            // $notifications->icon = $request->icon;
+            $request->validate([
+                'title' => 'required|string',
+                'description' => 'required|string',
+                'icon' => 'required|string',
+            ]);
 
             $notifications = new notification();
-            $notifications->to = 2;
-            $notifications->title = "Notification test";
-            $notifications->description = "Notification test";
-            $notifications->icon = "book-open";
+            $notifications->to = $id;
+            $notifications->title = $request->title;
+            $notifications->description = $request->description;
+            $notifications->icon = $request->icon;
 
             if ($notifications->save()) {
                 event(new notificationEvent($notifications));

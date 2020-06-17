@@ -35,8 +35,7 @@
 <script>
 import { fetchNotificationsApi, viewNotificationApi } from "@/api/notification";
 import { mapGetters } from "vuex";
-import { notify } from "@/sound";
-import { notifyBrowser, clearNotify } from "@/utils/notify";
+import notify from "@/utils/notify";
 import notifyItem from "./components/notifyItem.vue";
 export default {
   components: {
@@ -59,8 +58,7 @@ export default {
     Echo.private(`App.User.${this.user.id}`).listen("notificationEvent", e => {
       this.notifications.push(e.notification);
       this.view++;
-      notifyBrowser();
-      notify();
+      notify.browser();
     });
   },
   methods: {
@@ -70,7 +68,7 @@ export default {
         .then(({ view, notifications }) => {
           this.loading = false;
           this.view = view;
-          if (this.view) notifyBrowser();
+          if (this.view) notify.icon();
 
           this.notifications.push(...notifications.data);
           this.pagination.page = notifications.current_page;
@@ -87,7 +85,7 @@ export default {
         this.fetchNotifications(this.pagination.page);
     },
     viewNotification() {
-      clearNotify();
+      notify.clear();
       const view = this.view;
       this.view = 0;
       viewNotificationApi()
@@ -99,9 +97,9 @@ export default {
     }
   },
   watch: {
-    view(val) {
-      if (this.val) notifyBrowser();
-    }
+    // view(val) {
+    //   if (this.val) notifyBrowser();
+    // }
   }
 };
 </script>
