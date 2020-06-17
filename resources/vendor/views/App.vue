@@ -1,20 +1,20 @@
 <template>
   <v-app>
-    <vs-loading />
-    <vs-snackbar />
-    <vs-asker />
+    <materiel-loading />
+    <materiel-snackbar />
+    <materiel-asker />
     <router-view />
   </v-app>
 </template>
 
 <script>
-import { vsAsker, vsLoading, vsSnackbar } from "@/materiels/vsDialog/index.js";
+import { materielAsker, materielLoading, materielSnackbar } from "@/materiels/Dialog/index.js";
 import { mapGetters } from "vuex";
 export default {
   components: {
-    vsAsker,
-    vsLoading,
-    vsSnackbar
+    materielAsker,
+    materielLoading,
+    materielSnackbar
   },
   name: "App"
 };

@@ -6,17 +6,17 @@
 
     <v-tabs-items v-model="tab">
       <v-tab-item value="tab-1">
-        <ng-trash :headers="headers" :modulePath="modulePath" />
+        <materiel-trash :headers="headers" :modulePath="modulePath" />
       </v-tab-item>
     </v-tabs-items>
   </v-tabs>
 </template>
 
 <script>
-import ngTrash from "@/materiels/ngTrash";
+import materielTrash from "@/materiels/Trash";
 export default {
   components: {
-    ngTrash
+    materielTrash
   },
   data() {
     return {

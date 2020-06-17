@@ -7,7 +7,7 @@
       :open="dialog"
       @close="closeDialog"
     />
-    <ng-table :headers="headers" :modulePath="modulePath" ref="table">
+    <materiel-table :headers="headers" :modulePath="modulePath" ref="table">
       <template v-slot:state="{item}">
         <div class="d-flex flex-row justify-space-between">
           <v-tooltip bottom>
@@ -57,19 +57,19 @@
           <span v-else>Woman</span>
         </v-tooltip>
       </template>
-    </ng-table>
+    </materiel-table>
   </div>
 </template>   
 
 
 <script>
-import ngTable from "@/materiels/ngTable";
+import materielTable from "@/materiels/Table";
 import { blockUserApi } from "@/api/user/account";
 import { assignRole } from "./components";
 import { fetchOnlyRolesApi, assignRoleApi } from "@/api/user/privilege/role.js";
 
 export default {
-  components: { ngTable, assignRole },
+  components: { materielTable, assignRole },
   data() {
     return {
       headers: [

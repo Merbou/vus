@@ -46,6 +46,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     //Notifications
     Route::get("/notifications", "api\\notification\\notificationController@index");
     Route::put("/view-notifications", "api\\notification\\notificationController@view");
+    Route::get("/view-notifications", "api\\notification\\notificationController@getView");
     Route::get("/notification/{id}", "api\\notification\\notificationController@store");
     
     //Trash

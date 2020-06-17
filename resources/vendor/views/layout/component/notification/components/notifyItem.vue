@@ -1,26 +1,24 @@
-<template v-if="notifications.length"  >
+<template v-if="notifications.length">
   <div>
-    <v-list-item
-      v-for="notification in items"
-      :key="notification.id"
-      @click="to(notification.link)"
-    >
-      <v-list-item-avatar>
-        <v-icon>{{`fas fa-${notification.icon?notification.icon:'flag'}`}}</v-icon>
-      </v-list-item-avatar>
-      <v-list-item-content>
-        <v-list-item-title>{{notification.title}}</v-list-item-title>
-        <v-tooltip bottom v-if="notification.description">
-          <template v-slot:activator="{ on }">
-            <v-list-item-subtitle v-on="on" class="font-weight-bold">
-              <p>{{notification.description}}</p>
-            </v-list-item-subtitle>
-          </template>
-          <p>{{notification.description}}</p>
-        </v-tooltip>
-      </v-list-item-content>
-    </v-list-item>
-    <v-divider :inset="true"></v-divider>
+    <div v-for="notification in items" :key="notification.id">
+      <v-list-item @click="to(notification.link)">
+        <v-list-item-avatar :color="colors[getRandomInt(colors.length)]+' accent-4'">
+          <v-icon color="grey lighten-5">{{`fas fa-${notification.icon?notification.icon:'flag'}`}}</v-icon>
+        </v-list-item-avatar>
+        <v-list-item-content>
+          <v-list-item-title>{{notification.title}}</v-list-item-title>
+          <v-tooltip bottom v-if="notification.description">
+            <template v-slot:activator="{ on }">
+              <v-list-item-subtitle v-on="on" class="font-weight-bold">
+                <p>{{notification.description}}</p>
+              </v-list-item-subtitle>
+            </template>
+            <p>{{notification.description}}</p>
+          </v-tooltip>
+        </v-list-item-content>
+      </v-list-item>
+      <v-divider :inset="true"></v-divider>
+    </div>
   </div>
 </template>
 
@@ -35,7 +33,8 @@ export default {
   },
   data() {
     return {
-      items: []
+      items: [],
+      colors: ["light-blue", "cyan", "teal", "green", "indigo", "purple"]
     };
   },
   created() {
@@ -49,6 +48,9 @@ export default {
 
         window.open(path);
       }
+    },
+    getRandomInt(max) {
+      return Math.floor(Math.random() * Math.floor(max));
     }
   }
 };

@@ -18,6 +18,15 @@ export function storeNotificationApi(data, id) {
 }
 
 
+export function fetchNotificationsViewApi() {
+    return request({
+        url: `view-notifications`,
+        method: 'get'
+    });
+
+}
+
+
 export function viewNotificationApi() {
     return request({
         url: `view-notifications`,

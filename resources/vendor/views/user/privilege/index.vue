@@ -11,7 +11,7 @@
     />
     <v-row>
       <v-col cols="12" lg="7" md="8" sm="12">
-        <ng-table :headers="headers" :modulePath="modulePath" ref="table">
+        <materiel-table :headers="headers" :modulePath="modulePath" ref="table">
           <template v-slot:top>
             <v-toolbar flat>
               <v-toolbar-title>Roles</v-toolbar-title>
@@ -45,7 +45,7 @@
               <span>Assign permissions</span>
             </v-tooltip>
           </template>
-        </ng-table>
+        </materiel-table>
       </v-col>
       <v-col cols="12" lg="5" md="4" sm="12">
         <pieChart />
@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import ngTable from "@/materiels/ngTable";
+import materielTable from "@/materiels/Table";
 import { mapGetters } from "vuex";
 import { toTree } from "@/utils/permission";
 
@@ -68,7 +68,7 @@ import {
 import { newRole, assignPermissions, pieChart } from "./components";
 export default {
   components: {
-    ngTable,
+    materielTable,
     newRole,
     assignPermissions,
     pieChart

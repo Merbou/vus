@@ -13,7 +13,7 @@
             <item-title :title="child.name" />
           </template>
 
-          <ng-item-group
+          <vs-item-group
             v-if="child.children"
             :key="child.name"
             :item="withParentPath(child.path,child.children)"
@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import ngItemGroup from "./itemGroup";
+import vsItemGroup from "./itemGroup";
 import { itemTitle, itemIcon } from "./item/index";
 
 export default {
   name: "itemGroup",
-  components: { itemTitle, itemIcon, ngItemGroup },
+  components: { itemTitle, itemIcon, vsItemGroup },
   props: {
     item: {
       type: Object,

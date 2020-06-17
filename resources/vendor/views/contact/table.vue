@@ -2,7 +2,7 @@
   <div>
     <dialog-contact :dialog="showContent" :item="item" @close="closeDialog" />
 
-    <ng-table :headers="headers" :modulePath="modulePath" ref="table" :select="true">
+    <materiel-table :headers="headers" :modulePath="modulePath" ref="table" :select="true">
       <template v-slot:top="{selected}">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -49,16 +49,16 @@
           <span>Read it</span>
         </v-tooltip>
       </template>
-    </ng-table>
+    </materiel-table>
   </div>
 </template>
 <script>
 import dialogContact from "./component/dialogContact";
-import ngTable from "@/materiels/ngTable";
+import materielTable from "@/materiels/Table";
 import { deleteContactsApi, readContactApi } from "@/api/contact";
 import { mapGetters } from "vuex";
 export default {
-  components: { ngTable, dialogContact },
+  components: { materielTable, dialogContact },
   data() {
     return {
       headers: [

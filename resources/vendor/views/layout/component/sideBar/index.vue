@@ -8,17 +8,18 @@
     :value="sidebar"
     class="side-bar"
   >
-    <ng-list :items="routes" />
+    <vs-list :items="routes" v-if="routes.length" />
+    <v-skeleton-loader v-else v-for="n in 5" :key="n" class="mx-2 my-3" type="avatar"></v-skeleton-loader>
   </v-navigation-drawer>
 </template>
 
 <script>
-import ngList from "./component/list";
+import vsList from "./component/list";
 import { mapGetters } from "vuex";
 export default {
   name: "sideBar",
   components: {
-    ngList
+    vsList
   },
   computed: {
     ...mapGetters(["routes", "sidebar"])

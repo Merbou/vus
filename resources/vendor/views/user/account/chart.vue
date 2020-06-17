@@ -6,7 +6,7 @@
 
 <script>
 import { fetchAccountCountApi } from "@/api/user/chart";
-import curveChart from "@/materiels/ngCharts/curveChart/index";
+import curveChart from "@/materiels/Charts/curveChart/index";
 export default {
   name: "chartUser",
   components: {

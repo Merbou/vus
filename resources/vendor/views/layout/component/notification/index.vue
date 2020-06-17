@@ -10,10 +10,27 @@
           @click="viewNotification"
         >far fa-bell</v-icon>
       </v-badge>
-      <v-icon dark color="grey darken-4" v-show="view==0" class="mx-3" v-on="on">far fa-bell</v-icon>
+      <v-icon
+        dark
+        color="grey darken-4"
+        v-show="view==0"
+        class="mx-3"
+        v-on="on"
+        @click.once="fetchNotifications(0)"
+      >far fa-bell</v-icon>
     </template>
-    <v-list width="400" height="400" style="overflow-y:auto" v-if="notifications.length>0" two-line>
-      <notify-item :notifications="notifications" />
+    <v-list width="400" height="400" style="overflow-y:auto" two-line>
+      <notify-item :notifications="notifications" v-if="notifications.length>0" />
+      <template v-if="loading||!notifications.length">
+        <v-skeleton-loader
+          v-for="n in 10"
+          :key="n"
+          class="mx-auto"
+          max-width="300"
+          type="list-item-avatar-two-line"
+        ></v-skeleton-loader>
+      </template>
+
       <v-list-item
         @click="moreNotifications"
         v-if="pagination.page < pagination.last_page"
@@ -24,16 +41,15 @@
         </v-list-item-title>
       </v-list-item>
     </v-list>
-    <v-list width="400" v-if="notifications.length==0 || loading" two-line>
-      <v-list-item class="d-flex justify-center">
-        <v-progress-circular class="my-2 loadigData" indeterminate color="green"></v-progress-circular>
-      </v-list-item>
-    </v-list>
   </v-menu>
 </template>
 
 <script>
-import { fetchNotificationsApi, viewNotificationApi } from "@/api/notification";
+import {
+  fetchNotificationsApi,
+  viewNotificationApi,
+  fetchNotificationsViewApi
+} from "@/api/notification";
 import { mapGetters } from "vuex";
 import notify from "@/utils/notify";
 import notifyItem from "./components/notifyItem.vue";
@@ -51,9 +67,8 @@ export default {
     ...mapGetters(["user"])
   },
   mounted() {
-    this.fetchNotifications(this.pagination.page);
+    this.fetchNotificationsView();
   },
-
   created() {
     Echo.private(`App.User.${this.user.id}`).listen("notificationEvent", e => {
       this.notifications.push(e.notification);
@@ -79,6 +94,20 @@ export default {
           console.log(err);
         });
     },
+    fetchNotificationsView(page) {
+      this.loading = true;
+      fetchNotificationsViewApi(page)
+        .then(({ view }) => {
+          this.loading = false;
+          this.view = view;
+          if (this.view) notify.icon();
+        })
+        .catch(err => {
+          this.loading = false;
+          console.log(err);
+        });
+    },
+
     moreNotifications() {
       this.pagination.page++;
       if (this.pagination.page <= this.pagination.last_page)

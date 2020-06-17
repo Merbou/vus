@@ -30,7 +30,6 @@ class notificationController extends Controller
 
 
 
-
     public function store(Request $request, $id)
     {
         try {
@@ -56,6 +55,15 @@ class notificationController extends Controller
     }
 
 
+    public function getView()
+    {
+        try {
+            $view = notification::where([["to", \Auth::id()], ["vu", 0]])->count();
+            return response()->json(["view" => $view], 206);
+        } catch (Exception $e) {
+            return response()->json($e, 400);
+        }
+    }
 
     public function view()
     {
