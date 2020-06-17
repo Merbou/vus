@@ -1,7 +1,14 @@
 <template>
   <div>
     <ValidationObserver ref="form" class="container" autocomplete="on" v-on:keyup.enter="validate">
-      <v-card max-width="400" class="mx-auto" :loading="loading" :disabled="loading">
+      <v-card
+        max-width="400"
+        class="mx-auto"
+        :loading="loading"
+        :disabled="loading"
+        shaped
+        elevation="10"
+      >
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
             <div>Activation</div>
@@ -18,6 +25,9 @@
                   autocomplete="on"
                   slot-scope="{errors}"
                   v-model.number="form.code"
+                  solo
+                  rounded
+                  single-line
                   :error-messages="errorRender(errors,BackErrors.code)"
                   label="Code activation"
                   required
@@ -28,7 +38,7 @@
         </v-card-text>
         <v-card-actions class="d-flex justify-space-between">
           <v-btn text small @click="sendMail(true)">Resend</v-btn>
-          <v-btn class="ma-2 white--text" color="blue" @click="validate">Verifie</v-btn>
+          <v-btn class="ma-2 white--text" color="blue" @click="validate" rounded>Verifie</v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>

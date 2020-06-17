@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\api\Auth;
 
-use Illuminate\Database\QueryException;
+use Illuminate\DatabaseQueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\registerRequest;
 use App\Http\Requests\Auth\loginRequest;
@@ -30,7 +30,7 @@ class AuthController extends Controller
             $user = $this->createWithHashing($request->all());
 
 
-            if (!$user->assignRole("writer")) throw new Exception("Role did not grant user");;
+            if (!$user->assignRole("writer")) throw new \Exception("Role did not grant user");
 
             $user->picture_path = $this->SetInitAvatar();
             $roles = Role::where('name', 'writer')->with("permissions")->get();
@@ -43,7 +43,7 @@ class AuthController extends Controller
         } catch (\Exception $th) {
             $user->delete();
             return response()->json($th, 500);
-        } catch (\QueryException $th) {
+        } catch (QueryException $th) {
             return response()->json($th, 400);
         }
     }
@@ -76,7 +76,7 @@ class AuthController extends Controller
 
 
 
-            if (!Auth::attempt($credentials)) throw new Exception(["error" => "unauthenticated"], 1);
+            if (!Auth::attempt($credentials)) throw new \Exception("unauthenticated");
 
 
 
@@ -93,7 +93,7 @@ class AuthController extends Controller
             return response()->json(["user" => $user, "token" => $access_token], 200);
         } catch (\Exception $th) {
             return response()->json($th, 403);
-        } catch (\QueryException $th) {
+        } catch (QueryException $th) {
             return response()->json($th, 400);
         }
     }

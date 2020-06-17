@@ -38,10 +38,11 @@ export default {
           this.loading = false;
           this.$store.dispatch("setInfo", Response);
           this.initUser(Response);
+          this.clearPassword();
         })
         .catch(rej => {
           this.snackbar({
-            text: "The setting was not updated. Try again later!",
+            text: "The setting was not updated.",
             color: "error"
           });
           this.vLoading(false);
@@ -51,6 +52,11 @@ export default {
     },
     initUser(data) {
       this.userInfo = Object.assign(this.userInfo, data);
+    },
+    clearPassword() {
+      this.form.last_password = "";
+      this.form.password = "";
+      this.form.password_confirmation = "";
     }
   }
 };

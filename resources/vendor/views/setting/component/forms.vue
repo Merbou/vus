@@ -50,7 +50,7 @@
 
     <v-layout>
       <v-flex xs12 md12 lg12 sm12 class="text-right mt-5">
-        <v-btn outlined color="success" @click="validate()">update</v-btn>
+        <v-btn outlined color="success" @click="validate()" rounded>update</v-btn>
       </v-flex>
     </v-layout>
   </ValidationObserver>

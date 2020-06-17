@@ -1,5 +1,5 @@
 <template>
-  <v-card :loading="loading" :disabled="loading">
+  <v-card :loading="loading" :disabled="loading" shaped>
     <v-card-text>
       <v-col wrap>
         <div xs12 md12 lg12 sm12>
@@ -16,6 +16,9 @@
               :success="form.lastname?valid:null"
               label="lastname"
               outlined
+              solo
+              rounded
+              single-line
             ></v-text-field>
           </ValidationProvider>
         </div>
@@ -33,6 +36,9 @@
               :success="form.firstname?valid:null"
               label="firstname"
               outlined
+              solo
+              rounded
+              single-line
             ></v-text-field>
           </ValidationProvider>
         </div>
@@ -50,6 +56,9 @@
               :success="form.username?valid:null"
               label="username"
               outlined
+              solo
+              rounded
+              single-line
             ></v-text-field>
           </ValidationProvider>
         </div>
@@ -92,11 +101,7 @@ export default {
   },
   methods: {
     fireInfo() {
-      this.$emit("fireInfo", {
-        lastname: this.form.lastname,
-        firstname: this.form.firstname,
-        username: this.form.username
-      });
+      this.$emit("fireInfo", this.form);
     },
     initform(form) {
       this.form.lastname = form.lastname;

@@ -13,7 +13,7 @@
       <v-card>
         <v-list>
           <v-list-item>
-            <v-list-item-avatar>
+            <v-list-item-avatar  height="50" width="50">
               <img :src="'/storage/'+user.picture_path" :alt="user.username" />
             </v-list-item-avatar>
 

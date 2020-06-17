@@ -30,7 +30,7 @@ class handleAccountController extends Controller
                 })
                 ->orderBy('created_at', 'asc')
                 ->paginate(100);
-                
+
             if (!$users) throw new  Exception("Error Processing Request");
 
             return response()->json($users, 206);
@@ -84,19 +84,19 @@ class handleAccountController extends Controller
 
             $avatar = $request->avatar;
 
-            if (!empty($request->firstname) && $request->firstname !== "null")
+            if (!empty($request->firstname) && $request->firstname !== "null" && $request->firstname !== "undefined")
                 $user->firstname = $request->firstname;
 
-            if (!empty($request->lastname) && $request->lastname !== "null")
+            if (!empty($request->lastname) && $request->lastname !== "null" && $request->lastname !== "undefined")
                 $user->lastname = $request->lastname;
 
-            if (!empty($request->username) && $request->username !== "null")
+            if (!empty($request->username) && $request->username !== "null" && $request->username !== "undefined")
                 $user->username = $request->username;
 
-            if (!empty($request->phone) && $request->phone !== "null")
+            if (!empty($request->phone) && $request->phone !== "null" && $request->phone !== "undefined")
                 $user->phone = $request->phone;
 
-            if (!empty($avatar) && $request->firstname !== "null") {
+            if (!empty($avatar) && $request->firstname !== "null" && $request->firstname !== "undefined") {
                 $user->picture_path = $this->store($avatar, Auth::id());
             } else {
                 #when sex is updated if(personal pict not exist) change pict according to sex
@@ -105,7 +105,7 @@ class handleAccountController extends Controller
                     $user->sex = $request->sex;
             }
 
-            if (!empty($request->password) && $request->password !== "null") {
+            if (!empty($request->password) && $request->password !== "null" && $request->password !== "undefined") {
                 if (Hash::check($request->last_password, $user->password)) {
                     $user->password = bcrypt($request->password);
                 } else

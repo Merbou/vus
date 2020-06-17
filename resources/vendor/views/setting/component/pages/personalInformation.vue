@@ -1,5 +1,5 @@
 <template>
-  <v-card :disabled="loading" raised :loading="loading">
+  <v-card :disabled="loading" raised :loading="loading" >
     <v-card-text>
       <v-flex xs12 md12 lg12 sm12>
         <ValidationProvider name="phone">
@@ -8,6 +8,9 @@
             @change="fireInfo"
             label="phone"
             outlined
+            solo
+            rounded
+            single-line
             class="mb-5"
             required
             default-country-code="DZ"
@@ -27,6 +30,9 @@
             :success="true"
             required
             outlined
+            solo
+            rounded
+            single-line
             item-text="text"
             item-value="value"
             :items="[{text:'Homme',value:1},{text:'Femme',value:0}]"

@@ -6,7 +6,7 @@
       autocomplete="on"
       v-on:keyup.enter="validate"
     >
-      <v-card max-width="400" class="mx-auto" :loading="loading" :disabled="loading">
+      <v-card max-width="400" class="mx-auto" :loading="loading" :disabled="loading" shaped elevation="10">
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
             <div>Login</div>
@@ -19,14 +19,16 @@
               <ValidationProvider name="email" rules="email|required">
                 <v-text-field
                   outlined
-                  :loading="loading"
+                  solo
+                  rounded
+                  single-line
                   autocomplete="on"
                   slot-scope="{
                             errors,
                             valid
                         }"
                   v-model="loginForm.email"
-                  :error-messages="errorRender(errors,BackErrors.email)"
+                  :error-messages="errorRender(errors,backErrors.email)"
                   :success="(valid)?null:valid"
                   label="email"
                   required
@@ -38,15 +40,17 @@
               <ValidationProvider name="password" rules="required|min:8">
                 <v-text-field
                   outlined
+                  solo
+                  rounded
+                  single-line
                   slot-scope="{
                             errors,
                             valid
                         }"
                   v-model="loginForm.password"
-                  :error-messages="errorRender(errors,BackErrors.password)"
+                  :error-messages="errorRender(errors,backErrors.password)"
                   :success="(valid)?null:valid"
                   label="password"
-                  :loading="loading"
                   @click:append="show = !show"
                   :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
@@ -59,7 +63,7 @@
           <v-btn text small>
             <router-link to="/register">Register</router-link>
           </v-btn>
-          <v-btn class="ma-2 white--text" color="blue" @click="validate">login</v-btn>
+          <v-btn class="ma-2 white--text" color="blue" @click="validate" rounded >login</v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>
@@ -88,7 +92,7 @@ export default {
         email: "",
         password: ""
       },
-      BackErrors: {
+      backErrors: {
         email: "",
         password: ""
       },
@@ -100,23 +104,23 @@ export default {
   methods: {
     handleLogin() {
       this.loading = true;
-      this.vLoading(true);
 
       this.$store
         .dispatch("login", this.loginForm)
         .then(response => {
           this.loading = false;
-          this.vLoading(false);
           this.snackbar({ text: "welcome back!", color: "success" });
           this.$router.push({ path: "/dashboard" }).catch(err => {});
         })
         .catch(error => {
           this.loading = false;
-          this.vLoading(false);
           if (error && error.status == 422) {
-            Object.assign(this.BackErrors, error.data.errors);
+            Object.assign(this.backErrors, error.data.errors);
           } else if (error && error.status == 403) {
-            alert("email or password is wrong!");
+            this.snackbar({
+              text: "email or password is wrong!",
+              color: "error"
+            });
           }
         });
     },
@@ -128,9 +132,9 @@ export default {
         return false;
       }
     },
-    errorRender(errors, backError) {
-      if (errors.length > 0) return errors;
-      else if (backError) return backError[0];
+    errorRender(_errors, _backError) {
+      if (_errors.length > 0) return _errors;
+      else if (_backError) return _backError[0];
     }
   }
 };
