@@ -17,10 +17,12 @@
                 v-if="item.email_verified_at"
                 v-on="on"
                 color="green"
+                small
               >fas fa-user-check</v-icon>
-              <v-icon class="state" v-else v-on="on" color="red">fas fa-user-times</v-icon>
+              <v-icon class="state" v-else v-on="on" small color="red">fas fa-user-times</v-icon>
             </template>
-            <span>account verified</span>
+            <span v-if="item.email_verified_at">account verified</span>
+            <span v-else>account not verified</span>
           </v-tooltip>
 
           <v-tooltip bottom>
@@ -31,9 +33,18 @@
                 v-on="on"
                 v-if="item.is_active"
                 color="green"
+                small
                 dark
               >yes</v-chip>
-              <v-chip class="state" @click="blockItem(item)" v-on="on" v-else color="red" dark>no</v-chip>
+              <v-chip
+                class="state"
+                @click="blockItem(item)"
+                small
+                v-on="on"
+                v-else
+                color="red"
+                dark
+              >no</v-chip>
             </template>
             <span>blocked</span>
           </v-tooltip>
@@ -169,6 +180,6 @@ export default {
 
 <style>
 .state {
-  zoom: 0.7;
+  /* zoom: 0.7; */
 }
 </style>

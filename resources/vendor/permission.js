@@ -67,8 +67,6 @@ function privateField(to, form, next) {
 
 router.beforeEach((to, from, next) => {
     NProgress.start()
-    store.dispatch("loading", true)
-
     if (getToken()) {
 
         ///PRIVATE ROUTES
@@ -95,14 +93,12 @@ router.beforeEach((to, from, next) => {
     }
     if (to.path == from.path) {
         NProgress.done()
-        store.dispatch("loading", false)
     }
 
 })
 
 
 router.afterEach(() => {
-    store.dispatch("loading", false)
 
     NProgress.done()
 

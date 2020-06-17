@@ -64,7 +64,7 @@ import materielTable from "@/materiels/Table";
 import { mapGetters } from "vuex";
 export default {
   name: "materielTrash",
-  components: { ngTable },
+  components: { materielTable },
   props: {
     headers: {
       type: Array,

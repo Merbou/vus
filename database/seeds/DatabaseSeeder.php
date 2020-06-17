@@ -20,17 +20,17 @@ class DatabaseSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        Permission::create(['name' => 'dashboard']);
-        Permission::create(['name' => 'users.table']);
-        Permission::create(['name' => 'users.chart']);
-        Permission::create(['name' => 'users.privilege']);
-        Permission::create(['name' => 'trash']);
-        Permission::create(['name' => 'setting']);
-        Permission::create(['name' => 'contacts.@delete contacts']);
-        Permission::create(['name' => 'contacts.@read contacts']);
+        Permission::create(['guard_name' => 'api','name' => 'dashboard']);
+        Permission::create(['guard_name' => 'api','name' => 'users.table']);
+        Permission::create(['guard_name' => 'api','name' => 'users.chart']);
+        Permission::create(['guard_name' => 'api','name' => 'users.privilege']);
+        Permission::create(['guard_name' => 'api','name' => 'trash']);
+        Permission::create(['guard_name' => 'api','name' => 'setting']);
+        Permission::create(['guard_name' => 'api','name' => 'contacts.@delete contacts']);
+        Permission::create(['guard_name' => 'api','name' => 'contacts.@read contacts']);
 
         // create roles and assign existing permissions
-        $role1 = Role::create(['name' => 'writer']);
+        $role1 = Role::create(['guard_name' => 'api','name' => 'writer']);
         $role1->givePermissionTo('dashboard');
         $role1->givePermissionTo('users.chart');
         // $role1->givePermissionTo('users.table');
@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         $role1->givePermissionTo('setting');
         $role1->givePermissionTo('trash');
 
-        $role2 = Role::create(['name' => 'admin']);
+        $role2 = Role::create(['guard_name' => 'api','name' => 'admin']);
         $role2->givePermissionTo('dashboard');
         $role2->givePermissionTo('users.chart');
         $role2->givePermissionTo('users.table');
@@ -47,7 +47,7 @@ class DatabaseSeeder extends Seeder
         $role2->givePermissionTo('setting');
         $role2->givePermissionTo('trash');
 
-        $role3 = Role::create(['name' => 'super-admin']);
+        $role3 = Role::create(['guard_name' => 'api','name' => 'super-admin']);
         // gets all permissions via Gate::before rule; see AuthServiceProvider
 
         $user = App\User::create([

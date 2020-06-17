@@ -124,6 +124,7 @@ export default {
     },
     storeRole(role) {
       this.vLoading(true);
+      this.open = false;
       const index = this.save(role);
       storeRoleApi(role)
         .then(res => {
@@ -133,7 +134,6 @@ export default {
             color: "success"
           });
           this.getData()[index].id = res.id;
-          this.open = false;
         })
         .catch(err => {
           this.vLoading(false);
@@ -142,7 +142,6 @@ export default {
             color: "error"
           });
           this.remove(index);
-          this.open = false;
         });
     },
     deleteRole() {

@@ -25,6 +25,7 @@ export default {
   },
   watch: {
     loading(val) {
+      console.log(val)
       this.loader = val;
     }
   }

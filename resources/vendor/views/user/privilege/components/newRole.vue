@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="open" max-width="500px" @click:outside="close">
+  <v-dialog :value="open" max-width="500px" @click:outside="close">
     <v-card>
       <v-card-title>
         <span class="headline">New role</span>
