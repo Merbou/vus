@@ -10,6 +10,6 @@ $factory->define(contact::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'subject' => $faker->title,
         'description' => $faker->paragraph,
-        "to" => 1,
+        'to' => rand(1,15)
     ];
 });

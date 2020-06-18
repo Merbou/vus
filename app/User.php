@@ -10,7 +10,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasApiTokens,HasRoles;
+    use Notifiable, HasApiTokens, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -19,7 +19,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username', 'email', 'password', "firstName",
-        'lastName',"phone","picture_path","sex","is_active",
+        'lastName', "phone", "picture_path", "sex", "is_active",
     ];
 
     /**
@@ -44,5 +44,20 @@ class User extends Authenticatable
     public function userActivation()
     {
         return $this->hasOne('App\userActivation');
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany('App\contact');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany('App\ModelsChat\message');
+    }
+
+    public function rooms()
+    {
+        return $this->belongsToMany('App\ModelsChat\room');
     }
 }

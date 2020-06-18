@@ -8,13 +8,18 @@
 </template>
 
 <script>
-import { materielAsker, materielLoading, materielSnackbar } from "@/materiels/Dialog/index.js";
+import {
+  materielAsker,
+  materielLoading,
+  materielSnackbar
+} from "@/materiels/Dialog/index.js";
+
 import { mapGetters } from "vuex";
 export default {
   components: {
     materielAsker,
     materielLoading,
-    materielSnackbar
+    materielSnackbar,
   },
   name: "App"
 };

@@ -17,7 +17,7 @@ class CreateUserActivationsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->integer("code");
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');;
             $table->timestamps();
         });
     }

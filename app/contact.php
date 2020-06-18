@@ -15,4 +15,10 @@ class contact extends Model
         "type",
         "deleted"
     ];
+
+
+    public function sender()
+    {
+        return $this->belongsTo('App\User', 'to');
+    }
 }

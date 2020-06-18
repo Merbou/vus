@@ -32,6 +32,7 @@
         "socket.io-client": "^2.3.0",
         "vee-validate": "^3.2.5",
         "vue": "^2.6.11",
+        "vue-advanced-chat": "^0.4.3",
         "vue-apexcharts": "^1.5.2",
         "vue-phone-number-input": "^1.1.6",
         "vue-router": "^3.1.6",

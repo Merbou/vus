@@ -10,7 +10,6 @@ import './src/plugins/laravel-echo'
 
 Vue.mixin(mixin)
 
-
 new Vue({
   vuetify,
   router,

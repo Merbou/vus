@@ -364,6 +364,22 @@ var map = {
 	"./auth/index.js": [
 		"./resources/vendor/api/auth/index.js"
 	],
+	"./chat/message": [
+		"./resources/vendor/api/chat/message.js",
+		49
+	],
+	"./chat/message.js": [
+		"./resources/vendor/api/chat/message.js",
+		49
+	],
+	"./chat/room": [
+		"./resources/vendor/api/chat/room.js",
+		48
+	],
+	"./chat/room.js": [
+		"./resources/vendor/api/chat/room.js",
+		48
+	],
 	"./contact": [
 		"./resources/vendor/api/contact/index.js",
 		1

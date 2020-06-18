@@ -25,7 +25,7 @@ class CreateNotificationsTable extends Migration
 
 
 
-            $table->foreign('to')->references('id')->on('users');
+            $table->foreign('to')->references('id')->on('users')->onDelete('cascade');;
             $table->timestamps();
         });
     }
