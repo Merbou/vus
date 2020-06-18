@@ -2,9 +2,9 @@
 
 import request from "@/utils/request";
 
-export function fetchRoomsApi() {
+export function fetchRoomsApi(page) {
     return request({
-        url: '/rooms',
+        url: `/rooms?page=${page || 1}`,
         method: "get",
     })
 }

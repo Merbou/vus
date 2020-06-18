@@ -45,6 +45,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     
     //chats
     Route::get("/rooms", "chat\\roomController@index");
+    Route::get("/messages/{id}", "chat\\messageController@index");
     
     
     //Notifications

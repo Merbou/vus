@@ -2,9 +2,9 @@
 
 import request from "@/utils/request";
 
-export function fetchContactsApi(page) {
+export function fetchMessagesApi(page,id) {
     return request({
-        url: `/contacts?page=${page || 1}`,
+        url: `/messages/${id}?page=${page || 1}`,
         method: "get",
     })
 }

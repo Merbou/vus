@@ -5,16 +5,24 @@ namespace App\Http\Controllers\chat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\room;
+use Illuminate\Support\Facades\Auth;
 
 class roomController extends Controller
 {
-   
-    
+
+
 
     public function index()
     {
         try {
-            $rooms = room::with("users")->get();
+            $rooms = room::select('id', 'name')
+                ->with('users:users.id,users.username')
+                ->whereHas('users', function ($query) {
+                    return $query
+                        ->select('users.id as user_id', 'users.username as username')
+                        ->where('users.id', '=', Auth::id());
+                })->paginate(100);
+
             return response()->json($rooms, 200);
         } catch (ModelNotFoundException $e) {
             return response()->json($e, 400);
