@@ -6,6 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\message;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use NunoMaduro\Collision\Adapters\Phpunit\Style;
 
 class messageController extends Controller
 {
@@ -17,7 +20,13 @@ class messageController extends Controller
     public function index($id)
     {
         try {
-            $messages = message::select('id as _id', 'content', 'sender_id', 'username')
+            $messagesViewd = message::where('room_id', $id)->update(['seen' => 1]);
+
+            $messages = message::select([
+                'id as _id', 'content', 'room_id', 'sender_id', 'username', 'seen',
+                DB::raw('DATE_FORMAT(created_at, "%H:%i") as timestamp'),
+                DB::raw('DATE_FORMAT(created_at, "%e %b %Y") as date'),
+            ])
                 ->where('room_id', $id)->paginate(50);
             return response()->json($messages, 200);
         } catch (QueryException $e) {
@@ -31,42 +40,64 @@ class messageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($id, Request $request)
     {
-        //
+        try {
+            if (!$id || $id == 'null' || $id == 'undefined') throw new Exception();
+
+            $request->validate([
+                'content' => 'required|string',
+            ]);
+
+
+            $message = message::create([
+                'content' => $request->content,
+                'room_id' => $id,
+                'sender_id' => Auth::id(),
+                'username' => Auth::user()->username,
+            ]);
+
+            return response()->json(['id' => $message->id], 200);
+        } catch (Exception $e) {
+
+            return response()->json($e, 400);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            if (!$id || $id == 'null' || $id == 'undefined') throw new Exception();
+
+            $request->validate([
+                'content' => 'required|string',
+            ]);
+
+
+            $message = message::where('id', $id)
+                ->update(['content' => $request->content]);
+
+            return response()->json(204);
+        } catch (Exception $e) {
+
+            return response()->json($e, 400);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function destroy($id)
     {
-        //
+        try {
+
+            $message = message::where('id', $id)->delete();
+            return response()->json(204);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
     }
 }

@@ -17,7 +17,10 @@ class roomController extends Controller
     public function index()
     {
         try {
-            $rooms = room::with('users:users.id as _id,users.username')
+            $rooms = room::with([
+                'users:users.id as _id,users.username',
+                'last_message'
+            ])
                 ->whereHas('users', function ($query) {
                     return $query
                         ->where('users.id', '=', Auth::id());

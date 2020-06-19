@@ -2,27 +2,33 @@
 
 import request from "@/utils/request";
 
-export function fetchMessagesApi(page,id) {
+export function fetchMessagesApi(page, id) {
     return request({
         url: `/messages/${id}?page=${page || 1}`,
         method: "get",
     })
 }
 
-export function deleteContactsApi(ids) {
+export function sendMessagesApi(id, data) {
     return request({
-        url: `/destroy-contacts`,
-        method: "delete",
-        data: {
-            ids
-        }
+        url: `/message/${id}`,
+        method: "post",
+        data
     })
 }
 
-export function readContactApi(id) {
+export function editMessagesApi(id, data) {
     return request({
-        url: `contact/${id}`,
+        url: `edit-message/${id}`,
         method: 'put',
+        data
+    });
+
+}
+export function deleteMessagesApi(id) {
+    return request({
+        url: `destroy-message/${id}`,
+        method: 'delete',
     });
 
 }

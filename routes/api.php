@@ -42,18 +42,20 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get("/contacts", "api\contact\contactController@index");
     Route::delete("/destroy-contacts", "api\contact\contactController@destroy");
     Route::put("/contact/{id}", "api\contact\contactController@read");
-    
+
     //chats
     Route::get("/rooms", "chat\\roomController@index");
     Route::get("/messages/{id}", "chat\\messageController@index");
-    
-    
+    Route::post("/message/{id}", "chat\\messageController@store");
+    Route::put("/edit-message/{id}", "chat\\messageController@update");
+    Route::delete("/destroy-message/{id}", "chat\\messageController@destroy");
+
     //Notifications
     Route::get("/notifications", "api\\notification\\notificationController@index");
     Route::put("/view-notifications", "api\\notification\\notificationController@view");
     Route::get("/view-notifications", "api\\notification\\notificationController@getView");
     Route::get("/notification/{id}", "api\\notification\\notificationController@store");
-    
+
     //Trash
     Route::get("/trash-contacts", "trash\contactController@index");
     Route::delete("/trash-contacts/trash", "trash\contactController@destroy");
