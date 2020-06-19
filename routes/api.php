@@ -30,9 +30,10 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get("/permissions", "api\user\privilege\permissionController@permissions");
     Route::post("/permissions", "api\user\privilege\permissionController@storePermissions");
     //Account
-    Route::get("/users-account", "api\user\handleAccountController@index");
+    Route::get("/users", "api\user\indexController@index");
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
     Route::put("/update-user", "api\user\handleAccountController@update");
+    Route::post("/users-q-search", "api\user\indexController@quickSearch");
 
     //chart account
     Route::get("/count-account", "api\user\chartAccountController@count");

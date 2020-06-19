@@ -1,42 +1,49 @@
 <template>
   <div>
+    <add-room :open="openAddRoom" @create="createRoom" @close="openAddRoom = false" />
     <chat-window
       :currentUserId="user.id"
       :rooms="rooms"
       :messages="messages"
       :loadingRooms="loadingRooms"
-      :showAddRoom="false"
       :messagesLoaded="messagesLoaded"
       @fetchMessages="fetchMessages"
       @sendMessage="sendMessage"
       @editMessage="editMessage"
       @deleteMessage="deleteMessage"
+      @addRoom="addRoom"
     ></chat-window>
   </div>
 </template>
 
 <script>
-import moment from "moment";
 import ChatWindow from "vue-advanced-chat";
 import "vue-advanced-chat/dist/vue-advanced-chat.css";
-import { fetchRoomsApi } from "@/api/chat/room.js";
+
+import moment from "moment";
+import { mapGetters } from "vuex";
+import { fetchRoomsApi, createRoomsApi } from "@/api/chat/room.js";
 import {
   fetchMessagesApi,
   sendMessagesApi,
   editMessagesApi,
   deleteMessagesApi
 } from "@/api/chat/message.js";
-import { mapGetters } from "vuex";
+
+import addRoom from "./components/addRoom";
+
 export default {
   components: {
-    ChatWindow
+    ChatWindow,
+    addRoom
   },
   data() {
     return {
       rooms: [],
       messages: [],
       loadingRooms: false,
-      messagesLoaded: false
+      messagesLoaded: false,
+      openAddRoom: false
     };
   },
   computed: {
@@ -105,6 +112,23 @@ export default {
           console.log(err);
           this.messages.splice(index, 0, message);
         });
+    },
+    addRoom() {
+      this.openAddRoom = true;
+    },
+    createRoom(room) {
+      console.log(room)
+      // const index = this.rooms.push(room) - 1;
+      // createRoomsApi(room)
+      //   .then(res => {
+      //     this.openAddRoom = false;
+      //     console.log(res);
+      //     // this.rooms[index]["_id"] = res.id;
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //     this.rooms.splice(index, 1);
+      //   });
     }
   }
 };

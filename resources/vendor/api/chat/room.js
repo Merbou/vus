@@ -9,20 +9,10 @@ export function fetchRoomsApi(page) {
     })
 }
 
-export function deleteContactsApi(ids) {
+export function createRoomsApi(data) {
     return request({
-        url: `/destroy-contacts`,
-        method: "delete",
-        data: {
-            ids
-        }
+        url: `/create-room`,
+        method: "post",
+        data
     })
-}
-
-export function readContactApi(id) {
-    return request({
-        url: `contact/${id}`,
-        method: 'put',
-    });
-
 }

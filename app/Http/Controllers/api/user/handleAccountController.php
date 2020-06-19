@@ -13,34 +13,7 @@ use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class handleAccountController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        try {
-            $selected = ["id", "email", "username", "firstname", "lastname", "created_at", "sex", "email_verified_at", "is_active"];
-
-            $users = User::select($selected)->where("id", "!=", Auth::id())
-                ->with("roles")
-                ->whereDoesntHave('roles', function ($query) {
-                    $query->where('name', 'super-admin');
-                })
-                ->orderBy('created_at', 'asc')
-                ->paginate(100);
-
-            if (!$users) throw new  Exception("Error Processing Request");
-
-            return response()->json($users, 206);
-        } catch (Exception $e) {
-            return response()->json($e, 400);
-        }
-    }
-
-
-
+   
 
     /**
      * blocked the specified resource in storage.

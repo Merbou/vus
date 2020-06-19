@@ -4,7 +4,7 @@ import request from "@/utils/request";
 
 export function fetchUsersApi(page) {
     return request({
-        url: `/users-account?page=${page || 1}`,
+        url: `/users?page=${page || 1}`,
         method: "get"
     })
 }

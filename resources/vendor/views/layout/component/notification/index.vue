@@ -19,11 +19,11 @@
         @click.once="fetchNotifications(0)"
       >far fa-bell</v-icon>
     </template>
-    <v-list width="400" height="400" style="overflow-y:auto" two-line>
+    <v-list width="400" :height="height" style="overflow-y:auto" two-line>
       <notify-item :notifications="notifications" v-if="notifications.length>0" />
-      <template v-if="loading||!notifications.length">
+      <template v-if="loading">
         <v-skeleton-loader
-          v-for="n in 10"
+          v-for="n in 1"
           :key="n"
           class="mx-auto"
           max-width="300"
@@ -59,6 +59,7 @@ export default {
   },
   data: () => ({
     loading: false,
+    height: 90,
     notifications: [],
     pagination: { page: 1, last_page: 0 },
     view: 0
@@ -86,6 +87,7 @@ export default {
           if (this.view) notify.icon();
 
           this.notifications.push(...notifications.data);
+          if (notifications.length) this.height = 400;
           this.pagination.page = notifications.current_page;
           this.pagination.last_page = notifications.last_page;
         })

@@ -401,6 +401,14 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	"./user/privilege/role.js": [
 		"./resources/vendor/api/user/privilege/role.js",
 		18
+	],
+	"./user/search": [
+		"./resources/vendor/api/user/search.js",
+		49
+	],
+	"./user/search.js": [
+		"./resources/vendor/api/user/search.js",
+		49
 	]
 };
 function webpackAsyncContext(req) {
