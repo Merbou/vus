@@ -5,6 +5,7 @@ namespace App\Http\Controllers\chat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\message;
+use Illuminate\Database\QueryException;
 
 class messageController extends Controller
 {
@@ -19,7 +20,7 @@ class messageController extends Controller
             $messages = message::select('id as _id', 'content', 'sender_id', 'username')
                 ->where('room_id', $id)->paginate(50);
             return response()->json($messages, 200);
-        } catch (ModelNotFoundException $e) {
+        } catch (QueryException $e) {
             return response()->json($e, 400);
         }
     }
