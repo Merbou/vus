@@ -7,6 +7,50 @@
 
       <v-card-text>
         <v-container>
+          <ValidationProvider name="Search field" rules="max:30|alpha_dash">
+            <v-combobox
+              v-model="select"
+              :items="people"
+              :allow-overflow="false"
+              hide-no-data
+              hide-selected
+              @update:search-input="searchPeople"
+              item-value="id"
+              item-text="username"
+              label="invite someone"
+              no-filter
+              outlined
+              multiple
+              solo
+              small-chips
+              rounded
+              chips
+            >
+              <template v-slot:selection="data">
+                <v-chip
+                  v-bind="data.attrs"
+                  :input-value="data.selected"
+                  close
+                  @click="data.select"
+                  @click:close="remove(data.item)"
+                >{{ data.item.username|etc }}</v-chip>
+              </template>
+              <template v-slot:item="data">
+                <template v-if="typeof data.item !== 'object'">
+                  <v-list-item-content v-text="data.item"></v-list-item-content>
+                </template>
+                <template v-else>
+                  <!-- <v-list-item-avatar>
+                      <img :src="data.item.avatar" />
+                  </v-list-item-avatar>-->
+                  <v-list-item-content>
+                    <v-list-item-title v-html="data.item.username"></v-list-item-title>
+                    <v-list-item-subtitle v-html="data.item.email"></v-list-item-subtitle>
+                  </v-list-item-content>
+                </template>
+              </template>
+            </v-combobox>
+          </ValidationProvider>
           <ValidationObserver
             ref="create"
             class="container"
@@ -19,7 +63,7 @@
                             errors,
                             valid
                         }"
-                v-model="item.roomName"
+                v-model="roomName"
                 :error-messages="errors"
                 :success="valid"
                 label="Room name"
@@ -27,69 +71,6 @@
                 solo
                 rounded
               ></v-text-field>
-            </ValidationProvider>
-            <ValidationProvider name="Search field" rules="max:30|alpha_dash">
-              <v-autocomplete
-                v-model="item.select"
-                :items="people"
-                @update:search-input="searchPeople"
-                return-object
-                label="invite someone"
-                no-filter
-                multiple
-                outlined
-                solo
-                rounded
-                chips
-              >
-                <template v-slot:selection="data">
-                  <template v-if="typeof data.item !== 'object'">
-                    <v-chip
-                      :key="JSON.stringify(data.item)"
-                      v-bind="data.attrs"
-                      :input-value="data.selected"
-                      :disabled="data.disabled"
-                      @click:close="data.parent.selectItem(data.item)"
-                    >
-                      <v-avatar
-                        class="accent white--text"
-                        left
-                        v-text="data.item.slice(0, 1).toUpperCase()"
-                      ></v-avatar>
-                      <v-list-item-content v-text="data.item"></v-list-item-content>
-                      {{ data.item }}
-                    </v-chip>
-                  </template>
-                  <template v-else>
-                    <v-chip
-                      :key="data.item.id"
-                      v-bind="data.attrs"
-                      :input-value="data.selected"
-                      :disabled="data.disabled"
-                      @click:close="data.parent.selectItem(data.item.username)"
-                    >
-                      <v-avatar
-                        class="accent white--text"
-                        left
-                        v-text="data.item.username.slice(0, 1).toUpperCase()"
-                      ></v-avatar>
-                      <v-list-item-content v-text="data.item.username"></v-list-item-content>
-                      {{ data.item.username }}
-                    </v-chip>
-                  </template>
-                </template>
-                <template v-slot:item="data">
-                  <template v-if="typeof data.item !== 'object'">
-                    <v-list-item-content v-text="data.item"></v-list-item-content>
-                  </template>
-                  <template v-else>
-                    <v-list-item-content>
-                      <v-list-item-title v-html="data.item.username"></v-list-item-title>
-                      <v-list-item-subtitle v-html="data.item.email"></v-list-item-subtitle>
-                    </v-list-item-content>
-                  </template>
-                </template>
-              </v-autocomplete>
             </ValidationProvider>
           </ValidationObserver>
         </v-container>
@@ -122,10 +103,8 @@ export default {
   data() {
     return {
       people: [],
-      item: {
-        roomName: "",
-        select: []
-      }
+      select: null,
+      roomName: ""
     };
   },
   methods: {
@@ -139,12 +118,26 @@ export default {
             console.log(err);
           });
     },
+    create() {
+      const select = this.select.filter(e => typeof e === "object");
+      const roomName = this.roomName;
+      this.$emit("create", { roomName, select });
+    },
     async validate() {
       const result = await this.$refs.create.validate();
-      if (result) this.$emit("create", this.item);
+      if (result) this.create();
+    },
+    remove(item) {
+      const index = this.select.indexOf(item);
+      if (index >= 0) this.select.splice(index, 1);
     },
     close() {
       this.$emit("close");
+    }
+  },
+  filters: {
+    etc(val) {
+      if (val) return val.length > 10 ? val.slice(0, 10) + "..." : val;
     }
   }
 };

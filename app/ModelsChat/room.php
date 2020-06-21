@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class room extends Model
 {
+
+    protected $fillable = [
+        "name",
+    ];
     public function messages()
     {
         return $this->hasMany('App\ModelsChat\message');

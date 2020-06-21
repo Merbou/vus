@@ -66,10 +66,11 @@ export default {
         });
     },
     fetchMessages({ room, options = {} }) {
+      this.messagesLoaded = false;
       fetchMessagesApi(1, room.roomId)
         .then(res => {
           this.messages = res.data;
-          if ((res.current_page = res.last_page)) this.messagesLoaded = true;
+          if (res.current_page == res.last_page) this.messagesLoaded = true;
         })
         .catch(err => {
           console.log(err);
@@ -116,32 +117,53 @@ export default {
     addRoom() {
       this.openAddRoom = true;
     },
-    createRoom(room) {
-      console.log(room)
-      // const index = this.rooms.push(room) - 1;
-      // createRoomsApi(room)
-      //   .then(res => {
-      //     this.openAddRoom = false;
-      //     console.log(res);
-      //     // this.rooms[index]["_id"] = res.id;
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //     this.rooms.splice(index, 1);
-      //   });
+    createRoom(data) {
+      const { roomName, select } = data;
+
+      const ids = select.map(e => e.id);
+
+      const index = this.rooms.push(this.createVirtualroom(data)) - 1;
+
+      createRoomsApi({ roomName, ids })
+        .then(res => {
+          this.rooms[index]["roomId"] = res.id;
+        })
+        .catch(err => {
+          console.log(err);
+          this.rooms.splice(index, 1);
+        })
+        .finally(err => (this.openAddRoom = false));
+    },
+    createVirtualroom({ roomName, select }) {
+      const room = roomName ? roomName : nameSeries(select);
+      return {
+        roomId: "v" + this.rooms.length,
+        roomName: room,
+        users: select
+      };
     }
   }
 };
 
 function reform(e) {
-  e["lastMessage"] = { ...e["last_message"] };
-  delete e["last_message"];
+  if (!e["roomName"]) e["roomName"] = nameSeries(e["users"]);
+  if (e["last_message"]) {
+    e["lastMessage"] = { ...e["last_message"] };
+    delete e["last_message"];
+  } else delete e["last_message"];
   return e;
+}
+function nameSeries(_obj) {
+  return _obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
+}
+function etc(val) {
+  if (val) return val.length > 10 ? val.slice(0, 20) + "..." : val;
 }
 </script>
 
 <style>
-.room-header.app-border-b {
+.room-header.app-border-b,
+.container-scroll {
   z-index: 1 !important;
 }
 </style>

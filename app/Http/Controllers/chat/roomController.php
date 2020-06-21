@@ -5,9 +5,11 @@ namespace App\Http\Controllers\chat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\room;
+use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 
+use function PHPSTORM_META\map;
 
 class roomController extends Controller
 {
@@ -34,15 +36,35 @@ class roomController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function store(Request $request)
     {
-        //
+        try {
+            $data = ["name" => null];
+            $rules = ['ids.*' => 'required|integer'];
+
+            if ($request->roomName && $request->roomName !== "null" && $request->roomName !== "undefined") {
+                $rules["roomName"] = 'string';
+                $data["roomName"] = $request->roomName;
+            }
+
+
+            $request->validate($rules);
+
+            $users = User::whereIn('id', $request->ids)->select("id")->get()->map(function($q){
+                return $q["id"];
+            });
+
+            if (count($users)) {
+                $users->push(Auth::id());
+                $room = room::create($data);
+                $room->users()->attach($users);
+            }
+            return response()->json(["id" => $room->id], 200);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
     }
 
     /**

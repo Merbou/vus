@@ -56,7 +56,7 @@ class indexController extends Controller
                 return $this;
             });
 
-            $selected = ["id", "username", "email"];
+            $selected = ["id as _id","id", "username", "email"];
 
             $users = User::query()
                 ->select($selected)

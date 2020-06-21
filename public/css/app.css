@@ -404,11 +404,11 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	],
 	"./user/search": [
 		"./resources/vendor/api/user/search.js",
-		49
+		19
 	],
 	"./user/search.js": [
 		"./resources/vendor/api/user/search.js",
-		49
+		19
 	]
 };
 function webpackAsyncContext(req) {
