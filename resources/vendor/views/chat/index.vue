@@ -2,6 +2,9 @@
   <div>
     <add-room :open="openAddRoom" @create="createRoom" @close="openAddRoom = false" />
     <chat-window
+      :showFiles="false"
+      :showEmojis="false"
+      :showReactionEmojis="false"
       :currentUserId="user.id"
       :rooms="rooms"
       :messages="messages"
@@ -17,8 +20,7 @@
 </template>
 
 <script>
-import ChatWindow from "vue-advanced-chat";
-import "vue-advanced-chat/dist/vue-advanced-chat.css";
+import ChatWindow from "@/materiels/Chat/ChatWindow";
 
 import moment from "moment";
 import { mapGetters } from "vuex";
@@ -86,7 +88,7 @@ export default {
       const index = this.messages.push(data) - 1;
       sendMessagesApi(roomId, { content })
         .then(res => {
-          this.messages[index]["_id"] = res.id;
+          this.messages[index] = {...this.messages[index],...res};
         })
         .catch(err => {
           console.log(err);
@@ -155,9 +157,6 @@ function reform(e) {
 }
 function nameSeries(_obj) {
   return _obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
-}
-function etc(val) {
-  if (val) return val.length > 10 ? val.slice(0, 20) + "..." : val;
 }
 </script>
 

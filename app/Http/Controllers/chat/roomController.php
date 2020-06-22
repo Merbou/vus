@@ -52,7 +52,7 @@ class roomController extends Controller
 
             $request->validate($rules);
 
-            $users = User::whereIn('id', $request->ids)->select("id")->get()->map(function($q){
+            $users = User::whereIn('id', $request->ids)->select("id")->get()->map(function ($q) {
                 return $q["id"];
             });
 
