@@ -44,7 +44,17 @@ export default {
       messages: [],
       loadingRooms: false,
       messagesLoaded: false,
-      openAddRoom: false
+      openAddRoom: false,
+      pagination: {
+        room: {
+          current_page: 1,
+          last_page: ""
+        },
+        message: {
+          current_page: 1,
+          last_page: ""
+        }
+      }
     };
   },
   computed: {
@@ -56,22 +66,24 @@ export default {
   methods: {
     fetchRooms() {
       this.loadingRooms = true;
-      fetchRoomsApi()
-        .then(res => {
-          this.loadingRooms = false;
-          this.rooms = res.data;
+      if (!this.paginate("room")) this.loadingRooms = false;
+      fetchRoomsApi(this.pagination.room.current_page)
+        .then(({ data, current_page, last_page }) => {
+          this.rooms.push(...data);
+          this.pagination.room = { current_page, last_page };
         })
-        .catch(err => {
-          this.loadingRooms = false;
-          console.log(err);
-        });
+        .catch(err => console.log(err))
+        .finally(() => (this.loadingRooms = false));
     },
     fetchMessages({ room, options = {} }) {
+      if (!this.paginate("message")) this.messagesLoaded = true;
+
       this.messagesLoaded = false;
-      fetchMessagesApi(1, room.roomId)
-        .then(res => {
-          this.messages = res.data;
-          if (res.current_page == res.last_page) this.messagesLoaded = true;
+      fetchMessagesApi(this.pagination.message.current_page, room.roomId)
+        .then(({ data, current_page, last_page }) => {
+          this.messages.push(...data);
+          this.pagination.message = { current_page, last_page };
+          if (current_page == last_page) this.messagesLoaded = true;
         })
         .catch(err => {
           console.log(err);
@@ -84,12 +96,12 @@ export default {
         content,
         sender_id: this.user.id,
         username: this.user.username,
-        timestamp: date.getHours()+":"+date.getMinutes(),
+        timestamp: date.getHours() + ":" + date.getMinutes()
       };
       const index = this.messages.push(data) - 1;
       sendMessagesApi(roomId, { content })
         .then(res => {
-          this.messages[index] =Object.assign(this.messages[index],res);
+          this.messages[index] = Object.assign(this.messages[index], res);
         })
         .catch(err => {
           console.log(err);
@@ -144,6 +156,15 @@ export default {
         roomName: room,
         users: select
       };
+    },
+    paginate(name) {
+      if (this.pagination[name].current_page && this.pagination[name].last_page)
+        if (
+          this.pagination[name].current_page < this.pagination[name].last_page
+        ) {
+          this.pagination[name].current_page += 1;
+          return true;
+        } else return false;
     }
   }
 };

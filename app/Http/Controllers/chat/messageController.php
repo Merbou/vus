@@ -27,7 +27,7 @@ class messageController extends Controller
                 DB::raw('DATE_FORMAT(created_at, "%H:%i") as timestamp'),
                 DB::raw('DATE_FORMAT(created_at, "%e %b %Y") as date'),
             ])
-                ->where('room_id', $id)->paginate(50);
+                ->where('room_id', $id)->paginate(20);
             return response()->json($messages, 200);
         } catch (QueryException $e) {
             return response()->json($e, 400);
