@@ -5,12 +5,9 @@ namespace App\Http\Controllers\chat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\message;
-use DateTime;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use NunoMaduro\Collision\Adapters\Phpunit\Style;
-use PhpParser\Node\Expr\Cast\Object_;
 use stdClass;
 
 class messageController extends Controller
@@ -23,10 +20,10 @@ class messageController extends Controller
     public function index($id)
     {
         try {
-            $messagesViewd = message::where('room_id', $id)->update(['seen' => 1]);
+            $messagesViewd = message::where([['room_id', $id], ["sender_id", Auth::id()]])->update(['seen' => 1]);
 
             $messages = message::select([
-                "id",'id as _id', 'content', 'room_id', 'sender_id', 'username', 'seen',
+                "id", 'id as _id', 'content', 'room_id', 'sender_id', 'username', 'seen',
                 DB::raw('DATE_FORMAT(created_at, "%H:%i") as timestamp'),
                 DB::raw('DATE_FORMAT(created_at, "%e %b %Y") as date'),
             ])
@@ -109,15 +106,11 @@ class messageController extends Controller
     public function getMessageFormat($message)
     {
         $response = new stdClass();
-        $response->id = $message->id;
+        $response->_id = $message->id;
         $response->content = $message->content;
         $response->sender_id = $message->sender_id;
         $response->room_id = $message->room_id;
         $response->username = $message->username;
-
-        $cls_date = new DateTime($message->created_at);
-        $response->timestamp = $cls_date->format('H:i');
-        $response->date = $cls_date->format('m F Y');
 
         return $response;
     }

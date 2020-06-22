@@ -22,7 +22,6 @@
 <script>
 import ChatWindow from "@/materiels/Chat/ChatWindow";
 
-import moment from "moment";
 import { mapGetters } from "vuex";
 import { fetchRoomsApi, createRoomsApi } from "@/api/chat/room.js";
 import {
@@ -60,7 +59,7 @@ export default {
       fetchRoomsApi()
         .then(res => {
           this.loadingRooms = false;
-          this.rooms = res.data.map(e => reform(e));
+          this.rooms = res.data;
         })
         .catch(err => {
           this.loadingRooms = false;
@@ -79,16 +78,18 @@ export default {
         });
     },
     sendMessage({ roomId, content, file, replyMessage }) {
+      var date = new Date();
       const data = {
         _id: "v" + this.messages.length,
         content,
         sender_id: this.user.id,
-        username: this.user.username
+        username: this.user.username,
+        timestamp: date.getHours()+":"+date.getMinutes(),
       };
       const index = this.messages.push(data) - 1;
       sendMessagesApi(roomId, { content })
         .then(res => {
-          this.messages[index] = {...this.messages[index],...res};
+          this.messages[index] =Object.assign(this.messages[index],res);
         })
         .catch(err => {
           console.log(err);
@@ -146,18 +147,6 @@ export default {
     }
   }
 };
-
-function reform(e) {
-  if (!e["roomName"]) e["roomName"] = nameSeries(e["users"]);
-  if (e["last_message"]) {
-    e["lastMessage"] = { ...e["last_message"] };
-    delete e["last_message"];
-  } else delete e["last_message"];
-  return e;
-}
-function nameSeries(_obj) {
-  return _obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
-}
 </script>
 
 <style>

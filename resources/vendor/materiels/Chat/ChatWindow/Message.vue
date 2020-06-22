@@ -313,7 +313,7 @@ export default {
 	computed: {
 		showDate() {
 			return (
-				this.index > 0 &&
+				this.message.date && this.index > 0 &&
 				this.message.date !== this.messages[this.index - 1].date
 			)
 		},
@@ -336,7 +336,7 @@ export default {
 		},
 		isMessageSeen() {
 			return (
-				this.message.sender_id === this.currentUserId &&
+				this.message.sender_id !== this.currentUserId &&
 				this.message.seen &&
 				!this.message.deleted
 			)

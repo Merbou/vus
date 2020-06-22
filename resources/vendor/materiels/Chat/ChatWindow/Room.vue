@@ -81,7 +81,7 @@
 						</infinite-loading>
 					</transition>
 					<transition-group name="fade-message">
-						<div v-for="(message, i) in messages" :key="message._id">
+						<div v-for="(message, i) in messages" :key="message.sender_id+'/'+i">
 							<message
 								:currentUserId="currentUserId"
 								:message="message"
