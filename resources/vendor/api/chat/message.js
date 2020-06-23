@@ -5,6 +5,7 @@ import request from "@/utils/request";
 export function fetchMessagesApi(page, id) {
     return request({
         url: `/messages/${id}?page=${page || 1}`,
+        requestId: 'fetch-messages-data',
         method: "get",
     })
 }

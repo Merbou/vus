@@ -40,9 +40,15 @@
                   <v-list-item-content v-text="data.item"></v-list-item-content>
                 </template>
                 <template v-else>
-                  <!-- <v-list-item-avatar>
-                      <img :src="data.item.avatar" />
-                  </v-list-item-avatar>-->
+                  <v-list-item-avatar v-if="data.item.picture_path">
+                    <img :src="'/storage/' + data.item.picture_path" />
+                  </v-list-item-avatar>
+                  <v-list-item-avatar
+                    v-else
+                    class="accent white--text"
+                    left
+                    v-text="data.item.username.slice(0, 1).toUpperCase()"
+                  ></v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-title v-html="data.item.username"></v-list-item-title>
                     <v-list-item-subtitle v-html="data.item.email"></v-list-item-subtitle>

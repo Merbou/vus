@@ -69,7 +69,7 @@ class handleAccountController extends Controller
             if (!empty($request->phone) && $request->phone !== "null" && $request->phone !== "undefined")
                 $user->phone = $request->phone;
 
-            if (!empty($avatar) && $request->firstname !== "null" && $request->firstname !== "undefined") {
+            if (!empty($avatar) && $request->avatar !== "null" && $request->avatar !== "undefined") {
                 $user->picture_path = $this->store($avatar, Auth::id());
             } else {
                 #when sex is updated if(personal pict not exist) change pict according to sex

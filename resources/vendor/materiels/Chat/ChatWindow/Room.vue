@@ -463,7 +463,8 @@ export default {
 		},
 		focusTextarea(disableMobileFocus) {
 			if (detectMobile() && disableMobileFocus) return
-			this.$refs['roomTextarea'].focus()
+
+			this.$refs['roomTextarea']&&this.$refs['roomTextarea'].focus()
 		},
 		isMessageEmpty() {
 			return !this.file && !this.message.trim()
@@ -608,7 +609,6 @@ export default {
 	align-items: center;
 	height: 64px;
 	width: 100%;
-	z-index: 10;
 	margin-right: 1px;
 	background: var(--chat-header-bg-color);
 	border-top-right-radius: var(--chat-container-border-radius);
@@ -692,8 +692,6 @@ export default {
 		0 1px 2px 0 rgba(0, 0, 0, 0.12);
 	display: flex;
 	cursor: pointer;
-	z-index: 10;
-
 	svg {
 		height: 25px;
 		width: 25px;
@@ -702,9 +700,7 @@ export default {
 
 .room-footer {
 	width: calc(100% - 1px);
-	border-bottom-right-radius: 4px;
-	z-index: 10;
-}
+	border-bottom-right-radius: 4px;}
 
 .box-footer {
 	display: flex;
@@ -824,8 +820,6 @@ textarea {
 	position: absolute;
 	top: 6px;
 	left: 6px;
-	z-index: 10;
-
 	svg {
 		height: 20px;
 		width: 20px;

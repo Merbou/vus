@@ -7,6 +7,7 @@
         :rooms="orderedRooms"
         :loadingRooms="loadingRooms"
         :room="room"
+        :filterRoom="filterRoom"
         :textMessages="t"
         :showAddRoom="showAddRoom"
         :showRoomsList="showRoomsList"
@@ -14,6 +15,7 @@
         :isMobile="isMobile"
         @fetchRoom="fetchRoom"
         @addRoom="addRoom"
+        @searchRoom="searchRoom"
       >
         <template v-slot:rooms-header>
           <slot name="rooms-header"></slot>
@@ -72,6 +74,7 @@ export default {
     styles: { type: Object, default: () => ({}) },
     responsiveBreakpoint: { type: Number, default: 900 },
     singleRoom: { type: Boolean, default: false },
+    filterRoom: { type: Boolean, default: true },
     textMessages: { type: Object, default: null },
     currentUserId: { type: [String, Number], default: "" },
     rooms: { type: Array, default: () => [] },
@@ -172,15 +175,19 @@ export default {
       });
     },
     _rooms() {
-      return this.rooms.map(room => {
+      const rooms = this.rooms.map(room => {
         room = toCamelCase(room);
         if (!room["lastMessage"]) delete room["lastMessage"];
         if (!room["roomName"]) room["roomName"] = nameSeries(room["users"]);
         return room;
       });
+      return rooms;
     }
   },
   methods: {
+    searchRoom(elm) {
+      this.$emit("searchRoom", elm);
+    },
     updateResponsive() {
       this.isMobile = window.innerWidth < this.responsiveBreakpoint;
     },
@@ -189,6 +196,7 @@ export default {
       if (this.isMobile) this.room = {};
     },
     fetchRoom({ room }) {
+      this.$emit("fetchRoom", room);
       this.room = room;
       this.fetchMessages({ reset: true });
       if (this.isMobile) this.showRoomsList = false;

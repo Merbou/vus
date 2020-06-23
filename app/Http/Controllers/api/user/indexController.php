@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
 use App\User;
 use Exception;
+use Illuminate\Database\QueryException;
 
 class indexController extends Controller
 {
@@ -56,7 +57,7 @@ class indexController extends Controller
                 return $this;
             });
 
-            $selected = ["id as _id","id", "username", "email"];
+            $selected = ["id as _id", "id", "username", "email", "picture_path"];
 
             $users = User::query()
                 ->select($selected)
@@ -65,7 +66,7 @@ class indexController extends Controller
                 ->get();
 
             return response()->json(["users" => $users], 206);
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
             return response()->json($e, 400);
         }
     }

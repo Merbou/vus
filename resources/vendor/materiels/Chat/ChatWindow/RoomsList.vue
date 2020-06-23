@@ -7,15 +7,14 @@
 		<slot name="rooms-header"></slot>
 
 		<div class="box-search">
-			<div class="icon-search" v-if="rooms.length">
+			<div class="icon-search">
 				<svg-icon name="search" />
 			</div>
 			<input
 				type="search"
-				:placeholder="textMessages.SEARCH"
+				:placeholder="textMessages.SEARCH" 
 				autocomplete="off"
 				@input="searchRoom"
-				v-show="rooms.length"
 			/>
 			<div v-if="showAddRoom" class="svg-button add-icon" @click="addRoom">
 				<svg-icon name="add" />
@@ -92,6 +91,7 @@ export default {
 		currentUserId: { type: [String, Number], required: true },
 		textMessages: { type: Object, required: true },
 		showRoomsList: { type: Boolean, required: true },
+    	filterRoom: { type: Boolean, default: true },
 		showAddRoom: { type: Boolean, required: true },
 		textFormatting: { type: Boolean, required: true },
 		isMobile: { type: Boolean, required: true },
@@ -118,11 +118,13 @@ export default {
 
 	methods: {
 		searchRoom(ev) {
+			if(this.filterRoom)
 			this.filteredRooms = filteredUsers(
 				this.rooms,
 				'roomName',
 				ev.target.value
 			)
+			this.$emit("searchRoom",{pattern:ev.target.value,rooms:this.filteredRooms})
 		},
 		openRoom(room) {
 			if (room.roomId === this.room.roomId && !this.isMobile) return

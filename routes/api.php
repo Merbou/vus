@@ -34,21 +34,22 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
     Route::put("/update-user", "api\user\handleAccountController@update");
     Route::post("/users-q-search", "api\user\indexController@quickSearch");
-
+    
     //chart account
     Route::get("/count-account", "api\user\chartAccountController@count");
     Route::get("/roles-percentage", "api\user\chartAccountController@rolesUserPercentage");
-
+    
     //Contact
     Route::get("/contacts", "api\contact\contactController@index");
     Route::delete("/destroy-contacts", "api\contact\contactController@destroy");
     Route::put("/contact/{id}", "api\contact\contactController@read");
-
+    
     //chats
-        //room
+    //room
     Route::get("/rooms", "chat\\roomController@index");
     Route::post("/create-room", "chat\\roomController@store");
-        //message
+    Route::post("/room-q-search", "chat\\roomController@quickSearch");
+    //message
     Route::get("/messages/{id}", "chat\\messageController@index");
     Route::post("/message/{id}", "chat\\messageController@store");
     Route::put("/edit-message/{id}", "chat\\messageController@update");

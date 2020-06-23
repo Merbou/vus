@@ -16,3 +16,12 @@ export function createRoomsApi(data) {
         data
     })
 }
+
+
+export function searchRoomsApi(data) {
+    return request({
+        url: `/room-q-search`,
+        method: "post",
+        data
+    })
+}

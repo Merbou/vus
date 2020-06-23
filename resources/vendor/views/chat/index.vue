@@ -5,16 +5,21 @@
       :showFiles="false"
       :showEmojis="false"
       :showReactionEmojis="false"
+      :filterRoom="false"
+      cachRooms
       :currentUserId="user.id"
       :rooms="rooms"
       :messages="messages"
+      :menuActions="menuActions"
       :loadingRooms="loadingRooms"
       :messagesLoaded="messagesLoaded"
       @fetchMessages="fetchMessages"
+      @fetchRoom="fetchRoom"
       @sendMessage="sendMessage"
       @editMessage="editMessage"
       @deleteMessage="deleteMessage"
       @addRoom="addRoom"
+      @searchRoom="searchRoom"
     ></chat-window>
   </div>
 </template>
@@ -23,13 +28,18 @@
 import ChatWindow from "@/materiels/Chat/ChatWindow";
 
 import { mapGetters } from "vuex";
-import { fetchRoomsApi, createRoomsApi } from "@/api/chat/room.js";
+import {
+  fetchRoomsApi,
+  createRoomsApi,
+  searchRoomsApi
+} from "@/api/chat/room.js";
 import {
   fetchMessagesApi,
   sendMessagesApi,
   editMessagesApi,
   deleteMessagesApi
 } from "@/api/chat/message.js";
+import filterItems from "@/utils/filterItems";
 
 import addRoom from "./components/addRoom";
 
@@ -54,7 +64,21 @@ export default {
           current_page: 1,
           last_page: ""
         }
-      }
+      },
+      menuActions: [
+        {
+          name: "inviteUser",
+          title: "Invite User"
+        },
+        {
+          name: "removeUser",
+          title: "Remove User"
+        },
+        {
+          name: "deleteRoom",
+          title: "Delete Room"
+        }
+      ]
     };
   },
   computed: {
@@ -63,25 +87,85 @@ export default {
   mounted() {
     this.fetchRooms();
   },
+
+  destroyed() {
+    localStorage.removeItem("rooms");
+  },
+
   methods: {
     fetchRooms() {
       this.loadingRooms = true;
       if (!this.paginate("room")) this.loadingRooms = false;
       fetchRoomsApi(this.pagination.room.current_page)
         .then(({ data, current_page, last_page }) => {
-          this.rooms.push(...data);
+          if (current_page == 1) this.rooms = data;
+          else this.rooms.push(...data);
+          localStorage.setItem("rooms", JSON.stringify([...this.rooms]));
+
           this.pagination.room = { current_page, last_page };
         })
         .catch(err => console.log(err))
         .finally(() => (this.loadingRooms = false));
     },
+    addRoom() {
+      this.openAddRoom = true;
+    },
+    createRoom(data) {
+      const { roomName, select } = data;
+
+      const ids = select.map(e => e.id);
+
+      const index = this.rooms.push(this.createVirtualroom(data)) - 1;
+
+      createRoomsApi({ roomName, ids })
+        .then(res => {
+          this.rooms[index]["roomId"] = res.id;
+        })
+        .catch(err => {
+          console.log(err);
+          this.rooms.splice(index, 1);
+        })
+        .finally(err => (this.openAddRoom = false));
+    },
+    fetchRoom() {
+      this.pagination.message = {
+        current_page: 1,
+        last_page: ""
+      };
+      this.messages = [];
+    },
+    searchRoom({ pattern }) {
+      this.rooms = JSON.parse(localStorage.getItem("rooms"));
+      if (pattern) {
+        this.loadingRooms = true;
+        this.rooms = filterItems(this.rooms, nameSeries, pattern);
+        searchRoomsApi({ pattern })
+          .then(res => {
+            this.rooms = marge([...res.rooms, ...this.rooms]);
+          })
+          .catch(err => {
+            console.log(err);
+          })
+          .finally(err => (this.loadingRooms = false));
+      }
+    },
+    createVirtualroom({ roomName, select }) {
+      const room = roomName ? roomName : nameSeries(select);
+      return {
+        roomId: "v" + this.rooms.length,
+        roomName: room,
+        users: select
+      };
+    },
+
     fetchMessages({ room, options = {} }) {
       if (!this.paginate("message")) this.messagesLoaded = true;
 
       this.messagesLoaded = false;
       fetchMessagesApi(this.pagination.message.current_page, room.roomId)
         .then(({ data, current_page, last_page }) => {
-          this.messages.push(...data);
+          if (current_page == 1) this.messages = data.reverse();
+          else this.messages.push(...data.reverse());
           this.pagination.message = { current_page, last_page };
           if (current_page == last_page) this.messagesLoaded = true;
         })
@@ -129,34 +213,7 @@ export default {
           this.messages.splice(index, 0, message);
         });
     },
-    addRoom() {
-      this.openAddRoom = true;
-    },
-    createRoom(data) {
-      const { roomName, select } = data;
 
-      const ids = select.map(e => e.id);
-
-      const index = this.rooms.push(this.createVirtualroom(data)) - 1;
-
-      createRoomsApi({ roomName, ids })
-        .then(res => {
-          this.rooms[index]["roomId"] = res.id;
-        })
-        .catch(err => {
-          console.log(err);
-          this.rooms.splice(index, 1);
-        })
-        .finally(err => (this.openAddRoom = false));
-    },
-    createVirtualroom({ roomName, select }) {
-      const room = roomName ? roomName : nameSeries(select);
-      return {
-        roomId: "v" + this.rooms.length,
-        roomName: room,
-        users: select
-      };
-    },
     paginate(name) {
       if (this.pagination[name].current_page && this.pagination[name].last_page)
         if (
@@ -168,11 +225,16 @@ export default {
     }
   }
 };
+
+function nameSeries(_obj) {
+  return _obj["users"]
+    .reduce((acc, curr) => acc + "," + curr.username, "")
+    .substring(1);
+}
+function marge(rooms) {
+  return rooms.filter(
+    (e, i) => rooms.map(e => e.roomId).indexOf(e.roomId) === i
+  );
+}
 </script>
 
-<style>
-.room-header.app-border-b,
-.container-scroll {
-  z-index: 1 !important;
-}
-</style>

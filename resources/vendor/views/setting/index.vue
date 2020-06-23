@@ -30,34 +30,29 @@ export default {
       this.loading = true;
       updateUserApi(formData)
         .then(Response => {
-          this.vLoading(false);
           this.snackbar({
             text: "The setting was updated successfully !",
             color: "success"
           });
-          this.loading = false;
           this.$store.dispatch("setInfo", Response);
           this.initUser(Response);
-          this.clearPassword();
         })
         .catch(rej => {
+          console.log(rej)
           this.snackbar({
             text: "The setting was not updated.",
             color: "error"
           });
+          this.errors = rej && rej.data && rej.data.errors;
+        })
+        .finally(() => {
           this.vLoading(false);
           this.loading = false;
-          this.errors = rej && rej.data && rej.data.errors;
         });
     },
     initUser(data) {
       this.userInfo = Object.assign(this.userInfo, data);
     },
-    clearPassword() {
-      this.form.last_password = "";
-      this.form.password = "";
-      this.form.password_confirmation = "";
-    }
   }
 };
 </script>

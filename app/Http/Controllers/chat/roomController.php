@@ -46,18 +46,24 @@ class roomController extends Controller
 
             if ($request->roomName && $request->roomName !== "null" && $request->roomName !== "undefined") {
                 $rules["roomName"] = 'string';
-                $data["roomName"] = $request->roomName;
+                $data["name"] = $request->roomName;
             }
 
 
             $request->validate($rules);
 
-            $users = User::whereIn('id', $request->ids)->select("id")->get()->map(function ($q) {
+            $usernames = array();
+            $users = User::whereIn('id', $request->ids)->select("id", "username")->get()->map(function ($q) use (&$usernames) {
+                array_push($usernames, $q["username"]);
                 return $q["id"];
             });
 
             if (count($users)) {
                 $users->push(Auth::id());
+                if (!$data["name"])
+                    $data["name"] = join(",", array_slice($usernames, 0, 3));
+                if (count($usernames) > 3)
+                    $data["name"] .= "...";
                 $room = room::create($data);
                 $room->users()->attach($users);
             }
@@ -67,35 +73,32 @@ class roomController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function quickSearch(Request $request)
     {
-        //
+        try {
+            if (!$request->pattern) response()->json(204);
+
+            $rooms = room::where("name", "like", "%{$request->pattern}%")
+                ->with([
+                    'users:users.id as _id,users.username',
+                    'last_message'
+                ])
+                ->whereHas('users', function ($query) {
+                    return $query
+                        ->where('users.id', '=', Auth::id());
+                })
+                ->select('id', 'id as roomId', 'name as roomName')
+                ->get();
+
+            return response()->json(["rooms" => $rooms], 206);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function destroy($id)
     {
         //

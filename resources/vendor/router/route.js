@@ -17,8 +17,8 @@ export default new way(function () {
                 { path: 'privilege', view: 'user/privilege/index', name: "privilege", icon: "star" },
             ]
         },
-        { path: '/contacts', view: 'contact/table', name: "contacts", withLayout: true, icon: "inbox" },
         { path: '/chats', view: 'chat/index', name: "chat", withLayout: true, icon: "comments" },
+        { path: '/contacts', view: 'contact/table', name: "contacts", withLayout: true, icon: "inbox" },
         { path: '/setting', view: 'setting/index', name: "setting", withLayout: true, icon: "cogs" },
         { path: '/trash', view: 'trash/index', name: "trash", withLayout: true, icon: "trash" },
     ])
