@@ -42,6 +42,7 @@ import {
 import filterItems from "@/utils/filterItems";
 
 import addRoom from "./components/addRoom";
+import { isCancel } from "axios";
 
 export default {
   components: {
@@ -55,6 +56,7 @@ export default {
       loadingRooms: false,
       messagesLoaded: false,
       openAddRoom: false,
+      _httpCancel: "",
       pagination: {
         room: {
           current_page: 1,
@@ -127,12 +129,14 @@ export default {
         })
         .finally(err => (this.openAddRoom = false));
     },
-    fetchRoom() {
+    fetchRoom({ room }) {
+      this._httpCancel && this._httpCancel.cancel();
       this.pagination.message = {
         current_page: 1,
         last_page: ""
       };
       this.messages = [];
+      this.fetchMessages({ room });
     },
     searchRoom({ pattern }) {
       this.rooms = JSON.parse(localStorage.getItem("rooms"));
@@ -158,11 +162,15 @@ export default {
       };
     },
 
-    fetchMessages({ room, options = {} }) {
+    fetchMessages({ room }) {
       if (!this.paginate("message")) this.messagesLoaded = true;
-
+      const MessagesApi = fetchMessagesApi(
+        this.pagination.message.current_page,
+        room.roomId
+      );
       this.messagesLoaded = false;
-      fetchMessagesApi(this.pagination.message.current_page, room.roomId)
+      this._httpCancel = MessagesApi._httpCancel;
+      MessagesApi.request
         .then(({ data, current_page, last_page }) => {
           if (current_page == 1) this.messages = data.reverse();
           else this.messages.push(...data.reverse());
@@ -170,7 +178,8 @@ export default {
           if (current_page == last_page) this.messagesLoaded = true;
         })
         .catch(err => {
-          console.log(err);
+          if (isCancel()) console.log("request cancelled");
+          else console.log(err);
         });
     },
     sendMessage({ roomId, content, file, replyMessage }) {
@@ -237,4 +246,3 @@ function marge(rooms) {
   );
 }
 </script>
-

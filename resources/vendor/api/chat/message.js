@@ -1,13 +1,22 @@
 "use strict";
 
 import request from "@/utils/request";
+import { CancelToken } from "axios";
+
+const cancel_token = CancelToken;
 
 export function fetchMessagesApi(page, id) {
-    return request({
-        url: `/messages/${id}?page=${page || 1}`,
-        requestId: 'fetch-messages-data',
-        method: "get",
-    })
+    const source = cancel_token.source();
+
+    return {
+        _httpCancel: source,
+        request: request({
+            url: `/messages/${id}?page=${page || 1}`,
+            method: "get",
+            cancelToken: source.token
+        })
+    }
+
 }
 
 export function sendMessagesApi(id, data) {
@@ -31,5 +40,4 @@ export function deleteMessagesApi(id) {
         url: `destroy-message/${id}`,
         method: 'delete',
     });
-
 }

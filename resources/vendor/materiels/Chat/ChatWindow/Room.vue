@@ -609,6 +609,7 @@ export default {
 	align-items: center;
 	height: 64px;
 	width: 100%;
+	z-index: 4;
 	margin-right: 1px;
 	background: var(--chat-header-bg-color);
 	border-top-right-radius: var(--chat-container-border-radius);

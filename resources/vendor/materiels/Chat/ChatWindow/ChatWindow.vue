@@ -196,9 +196,9 @@ export default {
       if (this.isMobile) this.room = {};
     },
     fetchRoom({ room }) {
-      this.$emit("fetchRoom", room);
+      this.$emit("fetchRoom", {room});
       this.room = room;
-      this.fetchMessages({ reset: true });
+      // this.fetchMessages({ reset: true });
       if (this.isMobile) this.showRoomsList = false;
     },
     roomInfo() {

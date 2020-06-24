@@ -1,15 +1,14 @@
 "use strict";
 import axios from "axios";
+
 import { getToken, setToken } from "@/utils/token"
-
-
 
 ///create configuration of request api
 const service = axios.create({
     //set url MIX_BASE_API variable from .env   
     baseURL: process.env.MIX_BASE_API,
     //timeout of request 10s
-    timeout: 30000
+    timeout: 30000,
 })
 
 
