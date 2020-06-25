@@ -5,6 +5,7 @@ namespace App\Http\Controllers\chat;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\message;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -20,11 +21,12 @@ class messageController extends Controller
             $messagesViewd = message::where([['room_id', $id], ["sender_id", Auth::id()]])->update(['seen' => 1]);
 
             $messages = message::select([
-                "id", 'id as _id', 'content', 'room_id', 'sender_id', 'username', 'seen',
+                "id", 'id as _id', 'content', 'room_id', 'sender_id', 'username', 'seen', "replay_id",
                 DB::raw('DATE_FORMAT(created_at, "%H:%i") as timestamp'),
                 DB::raw('DATE_FORMAT(created_at, "%e %b %Y") as date'),
             ])
-                ->where('room_id', $id)
+                ->with('replyMessage')
+                ->where([['room_id', $id], ['replay_id', '=', null]])
                 ->orderBy('created_at', 'desc')
                 ->paginate(20);
             return response()->json($messages, 200);
@@ -32,7 +34,6 @@ class messageController extends Controller
             return response()->json($e, 400);
         }
     }
-
 
 
     public function store($id, Request $request)
@@ -44,21 +45,22 @@ class messageController extends Controller
             $request->validate([
                 'content' => 'required|string',
             ]);
+            $message = new message();
+            if ($request->replay_id && message::findOrFail($request->replay_id))
+                $message->replay_id = $request->replay_id;
 
+            $message->content = $request->content;
+            $message->room_id = $id;
+            $message->sender_id = Auth::id();
+            $message->username = Auth::user()->username;
 
-            $message = message::create([
-                'content' => $request->content,
-                'room_id' => $id,
-                'sender_id' => Auth::id(),
-                'username' => Auth::user()->username,
-            ]);
-
-
-            return response()->json($this->getMessageFormat($message), 200);
+            if ($message->save())
+                return response()->json($this->getMessageFormat($message), 200);
         } catch (Exception $e) {
-
             return response()->json($e, 400);
         } catch (QueryException $e) {
+            return response()->json($e, 400);
+        } catch (ModelNotFoundException $e) {
             return response()->json($e, 400);
         }
     }

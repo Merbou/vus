@@ -10,6 +10,7 @@ class message extends Model
     protected $fillable = [
         "sender_id",
         "room_id",
+        "replay_id",
         "content",
         "username"
     ];
@@ -17,6 +18,11 @@ class message extends Model
     public function sender()
     {
         return $this->belongsTo('App\User', 'sender_id');
+    }
+
+    public function replyMessage()
+    {
+        return $this->hasOne('App\ModelsChat\message', 'replay_id');
     }
 
     public function room()

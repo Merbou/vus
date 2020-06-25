@@ -17,11 +17,13 @@ class CreateMessagesTable extends Migration
             $table->id();
             $table->foreignId('room_id');
             $table->foreignId('sender_id');
+            $table->foreignId('replay_id')->nullable();
 
             $table->text('content');
             $table->string('username');
             $table->boolean('seen')->default(0);
-            
+
+            $table->foreign('replay_id')->references('id')->on('messages')->onDelete('cascade');
             $table->foreign('room_id')->references('id')->on('rooms')->onDelete('cascade');;
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');;
             $table->timestamps();

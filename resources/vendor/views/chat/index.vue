@@ -192,7 +192,9 @@ export default {
       if (!this.rooms.length) this.messages = [];
     },
     pushRoomContent(Content) {
-      for (const key in Content) this.rooms[this.indexRoom][key] = Content[key];
+      for (const key in Content) {
+        this.rooms[this.indexRoom][key] = Content[key];
+      }
     },
     clearRoomIndex() {
       this.indexRoom = "";
@@ -230,14 +232,28 @@ export default {
         username: this.user.username,
         timestamp: date.getHours() + ":" + date.getMinutes()
       };
-      const index = this.messages.push(data) - 1;
-      sendMessagesApi(roomId, { content })
+      let index;
+      if (replyMessage && replyMessage._id) {
+        index = this.messages.findIndex(e => e._id == replyMessage._id);
+        this.messages[index]["replyMessage"] = data;
+      } else index = this.messages.push(data) - 1;
+
+      sendMessagesApi(roomId, {
+        content,
+        replay_id: replyMessage && replyMessage._id
+      })
         .then(res => {
-          this.messages[index] = Object.assign(this.messages[index], res);
+          if (replyMessage && replyMessage._id)
+            this.messages[index]["replyMessage"] = Object.assign(
+              this.messages[index]["replyMessage"],
+              res
+            );
+          else this.messages[index] = Object.assign(this.messages[index], res);
         })
         .catch(err => {
           console.log(err);
-          this.messages.splice(index, 1);
+          if (replyMessage && replyMessage._id) this.messages[index] = null;
+          else this.messages.splice(index, 1);
         });
     },
     editMessage({ roomId, messageId, newContent, file, replyMessage }) {

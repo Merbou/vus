@@ -84,7 +84,7 @@
 						<div v-for="(message, i) in messages" :key="message.sender_id+'/'+i">
 							<message
 								:currentUserId="currentUserId"
-								:message="message"
+								:message="parse(message)"
 								:index="i"
 								:messages="messages"
 								:editedMessage="editedMessage"
@@ -591,6 +591,13 @@ export default {
 		},
 		nameFromUsers(_obj) {
 		return _obj&&_obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
+		},
+		parse(message) {
+			if(!message.replyMessage){		
+				message["replyMessage"]=message.reply_message
+				delete message["reply_message"]
+			}
+			return message
 		}
 	}
 }
