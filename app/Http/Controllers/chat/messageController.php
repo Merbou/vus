@@ -12,11 +12,8 @@ use stdClass;
 
 class messageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function index($id)
     {
         try {
@@ -36,16 +33,13 @@ class messageController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+
+
     public function store($id, Request $request)
     {
         try {
-            if (!$id || $id == 'null' || $id == 'undefined') throw new Exception();
+
+            if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
 
             $request->validate([
                 'content' => 'required|string',
@@ -73,7 +67,7 @@ class messageController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if (!$id || $id == 'null' || $id == 'undefined') throw new Exception();
+            if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
 
             $request->validate([
                 'content' => 'required|string',
@@ -96,10 +90,14 @@ class messageController extends Controller
     public function destroy($id)
     {
         try {
+            if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
 
             $message = message::where('id', $id)->delete();
             return response()->json(204);
         } catch (QueryException $e) {
+            return response()->json($e, 400);
+        } catch (Exception $e) {
+
             return response()->json($e, 400);
         }
     }

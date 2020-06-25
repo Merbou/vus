@@ -1,6 +1,49 @@
 <template>
   <div>
-    <add-room :open="openAddRoom" @create="createRoom" @close="openAddRoom = false" />
+    <add-room
+      v-if="openAddRoom"
+      :open="openAddRoom"
+      :roomsLength="rooms.length"
+      :user="user"
+      @putRoomIndex="putRoomIndex"
+      @pushRoomContent="pushRoomContent"
+      @clearRoomIndex="clearRoomIndex"
+      @shiftRoom="shiftRoom"
+      @pushRoom="pushRoom"
+      @close="openAddRoom = false"
+    />
+    <quit-room
+      v-if="openquitRoom"
+      :open="openquitRoom"
+      :room="room"
+      :user="user"
+      @shiftRoom="shiftRoom"
+      @pushRoom="pushRoom"
+      @clearRoomIndex="clearRoomIndex"
+      @close="openquitRoom = false"
+    />
+    <invite-user
+      v-if="openInviteUser"
+      :open="openInviteUser"
+      :room="room"
+      :user="user"
+      @clearRoomIndex="clearRoomIndex"
+      @putRoomIndex="putRoomIndex"
+      @pushRoomContent="pushRoomContent"
+      @close="openInviteUser = false"
+    />
+    <remove-user
+      v-if="openRemoveUser"
+      :open="openRemoveUser"
+      :room="room"
+      :user="user"
+      @putRoomIndex="putRoomIndex"
+      @pushRoomContent="pushRoomContent"
+      @clearRoomIndex="clearRoomIndex"
+      @shiftRoom="shiftRoom"
+      @pushRoom="pushRoom"
+      @close="openRemoveUser = false"
+    />
     <chat-window
       :showFiles="false"
       :showEmojis="false"
@@ -20,14 +63,18 @@
       @deleteMessage="deleteMessage"
       @addRoom="addRoom"
       @searchRoom="searchRoom"
+      @menuActionHandler="menuActionHandler"
     ></chat-window>
   </div>
 </template>
 
 <script>
 import ChatWindow from "@/materiels/Chat/ChatWindow";
+import { addRoom, quitRoom, removeUser, inviteUser } from "./components";
 
 import { mapGetters } from "vuex";
+import { isCancel } from "axios";
+import filterItems from "@/utils/filterItems";
 import {
   fetchRoomsApi,
   createRoomsApi,
@@ -39,23 +86,27 @@ import {
   editMessagesApi,
   deleteMessagesApi
 } from "@/api/chat/message.js";
-import filterItems from "@/utils/filterItems";
-
-import addRoom from "./components/addRoom";
-import { isCancel } from "axios";
 
 export default {
   components: {
     ChatWindow,
-    addRoom
+    addRoom,
+    quitRoom,
+    removeUser,
+    inviteUser
   },
   data() {
     return {
       rooms: [],
+      room: {},
+      indexRoom: "",
       messages: [],
       loadingRooms: false,
       messagesLoaded: false,
       openAddRoom: false,
+      openquitRoom: false,
+      openInviteUser: false,
+      openRemoveUser: false,
       _httpCancel: "",
       pagination: {
         room: {
@@ -69,16 +120,8 @@ export default {
       },
       menuActions: [
         {
-          name: "inviteUser",
-          title: "Invite User"
-        },
-        {
-          name: "removeUser",
-          title: "Remove User"
-        },
-        {
-          name: "deleteRoom",
-          title: "Delete Room"
+          name: "quitRoom",
+          title: "Quit Room"
         }
       ]
     };
@@ -109,35 +152,6 @@ export default {
         .catch(err => console.log(err))
         .finally(() => (this.loadingRooms = false));
     },
-    addRoom() {
-      this.openAddRoom = true;
-    },
-    createRoom(data) {
-      const { roomName, select } = data;
-
-      const ids = select.map(e => e.id);
-
-      const index = this.rooms.push(this.createVirtualroom(data)) - 1;
-
-      createRoomsApi({ roomName, ids })
-        .then(res => {
-          this.rooms[index]["roomId"] = res.id;
-        })
-        .catch(err => {
-          console.log(err);
-          this.rooms.splice(index, 1);
-        })
-        .finally(err => (this.openAddRoom = false));
-    },
-    fetchRoom({ room }) {
-      this._httpCancel && this._httpCancel.cancel();
-      this.pagination.message = {
-        current_page: 1,
-        last_page: ""
-      };
-      this.messages = [];
-      this.fetchMessages({ room });
-    },
     searchRoom({ pattern }) {
       this.rooms = JSON.parse(localStorage.getItem("rooms"));
       if (pattern) {
@@ -153,27 +167,52 @@ export default {
           .finally(err => (this.loadingRooms = false));
       }
     },
-    createVirtualroom({ roomName, select }) {
-      const room = roomName ? roomName : nameSeries(select);
-      return {
-        roomId: "v" + this.rooms.length,
-        roomName: room,
-        users: select
+    fetchRoom({ room }) {
+      this.room = room;
+      this.menuActionsOption(room.owner == this.user.id);
+      this._httpCancel && this._httpCancel.cancel();
+      this.pagination.message = {
+        current_page: 1,
+        last_page: ""
       };
+      this.messages = [];
+      this.fetchMessages({ room });
     },
-
+    addRoom() {
+      this.openAddRoom = true;
+    },
+    pushRoom({ room }) {
+      this.indexRoom = this.rooms.push(room) - 1;
+    },
+    shiftRoom({ room }) {
+      if (!this.indexRoom) {
+        this.indexRoom = this.rooms.findIndex(e => e.roomId === room.roomId);
+      }
+      this.rooms.splice(this.indexRoom, 1);
+      if (!this.rooms.length) this.messages = [];
+    },
+    pushRoomContent(Content) {
+      for (const key in Content) this.rooms[this.indexRoom][key] = Content[key];
+    },
+    clearRoomIndex() {
+      this.indexRoom = "";
+    },
+    putRoomIndex(id) {
+      this.indexRoom = this.rooms.findIndex(e => e.roomId === id);
+    },
     fetchMessages({ room }) {
       if (!this.paginate("message")) this.messagesLoaded = true;
       const MessagesApi = fetchMessagesApi(
         this.pagination.message.current_page,
         room.roomId
       );
+
       this.messagesLoaded = false;
       this._httpCancel = MessagesApi._httpCancel;
       MessagesApi.request
         .then(({ data, current_page, last_page }) => {
-          if (current_page == 1) this.messages = data.reverse();
-          else this.messages.push(...data.reverse());
+          if (current_page == 1) this.messages = data && data.reverse();
+          else this.messages.push(...(data && data.reverse()));
           this.pagination.message = { current_page, last_page };
           if (current_page == last_page) this.messagesLoaded = true;
         })
@@ -231,6 +270,44 @@ export default {
           this.pagination[name].current_page += 1;
           return true;
         } else return false;
+    },
+
+    menuActionHandler({ roomId, action }) {
+      switch (action.name) {
+        case "inviteUser":
+          this.openInviteUser = true;
+          break;
+        case "removeUser":
+          this.openRemoveUser = true;
+          break;
+        case "quitRoom":
+          this.openquitRoom = true;
+          break;
+      }
+    },
+    menuActionsOption(isOwner) {
+      if (isOwner)
+        this.menuActions = [
+          {
+            name: "inviteUser",
+            title: "Invite User"
+          },
+          {
+            name: "removeUser",
+            title: "Remove User"
+          },
+          {
+            name: "quitRoom",
+            title: "Quit Room"
+          }
+        ];
+      else
+        this.menuActions = [
+          {
+            name: "quitRoom",
+            title: "Quit Room"
+          }
+        ];
     }
   }
 };

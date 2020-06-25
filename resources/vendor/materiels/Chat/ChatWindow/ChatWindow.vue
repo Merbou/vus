@@ -178,7 +178,6 @@ export default {
       const rooms = this.rooms.map(room => {
         room = toCamelCase(room);
         if (!room["lastMessage"]) delete room["lastMessage"];
-        if (!room["roomName"]) room["roomName"] = nameSeries(room["users"]);
         return room;
       });
       return rooms;
@@ -264,10 +263,6 @@ function toCamelCase(_obj) {
     }
   }
   return _obj;
-}
-
-function nameSeries(_obj) {
-  return _obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
 }
 </script>
 

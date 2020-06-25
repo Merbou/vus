@@ -8,5 +8,6 @@ use Faker\Generator as Faker;
 $factory->define(room::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
+        'owner' => rand(1,15),
     ];
 });

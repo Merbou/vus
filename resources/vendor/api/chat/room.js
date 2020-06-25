@@ -17,6 +17,29 @@ export function createRoomsApi(data) {
     })
 }
 
+export function quitRoomApi(id) {
+    return request({
+        url: `/quit-room/${id}`,
+        method: "post",
+    })
+}
+
+export function kickRoomApi(id,data) {
+    return request({
+        url: `/kick-room/${id}`,
+        method: "post",
+        data
+    })
+}
+
+
+export function inviteRoomApi(id,data) {
+    return request({
+        url: `/invite-room/${id}`,
+        method: "post",
+        data
+    })
+}
 
 export function searchRoomsApi(data) {
     return request({

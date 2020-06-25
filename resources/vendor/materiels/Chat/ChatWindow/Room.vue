@@ -21,7 +21,7 @@
 						:style="{ 'background-image': `url('${room.avatar}')` }"
 					></div>
 					<div>
-						<div class="room-name">{{ room.roomName }}</div>
+						<div class="room-name">{{ nameFromUsers(room["users"]) }}</div>
 						<div v-if="typingUsers" class="room-info">
 							{{ typingUsers }} {{ textMessages.IS_TYPING }}
 						</div>
@@ -588,9 +588,13 @@ export default {
 		},
 		closeMenu() {
 			this.menuOpened = false
+		},
+		nameFromUsers(_obj) {
+		return _obj&&_obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
 		}
 	}
 }
+
 </script>
 
 <style lang="scss" scoped>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\api\Auth;
 
-use Illuminate\DatabaseQueryException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\registerRequest;
 use App\Http\Requests\Auth\loginRequest;

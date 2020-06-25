@@ -45,6 +45,8 @@ class indexController extends Controller
     {
         try {
             if (!$request->selected) response()->json(204);
+            $request->validate(['ids.*' => 'integer']);
+
 
             Builder::macro('whereLike', function ($attbs, $patterns) {
                 $this->where(function ($query) use ($attbs, $patterns) {
@@ -58,10 +60,10 @@ class indexController extends Controller
             });
 
             $selected = ["id as _id", "id", "username", "email", "picture_path"];
-
             $users = User::query()
                 ->select($selected)
                 ->where("id", "!=", Auth::id())
+                ->whereNotIn("id", $request->ids??[])
                 ->whereLike(['username', 'email', 'firstname', 'lastname'], $request->selected)
                 ->get();
 

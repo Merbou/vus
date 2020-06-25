@@ -12,7 +12,7 @@ class contactSeeder extends Seeder
     public function run()
     {
 
-        $contacts = Factory(App\contact::class, 500)->create();
+        // $contacts = Factory(App\contact::class, 500)->create();
         $rooms = Factory(App\ModelsChat\room::class, 3)->create();
         App\User::all()
             ->each(function ($user) {

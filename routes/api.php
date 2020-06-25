@@ -47,6 +47,9 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     //chats
     //room
     Route::get("/rooms", "chat\\roomController@index");
+    Route::post("/quit-room/{id}", "chat\\roomController@quit");
+    Route::post("/kick-room/{id}", "chat\\roomController@kick");
+    Route::post("/invite-room/{id}", "chat\\roomController@invite");
     Route::post("/create-room", "chat\\roomController@store");
     Route::post("/room-q-search", "chat\\roomController@quickSearch");
     //message

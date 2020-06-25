@@ -10,6 +10,7 @@ class room extends Model
 
     protected $fillable = [
         "name",
+        "owner"
     ];
     public function messages()
     {
@@ -30,5 +31,10 @@ class room extends Model
     public function users()
     {
         return $this->belongsToMany('App\User');
+    }
+
+    public function user_owner()
+    {
+        return $this->hasOne('App\User',"owner");
     }
 }

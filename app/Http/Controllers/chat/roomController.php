@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\chat;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\ModelsChat\room;
-use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
-
-use function PHPSTORM_META\map;
+use Illuminate\Http\Request;
+use App\Http\Requests\idsRequest;
+use App\ModelsChat\room;
+use App\User;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class roomController extends Controller
 {
@@ -27,7 +27,7 @@ class roomController extends Controller
                     return $query
                         ->where('users.id', '=', Auth::id());
                 })
-                ->select('id', 'id as roomId', 'name as roomName')
+                ->select('id', 'id as roomId', 'name as roomName', "owner")
                 ->paginate(100);
 
             return response()->json($rooms, 200);
@@ -41,7 +41,7 @@ class roomController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = ["name" => null];
+            $data = ["name" => null, "owner" => Auth::id()];
             $rules = ['ids.*' => 'required|integer'];
 
             if ($request->roomName && $request->roomName !== "null" && $request->roomName !== "undefined") {
@@ -52,20 +52,15 @@ class roomController extends Controller
 
             $request->validate($rules);
 
-            $usernames = array();
-            $users = User::whereIn('id', $request->ids)->select("id", "username")->get()->map(function ($q) use (&$usernames) {
-                array_push($usernames, $q["username"]);
-                return $q["id"];
-            });
+            $res = $this->filterIdsWith($request->ids);
 
-            if (count($users)) {
-                $users->push(Auth::id());
-                if (!$data["name"])
-                    $data["name"] = join(",", array_slice($usernames, 0, 3));
-                if (count($usernames) > 3)
-                    $data["name"] .= "...";
+
+            if (count($res["ids"])) {
+                $res["ids"]->push(Auth::id());
+
+
                 $room = room::create($data);
-                $room->users()->attach($users);
+                $room->users()->attach($res["ids"]);
             }
             return response()->json(["id" => $room->id], 200);
         } catch (QueryException $e) {
@@ -99,8 +94,83 @@ class roomController extends Controller
 
 
 
-    public function destroy($id)
+    public function quit($id)
     {
-        //
+        try {
+            if (!$id) return;
+
+            $room = room::where('id', $id)->with(['users' => function ($query) {
+                $query->where('users.id', '!=', Auth::id());
+            }])->first();
+
+
+            $room->users()->detach(Auth::id());
+            if (count($room->users)) {
+                if ($room->owner != Auth::id()) {
+                    $room->owner = $room->users[0]->id;
+                    $room->update();
+                }
+            } else $room->delete();
+
+            return response()->json(204);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        } catch (\Exception $e) {
+            return response()->json($e, 403);
+        }
+    }
+
+
+    public function kick(idsRequest $request, $id)
+    {
+        try {
+
+
+            $room = room::where('id', $id)->with('users')->first();
+            if ($room->owner !== Auth::id()) throw new HttpException("Forbidden");
+            $room->users()->detach($request->ids);
+            $freshRoom = $room->fresh();
+            if ($freshRoom->users->count() < 2)
+                $room->delete();
+
+
+            return response()->json(204);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        } catch (\Exception $e) {
+            return response()->json($e, 422);
+        } catch (HttpException $e) {
+            return response()->json($e, 403);
+        }
+    }
+
+
+    public function invite(idsRequest $request, $id)
+    {
+        try {
+            $room = room::where('id', $id)->first();
+            if ($room->owner !== Auth::id()) throw new HttpException("Forbidden");
+
+            if ($room->users()->attach($request->ids))
+                return response()->json(204);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        } catch (\Exception $e) {
+            return response()->json($e, 422);
+        } catch (HttpException $e) {
+            return response()->json($e, 403);
+        }
+    }
+
+    private function filterIdsWith($ids)
+    {
+
+        $ids = User::whereIn('id', $ids)->select("id", "username")
+            ->get()
+            ->map(function ($q) use (&$usernames) {
+                return $q["id"];
+            });
+
+        return ["ids" => $ids];
     }
 }
