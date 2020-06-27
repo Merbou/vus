@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\chat;
 
+use App\Events\MessageEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\message;
@@ -21,12 +22,12 @@ class messageController extends Controller
             $messagesViewd = message::where([['room_id', $id], ["sender_id", Auth::id()]])->update(['seen' => 1]);
 
             $messages = message::select([
-                "id", 'id as _id', 'content', 'room_id', 'sender_id', 'username', 'seen', "replay_id",
+                "id", 'content', 'room_id', 'sender_id', 'username', 'seen', "reply_id",
                 DB::raw('DATE_FORMAT(created_at, "%H:%i") as timestamp'),
                 DB::raw('DATE_FORMAT(created_at, "%e %b %Y") as date'),
             ])
                 ->with('replyMessage')
-                ->where([['room_id', $id], ['replay_id', '=', null]])
+                ->where([['room_id', $id], ['reply_id', '=', null]])
                 ->orderBy('created_at', 'desc')
                 ->paginate(20);
             return response()->json($messages, 200);
@@ -46,16 +47,20 @@ class messageController extends Controller
                 'content' => 'required|string',
             ]);
             $message = new message();
-            if ($request->replay_id && message::findOrFail($request->replay_id))
-                $message->replay_id = $request->replay_id;
+            if ($request->reply_id && message::findOrFail($request->reply_id))
+                $message->reply_id = $request->reply_id;
 
             $message->content = $request->content;
             $message->room_id = $id;
             $message->sender_id = Auth::id();
             $message->username = Auth::user()->username;
-
-            if ($message->save())
+            
+            
+            if ($message->save()) {
+                $message->_id = $message->id;
+                broadcast(new MessageEvent($message))->toOthers();
                 return response()->json($this->getMessageFormat($message), 200);
+            }
         } catch (Exception $e) {
             return response()->json($e, 400);
         } catch (QueryException $e) {

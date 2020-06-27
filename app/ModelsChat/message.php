@@ -10,7 +10,7 @@ class message extends Model
     protected $fillable = [
         "sender_id",
         "room_id",
-        "replay_id",
+        "reply_id",
         "content",
         "username"
     ];
@@ -22,7 +22,7 @@ class message extends Model
 
     public function replyMessage()
     {
-        return $this->hasOne('App\ModelsChat\message', 'replay_id');
+        return $this->hasOne('App\ModelsChat\message', 'reply_id');
     }
 
     public function room()

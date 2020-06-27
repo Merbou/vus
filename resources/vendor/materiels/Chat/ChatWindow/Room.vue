@@ -84,7 +84,7 @@
 						<div v-for="(message, i) in messages" :key="message.sender_id+'/'+i">
 							<message
 								:currentUserId="currentUserId"
-								:message="parse(message)"
+								:message="message"
 								:index="i"
 								:messages="messages"
 								:editedMessage="editedMessage"
@@ -151,7 +151,7 @@
 				<div
 					v-else-if="file"
 					class="file-container"
-					:class="{ 'file-container-edit': editedMessage._id }"
+					:class="{ 'file-container-edit': editedMessage.id }"
 				>
 					<div class="icon-file">
 						<svg-icon name="file" />
@@ -167,7 +167,7 @@
 					ref="roomTextarea"
 					:placeholder="textMessages.TYPE_MESSAGE"
 					:class="{
-						'textarea-outline': editedMessage._id
+						'textarea-outline': editedMessage.id
 					}"
 					:style="{
 						'min-height': `${imageDimensions ? imageDimensions.height : 20}px`,
@@ -184,7 +184,7 @@
 				<div class="icon-textarea">
 					<div
 						class="svg-button"
-						v-if="editedMessage._id"
+						v-if="editedMessage.id"
 						@click="resetMessage"
 					>
 						<svg-icon name="close-outline" />
@@ -257,7 +257,7 @@ export default {
 		showRoomsList: { type: Boolean, required: true },
 		isMobile: { type: Boolean, required: true },
 		rooms: { type: Array, required: true },
-		roomId: { type: [String, Number], required: true },
+		room_id: { type: [String, Number], required: true },
 		messages: { type: Array, required: true },
 		messagesLoaded: { type: Boolean, required: true },
 		menuActions: { type: Array, required: true },
@@ -323,7 +323,7 @@ export default {
 			else this.focusTextarea(true)
 		},
 		room(newVal, oldVal) {
-			if (newVal.roomId && newVal.roomId !== oldVal.roomId) {
+			if (newVal.room_id && newVal.room_id !== oldVal.room_id) {
 				this.loadingMessages = true
 				this.scrollIcon = false
 				this.resetMessage(true)
@@ -332,7 +332,7 @@ export default {
 		messages(newVal, oldVal) {
 			newVal.forEach(message => {
 				if (!messagesValid(message)) {
-					throw 'Messages object is not valid! Must contain _id[String, Number], content[String, Number] and sender_id[String, Number]'
+					throw 'Messages object is not valid! Must contain id[String, Number], content[String, Number] and sender_id[String, Number]'
 				}
 			})
 
@@ -382,11 +382,11 @@ export default {
 
 	computed: {
 		room() {
-			return this.rooms.find(room => room.roomId === this.roomId) || {}
+			return this.rooms.find(room => room.room_id === this.room_id) || {}
 		},
 		showNoMessages() {
 			return (
-				this.room.roomId &&
+				this.room.room_id &&
 				!this.messages.length &&
 				!this.loadingMessages &&
 				!this.loadingRooms
@@ -402,8 +402,8 @@ export default {
 			if (!this.room.typingUsers || !this.room.typingUsers.length) return
 
 			const typingUsers = this.room.users.filter(user => {
-				if (user._id === this.currentUserId) return
-				if (this.room.typingUsers.indexOf(user._id) === -1) return
+				if (user.id === this.currentUserId) return
+				if (this.room.typingUsers.indexOf(user.id) === -1) return
 				if (user.status && user.status.state === 'offline') return
 				return true
 			})
@@ -413,7 +413,7 @@ export default {
 		userStatus() {
 			if (!this.room.users || this.room.users.length !== 2) return
 
-			const user = this.room.users.find(u => u._id !== this.currentUserId)
+			const user = this.room.users.find(u => u.id !== this.currentUserId)
 
 			if (!user.status) return
 
@@ -472,20 +472,20 @@ export default {
 		sendMessage() {
 			if (!this.file && !this.message.trim()) return
 
-			if (this.editedMessage._id) {
+			if (this.editedMessage.id) {
 				if (this.editedMessage.content !== this.message || this.file) {
 					this.$emit('editMessage', {
-						messageId: this.editedMessage._id,
-						newContent: this.message.trim(),
+						message_id: this.editedMessage.id,
+						new_content: this.message.trim(),
 						file: this.file,
-						replyMessage: this.messageReply
+						reply_message: this.messageReply
 					})
 				}
 			} else {
 				this.$emit('sendMessage', {
 					content: this.message.trim(),
 					file: this.file,
-					replyMessage: this.messageReply
+					reply_message: this.messageReply
 				})
 			}
 
@@ -494,7 +494,7 @@ export default {
 		loadMoreMessages(infiniteState) {
 			if (this.loadingMoreMessages) return
 
-			if (this.messagesLoaded || !this.room.roomId) {
+			if (this.messagesLoaded || !this.room.room_id) {
 				return infiniteState.complete()
 			}
 
@@ -504,12 +504,12 @@ export default {
 		},
 		messageActionHandler({ action, message }) {
 			switch (action.name) {
-				case 'replyMessage':
-					return this.replyMessage(message)
+				case 'reply_message':
+					return this.reply_message(message)
 				case 'editMessage':
 					return this.editMessage(message)
 				case 'deleteMessage':
-					return this.$emit('deleteMessage', message._id)
+					return this.$emit('deleteMessage', message.id)
 				default:
 					return this.$emit('messageActionHandler', { action, message })
 			}
@@ -517,7 +517,7 @@ export default {
 		sendMessageReaction(messageReaction) {
 			this.$emit('sendMessageReaction', messageReaction)
 		},
-		replyMessage(message) {
+		reply_message(message) {
 			this.resetMessage()
 			this.messageReply = message
 		},
@@ -592,13 +592,6 @@ export default {
 		nameFromUsers(_obj) {
 		return _obj&&_obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
 		},
-		parse(message) {
-			if(!message.replyMessage){		
-				message["replyMessage"]=message.reply_message
-				delete message["reply_message"]
-			}
-			return message
-		}
 	}
 }
 

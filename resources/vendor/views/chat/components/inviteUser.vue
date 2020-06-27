@@ -94,7 +94,7 @@ export default {
   methods: {
     searchPeople(data) {
       if (data) {
-        const ids = this.room && this.room.users.map(e => e._id).filter(e => e);
+        const ids = this.room && this.room.users.map(e => e.id).filter(e => e);
         this.loading = true;
         searchUserApi({ selected: data, ids })
           .then(res => {
@@ -109,15 +109,15 @@ export default {
     inviteUser() {
       const users = this.room.users;
       this.select = this.select.filter(
-        e => users.map(e => e._id).indexOf(e.id) == -1 && typeof e === "object"
+        e => users.map(e => e.id).indexOf(e.id) == -1 && typeof e === "object"
       );
 
       const ids = this.select.map(e => e.id);
 
-      const roomId = this.room.roomId;
-      this.$emit("putRoomIndex", roomId);
+      const room_id = this.room.room_id;
+      this.$emit("putRoomIndex", room_id);
       if (this.room)
-        inviteRoomApi(roomId, { ids })
+        inviteRoomApi(room_id, { ids })
           .then(res => {
             this.$emit("pushRoomContent", {
               users: [...users, ...this.select]

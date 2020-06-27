@@ -24,8 +24,8 @@
 
       <room
         :currentUserId="currentUserId"
-        :rooms="_rooms"
-        :roomId="room.roomId || ''"
+        :rooms="rooms"
+        :room_id="room.room_id || ''"
         :messages="messages"
         :messagesLoaded="messagesLoaded"
         :menuActions="menuActions"
@@ -79,7 +79,7 @@ export default {
     currentUserId: { type: [String, Number], default: "" },
     rooms: { type: Array, default: () => [] },
     loadingRooms: { type: Boolean, default: false },
-    roomId: { type: [String, Number], default: null },
+    room_id: { type: [String, Number], default: null },
     messages: { type: Array, default: () => [] },
     messagesLoaded: { type: Boolean, default: false },
     menuActions: { type: Array, default: () => [] },
@@ -106,10 +106,10 @@ export default {
     };
   },
   watch: {
-    _rooms(newVal, oldVal) {
+    rooms(newVal, oldVal) {
       if (newVal[0] && newVal.length !== oldVal.length) {
-        if (this.roomId) {
-          const room = newVal.find(r => r.roomId === this.roomId);
+        if (this.room_id) {
+          const room = newVal.find(r => r.room_id === this.room_id);
           this.fetchRoom({ room });
         } else if (!this.isMobile) {
           this.fetchRoom({ room: this.orderedRooms[0] });
@@ -118,11 +118,11 @@ export default {
         }
       }
     },
-    roomId: {
+    room_id: {
       immediate: true,
       handler(val) {
-        if (val && !this.loadingRooms && this._rooms.length) {
-          const room = this._rooms.find(r => r.roomId === val);
+        if (val && !this.loadingRooms && this.rooms.length) {
+          const room = this.rooms.find(r => r.room_id === val);
           this.fetchRoom({ room });
         }
       }
@@ -131,7 +131,7 @@ export default {
       if (!val) return;
       if (Object.entries(val).length === 0) return;
       if (!roomsValid(val)) {
-        throw "Rooms object is not valid! Must contain roomId[String, Number], roomName[String] and users[Array]";
+        throw "Rooms object is not valid! Must contain room_id[String, Number], room_name[String] and users[Array]";
       }
       val.users.forEach(user => {
         if (!partcipantsValid(user)) {
@@ -168,20 +168,12 @@ export default {
       return cssThemeVars(customStyles);
     },
     orderedRooms() {
-      return this._rooms.slice().sort((a, b) => {
-        const aVal = a.lastMessage || { date: 0 };
-        const bVal = b.lastMessage || { date: 0 };
+      return this.rooms.slice().sort((a, b) => {
+        const aVal = a.last_message || { date: 0 };
+        const bVal = b.last_message || { date: 0 };
         return aVal.date > bVal.date ? -1 : bVal.date > aVal.date ? 1 : 0;
       });
     },
-    _rooms() {
-      const rooms = this.rooms.map(room => {
-        room = toCamelCase(room);
-        if (!room["lastMessage"]) delete room["lastMessage"];
-        return room;
-      });
-      return rooms;
-    }
   },
   methods: {
     searchRoom(elm) {
@@ -210,60 +202,41 @@ export default {
       this.$emit("fetchMessages", { room: this.room, options });
     },
     sendMessage(message) {
-      this.$emit("sendMessage", { ...message, roomId: this.room.roomId });
+      this.$emit("sendMessage", { ...message, room_id: this.room.room_id });
     },
     editMessage(message) {
-      this.$emit("editMessage", { ...message, roomId: this.room.roomId });
+      this.$emit("editMessage", { ...message, room_id: this.room.room_id });
     },
-    deleteMessage(messageId) {
-      this.$emit("deleteMessage", { messageId, roomId: this.room.roomId });
+    deleteMessage(message_id) {
+      this.$emit("deleteMessage", { message_id, room_id: this.room.room_id });
     },
     openFile(message) {
       this.$emit("openFile", message);
     },
     menuActionHandler(ev) {
-      this.$emit("menuActionHandler", { action: ev, roomId: this.room.roomId });
+      this.$emit("menuActionHandler", { action: ev, room_id: this.room.room_id });
     },
     messageActionHandler(ev) {
       this.$emit("messageActionHandler", {
         ...ev,
-        roomId: this.room.roomId
+        room_id: this.room.room_id
       });
     },
     sendMessageReaction(messageReaction) {
       this.$emit("sendMessageReaction", {
         ...messageReaction,
-        roomId: this.room.roomId
+        room_id: this.room.room_id
       });
     },
     typingMessage(message) {
       this.$emit("typingMessage", {
         message,
-        roomId: this.room.roomId
+        room_id: this.room.room_id
       });
     }
   }
 };
-function toCamelCase(_obj) {
-  const parseCamel = s => {
-    return s.replace(/([-_][a-z])/gi, $1 => {
-      return $1
-        .toUpperCase()
-        .replace("-", "")
-        .replace("_", "");
-    });
-  };
-  const NotCamel = str => {
-    return /([-_][a-z])/gi.test(str);
-  };
-  for (const key in _obj) {
-    if (NotCamel(key)) {
-      _obj[parseCamel(key)] = _obj[key];
-      delete _obj[key];
-    }
-  }
-  return _obj;
-}
+
 </script>
 
 <style lang="scss">

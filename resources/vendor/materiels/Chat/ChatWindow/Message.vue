@@ -4,7 +4,7 @@
 			{{ message.date }}
 		</div>
 
-		<div v-if="newMessage._id === message._id" class="line-new">
+		<div v-if="newMessage.id === message.id" class="line-new">
 			{{ textMessages.NEW_MESSAGES }}
 		</div>
 
@@ -33,14 +33,14 @@
 						v-if="roomUsers.length > 2 && message.sender_id !== currentUserId"
 						class="text-username"
 						:class="{
-							'username-reply': !message.deleted && message.replyMessage
+							'username-reply': !message.deleted && message.reply_message
 						}"
 					>
 						<span>{{ message.username }}</span>
 					</div>
 
 					<div
-						v-if="!message.deleted && message.replyMessage"
+						v-if="!message.deleted && message.reply_message"
 						class="reply-message"
 					>
 						<div class="reply-username">{{ replyUsername }}</div>
@@ -49,12 +49,12 @@
 							<div
 								class="message-image message-image-reply"
 								:style="{
-									'background-image': `url('${message.replyMessage.file.url}')`
+									'background-image': `url('${message.reply_message.file.url}')`
 								}"
 							></div>
 						</div>
 
-						<div class="reply-content">{{ message.replyMessage.content }}</div>
+						<div class="reply-content">{{ message.reply_message.content }}</div>
 					</div>
 
 					<div v-if="message.deleted">
@@ -130,7 +130,7 @@
 
 					<div
 						class="options-container"
-						:class="{ 'options-image': isImage && !message.replyMessage }"
+						:class="{ 'options-image': isImage && !message.reply_message }"
 						:style="{
 							width:
 								filteredMessageActions.length && showReactionEmojis
@@ -300,7 +300,7 @@ export default {
 	mounted() {
 		if (!this.message.seen && this.message.sender_id !== this.currentUserId) {
 			this.$emit('addNewMessage', {
-				_id: this.message._id,
+				_id: this.message.id,
 				index: this.index
 			})
 		}
@@ -342,8 +342,8 @@ export default {
 			)
 		},
 		replyUsername() {
-			const { sender_id } = this.message.replyMessage
-			const replyUser = this.roomUsers.find(user => user._id === sender_id)
+			const { sender_id } = this.message.reply_message
+			const replyUser = this.roomUsers.find(user => user.id === sender_id)
 			return replyUser ? replyUser.username : ''
 		},
 		isMessageActions() {
@@ -372,14 +372,14 @@ export default {
 	methods: {
 		isMessageHover() {
 			return (
-				this.editedMessage._id === this.message._id ||
-				this.hoverMessageId === this.message._id
+				this.editedMessage.id === this.message.id ||
+				this.hoverMessageId === this.message.id
 			)
 		},
 		onHoverMessage() {
 			this.imageHover = true
 			this.messageHover = true
-			if (this.canEditMessage()) this.hoverMessageId = this.message._id
+			if (this.canEditMessage()) this.hoverMessageId = this.message.id
 		},
 		canEditMessage() {
 			return !this.message.deleted
@@ -405,7 +405,7 @@ export default {
 			return this.checkImageType(this.message.file)
 		},
 		checkImageReplyFile() {
-			return this.checkImageType(this.message.replyMessage.file)
+			return this.checkImageType(this.message.reply_message.file)
 		},
 		checkImageType(file) {
 			if (!file) return
@@ -454,7 +454,7 @@ export default {
 			this.optionsClosing = true
 			setTimeout(() => (this.optionsClosing = false), 100)
 
-			if (this.hoverMessageId !== this.message._id) this.messageHover = false
+			if (this.hoverMessageId !== this.message.id) this.messageHover = false
 		},
 		openEmoji() {
 			this.emojiOpened = !this.emojiOpened
@@ -462,14 +462,14 @@ export default {
 		},
 		closeEmoji() {
 			this.emojiOpened = false
-			if (this.hoverMessageId !== this.message._id) this.messageHover = false
+			if (this.hoverMessageId !== this.message.id) this.messageHover = false
 		},
 		getEmojiByName(emojiName) {
 			return this.emojisList[emojiName]
 		},
 		sendMessageReaction(emoji, reaction) {
 			this.$emit('sendMessageReaction', {
-				messageId: this.message._id,
+				messageId: this.message.id,
 				reaction: emoji,
 				remove: reaction && reaction.indexOf(this.currentUserId) !== -1
 			})

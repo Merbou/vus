@@ -69,7 +69,7 @@
                             errors,
                             valid
                         }"
-              v-model="roomName"
+              v-model="room_name"
               :error-messages="errors"
               :success="valid"
               label="Room name (optionnal)"
@@ -118,7 +118,7 @@ export default {
       people: [],
       select: null,
       loading: false,
-      roomName: ""
+      room_name: ""
     };
   },
   methods: {
@@ -137,15 +137,15 @@ export default {
     },
     create() {
       this.select = this.select.filter(e => typeof e === "object");
-      const roomName = this.roomName;
+      const room_name = this.room_name;
       const ids = this.select.map(e => e.id);
-      const room = this.createVirtualroom({ roomName, select: this.select });
+      const room = this.createVirtualroom({ room_name, select: this.select });
 
       this.$emit("pushRoom", { room });
 
-      createRoomsApi({ roomName, ids })
+      createRoomsApi({ room_name, ids })
         .then(res => {
-          this.$emit("pushRoomContent", { roomId: res.id });
+          this.$emit("pushRoomContent", { room_id: res.id });
         })
         .catch(err => {
           console.log(err);
@@ -156,11 +156,11 @@ export default {
           this.close();
         });
     },
-    createVirtualroom({ roomName, select }) {
-      const room = roomName ? roomName : nameSeries({ users: select });
+    createVirtualroom({ room_name, select }) {
+      const room = room_name ? room_name : nameSeries({ users: select });
       return {
-        roomId: "v" + this.roomsLength,
-        roomName: room,
+        room_id: "v" + this.roomsLength,
+        room_name: room,
         users: select,
         owner: this.user.id
       };

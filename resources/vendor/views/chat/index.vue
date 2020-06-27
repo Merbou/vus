@@ -10,7 +10,7 @@
       @clearRoomIndex="clearRoomIndex"
       @shiftRoom="shiftRoom"
       @pushRoom="pushRoom"
-      @close="openAddRoom = false"
+      @close="close()"
     />
     <quit-room
       v-if="openquitRoom"
@@ -20,7 +20,7 @@
       @shiftRoom="shiftRoom"
       @pushRoom="pushRoom"
       @clearRoomIndex="clearRoomIndex"
-      @close="openquitRoom = false"
+      @close="close()"
     />
     <invite-user
       v-if="openInviteUser"
@@ -30,7 +30,7 @@
       @clearRoomIndex="clearRoomIndex"
       @putRoomIndex="putRoomIndex"
       @pushRoomContent="pushRoomContent"
-      @close="openInviteUser = false"
+      @close="close()"
     />
     <remove-user
       v-if="openRemoveUser"
@@ -42,7 +42,7 @@
       @clearRoomIndex="clearRoomIndex"
       @shiftRoom="shiftRoom"
       @pushRoom="pushRoom"
-      @close="openRemoveUser = false"
+      @close="close()"
     />
     <chat-window
       :showFiles="false"
@@ -69,12 +69,14 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { isCancel } from "axios";
 import ChatWindow from "@/materiels/Chat/ChatWindow";
 import { addRoom, quitRoom, removeUser, inviteUser } from "./components";
 
-import { mapGetters } from "vuex";
-import { isCancel } from "axios";
+import notify from "@/utils/notify";
 import filterItems from "@/utils/filterItems";
+
 import {
   fetchRoomsApi,
   createRoomsApi,
@@ -129,10 +131,9 @@ export default {
   computed: {
     ...mapGetters(["user"])
   },
-  mounted() {
+  created() {
     this.fetchRooms();
   },
-
   destroyed() {
     localStorage.removeItem("rooms");
   },
@@ -169,6 +170,14 @@ export default {
     },
     fetchRoom({ room }) {
       this.room = room;
+      Echo.join(`message.room.${this.room.room_id}`).listen(
+        "MessageEvent",
+        e => {
+          console.log(e.message);
+          this.messages.push(e.message);
+          notify.browser();
+        }
+      );
       this.menuActionsOption(room.owner == this.user.id);
       this._httpCancel && this._httpCancel.cancel();
       this.pagination.message = {
@@ -186,7 +195,7 @@ export default {
     },
     shiftRoom({ room }) {
       if (!this.indexRoom) {
-        this.indexRoom = this.rooms.findIndex(e => e.roomId === room.roomId);
+        this.indexRoom = this.rooms.findIndex(e => e.room_id === room.room_id);
       }
       this.rooms.splice(this.indexRoom, 1);
       if (!this.rooms.length) this.messages = [];
@@ -200,13 +209,13 @@ export default {
       this.indexRoom = "";
     },
     putRoomIndex(id) {
-      this.indexRoom = this.rooms.findIndex(e => e.roomId === id);
+      this.indexRoom = this.rooms.findIndex(e => e.room_id === id);
     },
     fetchMessages({ room }) {
       if (!this.paginate("message")) this.messagesLoaded = true;
       const MessagesApi = fetchMessagesApi(
         this.pagination.message.current_page,
-        room.roomId
+        room.room_id
       );
 
       this.messagesLoaded = false;
@@ -223,54 +232,54 @@ export default {
           else console.log(err);
         });
     },
-    sendMessage({ roomId, content, file, replyMessage }) {
+    sendMessage({ room_id, content, file, reply_message }) {
       var date = new Date();
       const data = {
-        _id: "v" + this.messages.length,
+        id: "v" + this.messages.length,
         content,
         sender_id: this.user.id,
         username: this.user.username,
         timestamp: date.getHours() + ":" + date.getMinutes()
       };
       let index;
-      if (replyMessage && replyMessage._id) {
-        index = this.messages.findIndex(e => e._id == replyMessage._id);
-        this.messages[index]["replyMessage"] = data;
+      if (reply_message && reply_message.id) {
+        index = this.messages.findIndex(e => e.id == reply_message.id);
+        this.messages[index]["reply_message"] = data;
       } else index = this.messages.push(data) - 1;
 
-      sendMessagesApi(roomId, {
+      sendMessagesApi(room_id, {
         content,
-        replay_id: replyMessage && replyMessage._id
+        replay_id: reply_message && reply_message.id
       })
         .then(res => {
-          if (replyMessage && replyMessage._id)
-            this.messages[index]["replyMessage"] = Object.assign(
-              this.messages[index]["replyMessage"],
+          if (reply_message && reply_message.id)
+            this.messages[index]["reply_message"] = Object.assign(
+              this.messages[index]["reply_message"],
               res
             );
           else this.messages[index] = Object.assign(this.messages[index], res);
         })
         .catch(err => {
           console.log(err);
-          if (replyMessage && replyMessage._id) this.messages[index] = null;
+          if (reply_message && reply_message.id) this.messages[index] = null;
           else this.messages.splice(index, 1);
         });
     },
-    editMessage({ roomId, messageId, newContent, file, replyMessage }) {
-      const index = this.messages.findIndex(e => e._id == messageId);
+    editMessage({ room_id, message_id, new_content, file, reply_message }) {
+      const index = this.messages.findIndex(e => e.id == message_id);
       const content = this.messages[index].content;
-      this.messages[index].content = newContent;
-      editMessagesApi(messageId, { content: newContent })
+      this.messages[index].content = new_content;
+      editMessagesApi(message_id, { content: new_content })
         .then()
         .catch(err => {
           console.log(err);
           this.messages[index].content = content;
         });
     },
-    deleteMessage({ roomId, messageId }) {
-      const index = this.messages.findIndex(e => e._id == messageId);
+    deleteMessage({ room_id, message_id }) {
+      const index = this.messages.findIndex(e => e.id == message_id);
       const message = this.messages.splice(index, 1);
-      deleteMessagesApi(messageId)
+      deleteMessagesApi(message_id)
         .then()
         .catch(err => {
           console.log(err);
@@ -288,7 +297,7 @@ export default {
         } else return false;
     },
 
-    menuActionHandler({ roomId, action }) {
+    menuActionHandler({ room_id, action }) {
       switch (action.name) {
         case "inviteUser":
           this.openInviteUser = true;
@@ -324,6 +333,12 @@ export default {
             title: "Quit Room"
           }
         ];
+    },
+    close() {
+      this.openAddRoom = false;
+      this.openquitRoom = false;
+      this.openInviteUser = false;
+      this.openRemoveUser = false;
     }
   }
 };
@@ -335,7 +350,7 @@ function nameSeries(_obj) {
 }
 function marge(rooms) {
   return rooms.filter(
-    (e, i) => rooms.map(e => e.roomId).indexOf(e.roomId) === i
+    (e, i) => rooms.map(e => e.room_id).indexOf(e.room_id) === i
   );
 }
 </script>

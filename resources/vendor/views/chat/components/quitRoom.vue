@@ -30,11 +30,11 @@ export default {
   methods: {
     quitRoom() {
       const room = { ...this.room };
-      const roomId = room && room.roomId;
-      if (roomId) {
+      const room_id = room && room.room_id;
+      if (room_id) {
         this.$emit("clearRoomIndex");
         this.$emit("shiftRoom", { room });
-        quitRoomApi(roomId)
+        quitRoomApi(room_id)
           .then(res => {})
           .catch(err => {
             this.$emit("pushRoom", { room });

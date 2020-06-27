@@ -17,8 +17,12 @@ service.interceptors.request.use(
     config => {
         ///config request with adding token access
         const token = getToken();
+        const socketId = window.Echo && window.Echo.socketId();
         if (token)
             config.headers["Authorization"] = `Bearer ${token}`
+        if (socketId)
+            config.headers['X-Socket-ID'] = socketId // Echo instance
+
         return config
 
     }, error => {
@@ -35,8 +39,8 @@ service.interceptors.response.use(response => {
         response.data.token = response.headers.Authorization
     }
     return response.data
-    }, error => {
-        return Promise.reject(error.response)
-    })
+}, error => {
+    return Promise.reject(error.response)
+})
 
 export default service;

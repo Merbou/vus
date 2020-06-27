@@ -20,14 +20,14 @@ class roomController extends Controller
     {
         try {
             $rooms = room::with([
-                'users:users.id as _id,users.username',
+                'users:users.id,users.username',
                 'last_message'
             ])
                 ->whereHas('users', function ($query) {
                     return $query
                         ->where('users.id', '=', Auth::id());
                 })
-                ->select('id', 'id as roomId', 'name as roomName', "owner")
+                ->select('id', 'id as room_id', 'name as room_name', "owner")
                 ->paginate(100);
 
             return response()->json($rooms, 200);

@@ -1,7 +1,7 @@
 export function roomsValid(obj) {
 	const roomsValidate = [
-		{ key: 'roomId', type: ['string', 'number'] },
-		{ key: 'roomName', type: ['string'] },
+		{ key: 'room_id', type: ['string', 'number'] },
+		{ key: 'room_name', type: ['string'] },
 		{ key: 'users', type: ['array'] }
 	]
 
@@ -24,7 +24,7 @@ export function roomsValid(obj) {
 
 export function partcipantsValid(obj) {
 	const participantsValidate = [
-		{ key: '_id', type: ['string', 'number'] },
+		{ key: 'id', type: ['string', 'number'] },
 		{ key: 'username', type: ['string'] }
 	]
 
@@ -40,7 +40,7 @@ export function partcipantsValid(obj) {
 
 export function messagesValid(obj) {
 	const participantsValidate = [
-		{ key: '_id', type: ['string', 'number'] },
+		{ key: 'id', type: ['string', 'number'] },
 		{ key: 'content', type: ['string', 'number'] },
 		{ key: 'sender_id', type: ['string', 'number'] }
 	]

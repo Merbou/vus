@@ -49,7 +49,7 @@ export default {
   computed: {
     roomWithOutCurrentUser() {
       return (
-        (this.room && this.room.users.filter(e => e._id !== this.user.id)) || []
+        (this.room && this.room.users.filter(e => e.id !== this.user.id)) || []
       );
     }
   },
@@ -61,20 +61,20 @@ export default {
   name: "removeUser",
   methods: {
     removeUser() {
-      const ids = this.kicked.map(e => e._id);
+      const ids = this.kicked.map(e => e.id);
       const room = { ...this.room };
       if (room) {
         const users = room.users;
         const noKicked = room.users.filter(
-          e => this.kicked.map(e => e._id).indexOf(e._id) == -1
+          e => this.kicked.map(e => e.id).indexOf(e.id) == -1
         );
-        const roomId = room.roomId;
-        this.$emit("putRoomIndex", roomId);
+        const room_id = room.room_id;
+        this.$emit("putRoomIndex", room_id);
 
         if (noKicked.length < 2) this.$emit("shiftRoom", { room });
         else this.$emit("pushRoomContent", { users: noKicked });
         this.close();
-        kickRoomApi(roomId, { ids })
+        kickRoomApi(room_id, { ids })
           .then(res => {})
           .catch(err => {
             console.log(err);

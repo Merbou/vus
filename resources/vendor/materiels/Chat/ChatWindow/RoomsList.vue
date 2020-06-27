@@ -29,8 +29,8 @@
       <div
         class="room-item"
         v-for="room in filteredRooms"
-        :key="room.roomId"
-        :class="{ 'room-selected': selectedRoomId === room.roomId }"
+        :key="room.room_id"
+        :class="{ 'room-selected': selectedRoomId === room.room_id }"
         @click="openRoom(room)"
       >
         <div
@@ -46,19 +46,19 @@
               :class="{ 'state-online': userStatus(room) === 'online' }"
             ></div>
             <div class="room-name text-ellipsis">{{ nameFromUsers(room["users"]) }}</div>
-            <div v-if="room.lastMessage" class="text-date">{{ room.lastMessage.timestamp }}</div>
+            <div v-if="room.last_message" class="text-date">{{ room.last_message.timestamp }}</div>
           </div>
           <div
             class="text-last"
-            :class="{ 'message-new': room.lastMessage.new }"
-            v-if="room.lastMessage"
+            :class="{ 'message-new': room.last_message.new }"
+            v-if="room.last_message"
           >
-            <span v-if="room.lastMessage.seen">
+            <span v-if="room.last_message.seen">
               <svg-icon name="checkmark" class="icon-check" />
             </span>
             <format-message
               :content="getLastMessage(room)"
-              :deleted="!!room.lastMessage.deleted"
+              :deleted="!!room.last_message.deleted"
               :formatLinks="false"
               :textFormatting="textFormatting"
               :singleLine="true"
@@ -106,7 +106,7 @@ export default {
       this.filteredRooms = val;
     },
     room(val) {
-      if (val) this.selectedRoomId = val.roomId;
+      if (val) this.selectedRoomId = val.room_id;
     }
   },
 
@@ -115,7 +115,7 @@ export default {
       if (this.filterRoom)
         this.filteredRooms = filteredUsers(
           this.rooms,
-          "roomName",
+          "room_name",
           ev.target.value
         );
       this.$emit("searchRoom", {
@@ -124,8 +124,8 @@ export default {
       });
     },
     openRoom(room) {
-      if (room.roomId === this.room.roomId && !this.isMobile) return;
-      this.selectedRoomId = room.roomId;
+      if (room.room_id === this.room.room_id && !this.isMobile) return;
+      this.selectedRoomId = room.room_id;
       this.$emit("fetchRoom", { room });
     },
     addRoom() {
@@ -134,35 +134,39 @@ export default {
     userStatus(room) {
       if (!room.users || room.users.length !== 2) return;
 
-      const user = room.users.find(u => u._id !== this.currentUserId);
+      const user = room.users.find(u => u.id !== this.currentUserId);
 
       if (user.status) return user.status.state;
     },
     getLastMessage(room) {
-      const content = room.lastMessage.deleted
+      const content = room.last_message.deleted
         ? this.textMessages.MESSAGE_DELETED
-        : room.lastMessage.content;
+        : room.last_message.content;
 
       if (room.users.length <= 2) {
         return content;
       }
 
       const user = room.users.find(
-        user => user._id === room.lastMessage.sender_id
+        user => user.id === room.last_message.sender_id
       );
 
-      if (user._id === this.currentUserId) {
+      if (!user) return `User - ${content}`;
+
+      if (user.id === this.currentUserId) {
         return content;
       }
 
       return `${user.username} - ${content}`;
     },
-	nameFromUsers(_obj) {
-	return _obj&&_obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
-	}
+    nameFromUsers(_obj) {
+      return (
+        _obj &&
+        _obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1)
+      );
+    }
   }
 };
-
 </script>
 
 <style lang="scss" scoped>
