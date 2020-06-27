@@ -51,6 +51,7 @@
         @messageActionHandler="messageActionHandler"
         @sendMessageReaction="sendMessageReaction"
         @typingMessage="typingMessage"
+        @focusMessageFrom="focusMessageFrom"
       ></room>
     </div>
   </div>
@@ -231,6 +232,11 @@ export default {
     typingMessage(message) {
       this.$emit("typingMessage", {
         message,
+        room_id: this.room.room_id
+      });
+    },
+    focusMessageFrom() {
+      this.$emit("focusMessageFrom", {
         room_id: this.room.room_id
       });
     }

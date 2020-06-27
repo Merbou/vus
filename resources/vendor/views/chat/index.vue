@@ -63,6 +63,7 @@
       @deleteMessage="deleteMessage"
       @addRoom="addRoom"
       @searchRoom="searchRoom"
+      @focusMessageFrom="focusMessageFrom"
       @menuActionHandler="menuActionHandler"
     ></chat-window>
   </div>
@@ -80,13 +81,15 @@ import filterItems from "@/utils/filterItems";
 import {
   fetchRoomsApi,
   createRoomsApi,
-  searchRoomsApi
+  searchRoomsApi,
+  fetchRoomApi
 } from "@/api/chat/room.js";
 import {
   fetchMessagesApi,
   sendMessagesApi,
   editMessagesApi,
-  deleteMessagesApi
+  deleteMessagesApi,
+  viewMessagesApi
 } from "@/api/chat/message.js";
 
 export default {
@@ -170,14 +173,7 @@ export default {
     },
     fetchRoom({ room }) {
       this.room = room;
-      Echo.join(`message.room.${this.room.room_id}`).listen(
-        "MessageEvent",
-        e => {
-          console.log(e.message);
-          this.messages.push(e.message);
-          notify.browser();
-        }
-      );
+      this.MessageEcho();
       this.menuActionsOption(room.owner == this.user.id);
       this._httpCancel && this._httpCancel.cancel();
       this.pagination.message = {
@@ -209,7 +205,7 @@ export default {
       this.indexRoom = "";
     },
     putRoomIndex(id) {
-      this.indexRoom = this.rooms.findIndex(e => e.room_id === id);
+      return (this.indexRoom = this.rooms.findIndex(e => e.room_id === id));
     },
     fetchMessages({ room }) {
       if (!this.paginate("message")) this.messagesLoaded = true;
@@ -232,6 +228,17 @@ export default {
           else console.log(err);
         });
     },
+    focusMessageFrom({ room_id }) {
+      this.viewMessages(room_id);
+    },
+    viewMessages(room_id) {
+      this.messages.forEach(e => {
+        e.seen = 1;
+      });
+      viewMessagesApi(room_id).catch(err => {
+        console.log(err);
+      });
+    },
     sendMessage({ room_id, content, file, reply_message }) {
       var date = new Date();
       const data = {
@@ -239,7 +246,8 @@ export default {
         content,
         sender_id: this.user.id,
         username: this.user.username,
-        timestamp: date.getHours() + ":" + date.getMinutes()
+        timestamp: date.getHours() + ":" + date.getMinutes(),
+        seen: 1
       };
       let index;
       if (reply_message && reply_message.id) {
@@ -258,11 +266,17 @@ export default {
               res
             );
           else this.messages[index] = Object.assign(this.messages[index], res);
+          if (this.putRoomIndex(this.room.room_id) > -1)
+            this.pushRoomContent({ last_message: this.messages[index] });
         })
         .catch(err => {
           console.log(err);
           if (reply_message && reply_message.id) this.messages[index] = null;
           else this.messages.splice(index, 1);
+          if (err.data === "Room Not existe") {
+            this.messages = [];
+            this.shiftRoom({ room_id });
+          }
         });
     },
     editMessage({ room_id, message_id, new_content, file, reply_message }) {
@@ -274,6 +288,10 @@ export default {
         .catch(err => {
           console.log(err);
           this.messages[index].content = content;
+          if (err.data === "Room Not existe") {
+            this.messages = [];
+            this.shiftRoom({ room_id });
+          }
         });
     },
     deleteMessage({ room_id, message_id }) {
@@ -284,9 +302,36 @@ export default {
         .catch(err => {
           console.log(err);
           this.messages.splice(index, 0, message);
+          if (err.data === "Room Not existe") {
+            this.messages = [];
+            this.shiftRoom({ room_id });
+          }
         });
     },
+    MessageEcho() {
+      Echo.private(`App.User.${this.user.id}`).listen("MessageEvent", e => {
+        if (!e.message) return;
+        this.channelChat(e.message);
+        notify.browser();
+      });
+    },
+    channelChat(message) {
+      let date = new Date(message.created_at);
+      message.timestamp = date.getHours() + ":" + date.getMinutes();
+      if (message.room_id === this.room.room_id) this.messages.push(message);
 
+      if (this.putRoomIndex(message.room_id) > -1) {
+        this.pushRoomContent({ last_message: message });
+        return;
+      } else
+        fetchRoomApi(message.room_id)
+          .then(res => {
+            this.rooms.push(res.room);
+          })
+          .catch(err => {
+            console.log(err);
+          });
+    },
     paginate(name) {
       if (this.pagination[name].current_page && this.pagination[name].last_page)
         if (
@@ -296,7 +341,6 @@ export default {
           return true;
         } else return false;
     },
-
     menuActionHandler({ room_id, action }) {
       switch (action.name) {
         case "inviteUser":

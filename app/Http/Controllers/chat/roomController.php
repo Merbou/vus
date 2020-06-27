@@ -36,6 +36,23 @@ class roomController extends Controller
         }
     }
 
+    public function single($id)
+    {
+        try {
+            $room = room::with([
+                'users:users.id,users.username',
+                'last_message'
+            ])
+                ->where('id', $id)
+                ->select('id', 'id as room_id', 'name as room_name', "owner")
+                ->first();
+
+            return response()->json(["room" => $room], 200);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
+    }
+
 
 
     public function store(Request $request)
@@ -102,10 +119,10 @@ class roomController extends Controller
             $room = room::where('id', $id)->with(['users' => function ($query) {
                 $query->where('users.id', '!=', Auth::id());
             }])->first();
-
+            if (!$room) return response()->json(204);
 
             $room->users()->detach(Auth::id());
-            if (count($room->users)) {
+            if (count($room->users) > 1) {
                 if ($room->owner != Auth::id()) {
                     $room->owner = $room->users[0]->id;
                     $room->update();

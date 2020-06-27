@@ -19,6 +19,15 @@ export function fetchMessagesApi(page, id) {
 
 }
 
+export function viewMessagesApi(id) {
+    return request({
+        url: `/view-messages/${id}`,
+        method: "get",
+    })
+}
+
+
+
 export function sendMessagesApi(id, data) {
     return request({
         url: `/message/${id}`,

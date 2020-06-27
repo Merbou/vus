@@ -9,6 +9,13 @@ export function fetchRoomsApi(page) {
     })
 }
 
+export function fetchRoomApi(id) {
+    return request({
+        url: `/room/${id}`,
+        method: "get",
+    })
+}
+
 export function createRoomsApi(data) {
     return request({
         url: `/create-room`,

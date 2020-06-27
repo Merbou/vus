@@ -159,12 +159,11 @@ export default {
 
       return `${user.username} - ${content}`;
     },
-    nameFromUsers(_obj) {
-      return (
-        _obj &&
-        _obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1)
-      );
-    }
+		nameFromUsers(_users) {
+		if(!_users||!_users.length)return
+		const _usersWithOutCurrent=[..._users].filter(e=>e.id!==this.currentUserId)
+		return _usersWithOutCurrent&&_usersWithOutCurrent.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
+		},
   }
 };
 </script>

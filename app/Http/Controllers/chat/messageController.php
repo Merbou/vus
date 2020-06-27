@@ -6,20 +6,30 @@ use App\Events\MessageEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ModelsChat\message;
+use App\ModelsChat\room;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use stdClass;
 
 class messageController extends Controller
 {
 
 
+    public function view($id)
+    {
+        try {
+            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])->update(['seen' => 1]);
+
+            return response()->json(204);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
+    }
     public function index($id)
     {
         try {
-            $messagesViewd = message::where([['room_id', $id], ["sender_id", Auth::id()]])->update(['seen' => 1]);
+            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])->update(['seen' => 1]);
 
             $messages = message::select([
                 "id", 'content', 'room_id', 'sender_id', 'username', 'seen', "reply_id",
@@ -42,7 +52,6 @@ class messageController extends Controller
         try {
 
             if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
-
             $request->validate([
                 'content' => 'required|string',
             ]);
@@ -54,16 +63,17 @@ class messageController extends Controller
             $message->room_id = $id;
             $message->sender_id = Auth::id();
             $message->username = Auth::user()->username;
-            
-            
+
+
             if ($message->save()) {
-                $message->_id = $message->id;
-                broadcast(new MessageEvent($message))->toOthers();
-                return response()->json($this->getMessageFormat($message), 200);
+                event(new MessageEvent($message));
+                return response()->json($message, 200);
             }
         } catch (Exception $e) {
             return response()->json($e, 400);
         } catch (QueryException $e) {
+            if (!room::where("id", $id)->first())
+                return response()->json("Room Not existe", 400);
             return response()->json($e, 400);
         } catch (ModelNotFoundException $e) {
             return response()->json($e, 400);
@@ -89,6 +99,8 @@ class messageController extends Controller
 
             return response()->json($e, 400);
         } catch (QueryException $e) {
+            if (!room::where("id", $id)->first())
+                return response()->json("Room Not existe", 400);
             return response()->json($e, 400);
         }
     }
@@ -102,23 +114,12 @@ class messageController extends Controller
             $message = message::where('id', $id)->delete();
             return response()->json(204);
         } catch (QueryException $e) {
+            if (!room::where("id", $id)->first())
+                return response()->json("Room Not existe", 400);
             return response()->json($e, 400);
         } catch (Exception $e) {
 
             return response()->json($e, 400);
         }
-    }
-
-
-    public function getMessageFormat($message)
-    {
-        $response = new stdClass();
-        $response->_id = $message->id;
-        $response->content = $message->content;
-        $response->sender_id = $message->sender_id;
-        $response->room_id = $message->room_id;
-        $response->username = $message->username;
-
-        return $response;
     }
 }

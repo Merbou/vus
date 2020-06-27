@@ -176,6 +176,7 @@
 						}px`
 					}"
 					v-model="message"
+					@focus="focusMessageFrom"
 					@input="onChangeInput"
 					@keydown.esc="resetMessage"
 					@keydown.enter.exact.prevent=""
@@ -538,6 +539,9 @@ export default {
 			this.resizeTextarea()
 			this.$emit('typingMessage', this.message)
 		},
+		focusMessageFrom() {
+			this.$emit('focusMessageFrom')
+		},
 		resizeTextarea() {
 			const el = this.$refs['roomTextarea']
 
@@ -589,8 +593,10 @@ export default {
 		closeMenu() {
 			this.menuOpened = false
 		},
-		nameFromUsers(_obj) {
-		return _obj&&_obj.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
+		nameFromUsers(_users) {
+		if(!_users||!_users.length)return
+		const _usersWithOutCurrent=[..._users].filter(e=>e.id!==this.currentUserId)
+		return _usersWithOutCurrent&&_usersWithOutCurrent.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
 		},
 	}
 }

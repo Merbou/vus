@@ -139,7 +139,7 @@ export default {
       this.select = this.select.filter(e => typeof e === "object");
       const room_name = this.room_name;
       const ids = this.select.map(e => e.id);
-      const room = this.createVirtualroom({ room_name, select: this.select });
+      const room = this.createVirtualroom({ room_name, select: [...this.select,this.user] });
 
       this.$emit("pushRoom", { room });
 
