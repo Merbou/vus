@@ -12,7 +12,7 @@ const mix = require('laravel-mix');
 
 mix.webpackConfig({
    resolve: {
-      extensions: ['.js', '.vue', '.json'],
+      extensions: ['.js', '.vue', '.json','html'],
       alias: {
          'vue$': 'vue/dist/vue.esm.js',
          '@': __dirname + '/resources/vendor',

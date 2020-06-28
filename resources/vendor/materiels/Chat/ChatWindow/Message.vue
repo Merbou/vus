@@ -119,10 +119,10 @@
 					</div>
 
 					<div class="text-timestamp">
-						<div class="icon-edited" v-if="message.edited && !message.deleted">
+						<div class="icon-edited" v-if="(message.edited || message.updated_at!==message.created_at) && !message.deleted">
 							<svg-icon name="pencil" />
 						</div>
-						<span>{{ message.timestamp }}</span>
+						<span >{{ message.timestamp }}</span>
 						<span v-if="isMessageSeen">
 							<svg-icon name="checkmark" class="icon-check" />
 						</span>

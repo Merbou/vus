@@ -505,7 +505,7 @@ export default {
 		},
 		messageActionHandler({ action, message }) {
 			switch (action.name) {
-				case 'reply_message':
+				case 'replyMessage':
 					return this.reply_message(message)
 				case 'editMessage':
 					return this.editMessage(message)
