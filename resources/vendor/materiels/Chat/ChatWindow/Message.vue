@@ -29,7 +29,7 @@
 							'username-reply': !message.deleted && message.reply_message
 						}"
           >
-            <span>{{ message.username }}</span>
+            <span v-if="!message.joind">{{ message.username }}</span>
           </div>
 
           <div v-if="!message.deleted && message.reply_message" class="reply-message">
@@ -154,13 +154,13 @@
           >
             <div
               ref="menuOptions"
-              v-if="optionsOpened"
+              v-if="optionsOpened&&!message.deleted&&!message.joind"
               v-click-outside="closeOptions"
               class="menu-options"
               :class="{ 'menu-left': message.sender_id !== currentUserId }"
               :style="{ top: `${menuOptionsTop}px` }"
             >
-              <div class="menu-list" v-if="!message.deleted">
+              <div class="menu-list">
                 <div v-for="action in filteredMessageActions" :key="action.name">
                   <div
                     v-if="(
@@ -179,7 +179,7 @@
           </transition>
         </div>
 
-        <transition-group name="slide-left" v-if="!message.deleted">
+        <transition-group name="slide-left" v-if="!message.deleted&&!message.joind">
           <button
             v-for="(reaction, key) in message.reactions"
             v-show="reaction.length"

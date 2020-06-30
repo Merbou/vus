@@ -53,6 +53,50 @@ export default {
         this.messages = [];
         this.fetchMessages({ room });
     },
+    channelRoomUser({ users, user_ids, room_id, is_invited, is_deleted }) {
+        console.log({ users, user_ids, room_id, is_invited, is_deleted })
+        if (!users && !user_ids && !room_id) return;
+        let index = this.rooms.findIndex(e => e.room_id === parseInt(room_id));
+
+        if (is_deleted) {
+            let users = this.rooms && this.rooms[index].users
+            if (!users) return
+            const kicked_users = users.filter(e => user_ids.indexOf(e.id) > -1)
+            this.rooms[index].users = users.
+                filter(_u => kicked_users.
+                    findIndex(_k_u => parseInt(_k_u.id) === parseInt(_u.id)) !== -1)
+
+            kicked_users.forEach(user => {
+                this.channelChat({
+                    message: {
+                        content: `${user.username} has been leave the conversation`,
+                        id: `_vv${this.messages.length + user.id}`,
+                        sender_id: user.id,
+                        username: user.username,
+                        room_id: parseInt(room_id),
+                        joind: true
+                    }
+                })
+
+            });
+            return;
+        }
+        if (is_invited)
+            users.forEach(user => {
+                this.rooms[index] && this.rooms[index].users.push(user)
+                this.channelChat({
+                    message: {
+                        content: `${user.username} has been joined the conversation`,
+                        id: `v${this.messages.length + user.id}`,
+                        sender_id: user.id,
+                        username: user.username,
+                        room_id: parseInt(room_id),
+                        joind: true
+                    }
+                })
+            });
+
+    },
     pushRoom({ room }) {
         this.indexRoom = this.rooms.push(room) - 1;
     },

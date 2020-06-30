@@ -4,9 +4,13 @@ export default {
     ...room,
     ...messages,
     MessageEcho() {
-        Echo.private(`App.User.${this.user.id}`).listen("MessageEvent", e => {
-            this.channelChat(e);
-        });
+        Echo.private(`App.User.${this.user.id}`)
+            .listen("MessageEvent", e => {
+                this.channelChat(e)
+            })
+            .listen("userEvent", e => {
+                this.channelRoomUser(e);
+            });
     },
     paginate(name) {
         if (this.pagination[name].current_page && this.pagination[name].last_page)

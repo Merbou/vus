@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\chat;
 
+use App\Events\userEvent;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
@@ -147,8 +148,10 @@ class roomController extends Controller
             if ($room->owner !== Auth::id()) throw new HttpException("Forbidden");
             $room->users()->detach($request->ids);
             $freshRoom = $room->fresh();
-            if ($freshRoom->users->count() < 2)
+            broadcast(new userEvent(["room_id" => $id, "deleted" => true, "ids" => $request->ids]))->toOthers();
+            if ($freshRoom->users->count() < 2) {
                 $room->delete();
+            }
 
 
             return response()->json(204);
@@ -168,8 +171,11 @@ class roomController extends Controller
             $room = room::where('id', $id)->first();
             if ($room->owner !== Auth::id()) throw new HttpException("Forbidden");
 
-            if ($room->users()->attach($request->ids))
-                return response()->json(204);
+            $room->users()->attach($request->ids);
+            $users = User::whereIn("id", $request->ids)->select("id", "username")->get();
+            if ($users->count())
+                broadcast(new userEvent(['users' => $users, 'room_id' => $id, 'invited' => true]))->toOthers();
+            return response()->json(204);
         } catch (QueryException $e) {
             return response()->json($e, 400);
         } catch (\Exception $e) {
