@@ -1,4 +1,5 @@
 import { isCancel } from "axios";
+import moment from "moment"
 import {
     fetchRoomApi
 } from "@/api/chat/room.js";
@@ -47,7 +48,7 @@ export default {
     sendMessage({ room_id, content, reply_message }) {
         const v_message = this.createVirtualMessage({ content })
         //push message or reply message
-        const index = this.replyMessageOrMessage(v_message, reply_message && reply_message.id)
+        const index = this.getIndexReplyMessageOrMessage(v_message, reply_message && reply_message.id)
 
 
         sendMessagesApi(room_id, {
@@ -56,9 +57,13 @@ export default {
         })
             .then(res => {
                 //update lastMesage of room to apears in list room if room exist
-                if (this.putRoomIndex(this.room.room_id) > -1)
+                if (this.putRoomIndex(this.room.room_id) > -1) {
                     //update message or reply message
-                    this.pushRoomContent({ last_message: this.updateReplyMessageOrMessage(res, reply_message, index) });
+                    const updated_message = { ...this.updateReplyMessageOrMessage(res, reply_message, index) }
+                    updated_message.timestamp = moment().format("DD/MM/YYYY HH:mm")
+                    updated_message.date = moment().format("YYYYMMDDHHmmss")
+                    this.pushRoomContent({ last_message: updated_message });
+                }
             })
             .catch(err => {
                 console.log(err);
@@ -73,24 +78,19 @@ export default {
             });
     },
     editMessage({ room_id, message_id, new_content, file, reply_message }) {
+        let index = this.messages.findIndex(e => e.id == message_id);
+        const content = this.messages[index].content;
 
-        let first_index = this.messages.findIndex(e => e.id == message_id);
-        const content = this.messages[first_index].content;
-        this.messages[first_index].content = new_content;
-
-        //descend message to last messages
-        const message = this.messages[first_index];
-        message["created_at"] = date()
-        message["updated_at"] = date()
-        this.messages.splice(first_index, 1);
-        let second_index = this.messages.push(message);
+        ///change som col
+        this.messages[index].content = new_content;
+        this.messages[index].edited = 1;
 
         editMessagesApi(message_id, { content: new_content })
             .then(res => {
             })
             .catch(err => {
-
-                message.content = content;
+                this.messages[index].content = content;
+                this.messages[index].edited = 0;
                 this.messages.splice(first_index, 0, message);
 
                 if (err.data === "Room Not existe") {
@@ -103,13 +103,12 @@ export default {
     deleteMessage({ room_id, message_id }) {
 
         const index = this.messages.findIndex(e => e.id == message_id);
-        const message = this.messages.splice(index, 1);
-
+        const message = this.messages.splice(index, 1).pop();
+        const vm = this
         deleteMessagesApi(message_id)
             .then()
             .catch(err => {
 
-                console.log(err);
                 this.messages.splice(index, 0, message);
 
                 if (err.data === "Room Not existe") {
@@ -121,28 +120,56 @@ export default {
     },
     focusMessageFrom({ room_id }) {
         if (!room_id) return;
-        this.messages.forEach(e => e.seen = 1)
-        viewMessagesApi(room_id).catch(err => console.log(err));
+        if (this.messages.findIndex(e => e.seen === 0) > -1) {
+            viewMessagesApi(room_id).catch(err => console.log(err));
+        }
 
     },
-    MessageEcho() {
-        Echo.private(`App.User.${this.user.id}`).listen("MessageEvent", e => {
-            if (!e.message) return;
-            this.channelChat(e.message);
+    channelChat(e) {
+        console.log(e)
+        if (e.is_view || !e.message) {
+            this.messages.forEach(e => e.seen = 1)
+            return;
+        }
+        let { message, is_updated, is_deleted } = e
+        //notify browser if is msg
+        if (!is_updated && !is_deleted)
             notify.browser();
-        });
-    },
-    channelChat(message) {
-        console.log(message)
-        //set timestemp format according to chat room
-        message.timestamp = this.timestamp(message.created_at);
 
+
+        let index = this.messages.findIndex(e => e.id == message.id);
+        if (is_deleted) {
+            this.messages[index].content = "this message has been deleted"
+            this.messages[index] = this.timestamp(e.message && e.message.updated_at);
+            this.messages[index].deleted = true
+
+            return
+        }
+
+        //set timestemp format according to chat room
+        if (message) {
+            message.new = true;
+            message.timestamp = this.timestamp(e.message && e.message.updated_at);
+        }
+
+        //if is updaated msg then delete origin before pushing the new
+        if (is_updated) {
+            this.messages.splice(index, 1);
+            message.edited = true
+            index = this.messages.push(message) - 1;
+        }
         // if we get meesage of current room push directly
-        if (message.room_id === this.room.room_id) {
-            this.replyMessageOrMessage(message, message.reply_id)
+        else if (message.room_id === this.room.room_id) {
+            this.getIndexReplyMessageOrMessage(message, message.reply_id)
         }
         // update lastMessage every time
-        if (this.putRoomIndex(message.room_id) > -1) this.pushRoomContent({ last_message: message });
+        if (this.putRoomIndex(message.room_id) > -1) {
+            const last_message = { ...message }
+            last_message.timestamp = moment().format("DD/MM/YYYY HH:mm")
+            last_message.date = moment().format("YYYYMMDDHHmmss")
+
+            this.pushRoomContent({ last_message });
+        }
         else
             //if message is from unexisted room fetch this room from server-side
             fetchRoomApi(message.room_id)
@@ -155,24 +182,25 @@ export default {
                 });
     },
     createVirtualMessage({ content }) {
-        var date = new Date();
         return {
             id: "v" + this.messages.length,
             content,
             sender_id: this.user.id,
             username: this.user.username,
-            timestamp: this.timestamp(),
-            seen: 1
+            timestamp: moment().format("HH:mm"),
+            seen: 0,
+            new: 1
         };
     },
-    replyMessageOrMessage(v_message, reply_id) {
+    getIndexReplyMessageOrMessage(v_message, reply_id) {
         let index
         if (reply_id) {
             index = this.messages.findIndex(e => e.id == reply_id);
+            //descend msg&reply msg to the first messages
             this.messages[index]["reply_message"] = v_message;
             const message = this.messages[index];
             this.messages.splice(index, 1);
-            index = this.messages.push(message);
+            index = this.messages.push(message) - 1;
         } else index = this.messages.push(v_message) - 1;
 
         return index
@@ -190,12 +218,7 @@ export default {
         return this.messages[index]
     },
     timestamp(_date) {
-        let date
-        if (_date)
-            date = new Date(_date);
-        else
-            date = new Date();
-        return date.getHours() + ":" + date.getMinutes()
-    }
+        return moment(_date).format("HH:mm")
+    },
 
 }

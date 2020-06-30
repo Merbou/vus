@@ -22,7 +22,7 @@ class message extends Model
 
     public function replyMessage()
     {
-        return $this->hasOne('App\ModelsChat\message', 'reply_id');
+        return $this->hasOne('App\ModelsChat\message', 'reply_id')->latest();
     }
 
     public function room()

@@ -18,9 +18,10 @@ class CreateMessagesTable extends Migration
             $table->foreignId('room_id');
             $table->foreignId('sender_id');
             $table->foreignId('reply_id')->nullable();
-
+            
             $table->text('content');
             $table->string('username');
+            $table->boolean("edited")->default(0);
             $table->boolean('seen')->default(0);
 
             $table->foreign('reply_id')->references('id')->on('messages')->onDelete('cascade');

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class messageController extends Controller
 {
@@ -20,7 +21,7 @@ class messageController extends Controller
     {
         try {
             $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])->update(['seen' => 1]);
-
+            broadcast(new MessageEvent(['room_id' => $id]))->toOthers();
             return response()->json(204);
         } catch (QueryException $e) {
             return response()->json($e, 400);
@@ -29,16 +30,18 @@ class messageController extends Controller
     public function index($id)
     {
         try {
-            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])->update(['seen' => 1]);
-
-            $messages = message::select([
-                "id", 'content', 'room_id', 'sender_id', 'username', 'seen', "reply_id","created_at","updated_at",
+            $select = [
+                "id", 'content', 'room_id', 'sender_id', 'username',
+                'seen', "edited", "reply_id",
                 DB::raw('DATE_FORMAT(created_at, "%H:%i") as timestamp'),
                 DB::raw('DATE_FORMAT(created_at, "%e %b %Y") as date'),
-            ])
+            ];
+            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])->update(['seen' => 1]);
+
+            $messages = message::select($select)
                 ->with('replyMessage')
                 ->where([['room_id', $id], ['reply_id', '=', null]])
-                ->orderBy('updated_at', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->paginate(20);
             return response()->json($messages, 200);
         } catch (QueryException $e) {
@@ -56,7 +59,13 @@ class messageController extends Controller
                 'content' => 'required|string',
             ]);
             $message = new message();
-            if ($request->reply_id && message::findOrFail($request->reply_id)->touch()) {
+            if ($request->reply_id && $master_message = message::findOrfail($request->reply_id)) {
+                if ($master_message->replyMessage) {
+                    if ($master_message->replyMessage->sender_id != Auth::id())
+                        return response()->json(204);
+                    $master_message->replyMessage()->delete();
+                }
+                $master_message->touch();
                 $message->reply_id = $request->reply_id;
             }
 
@@ -67,7 +76,7 @@ class messageController extends Controller
 
 
             if ($message->save()) {
-                broadcast(new MessageEvent($message))->toOthers();
+                broadcast(new MessageEvent(['message' => $message]))->toOthers();
                 return response()->json($message, 200);
             }
         } catch (Exception $e) {
@@ -92,10 +101,10 @@ class messageController extends Controller
             ]);
 
 
-            $message = message::where('id', $id)
-                ->update(['content' => $request->content]);
-
-            return response()->json($message,200);
+            $message = message::where('id', $id)->first();
+            $message->update(['content' => $request->content, 'edited' => 1]);
+            broadcast(new MessageEvent(['message' => $message, 'updated' => true]))->toOthers();
+            return response()->json($message, 200);
         } catch (Exception $e) {
 
             return response()->json($e, 400);
@@ -112,15 +121,20 @@ class messageController extends Controller
         try {
             if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
 
-            $message = message::where('id', $id)->delete();
-            return response()->json(204);
+            $message = message::findOrFail($id);
+            $room_id = $message->room_id;
+
+            if ($message->delete()) {
+                broadcast(new MessageEvent(["room_id" => $room_id, "deleted" => true, "id" => $id]))->toOthers();
+                return response()->json(204);
+            }
         } catch (QueryException $e) {
-            if (!room::where("id", $id)->first())
+            if (!room::findOrFail($room_id))
                 return response()->json("Room Not existe", 400);
             return response()->json($e, 400);
-        } catch (Exception $e) {
+        } catch (NotFoundHttpException $e) {
 
-            return response()->json($e, 400);
+            return response()->json($e, 404);
         }
     }
 }

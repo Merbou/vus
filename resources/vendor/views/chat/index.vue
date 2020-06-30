@@ -118,6 +118,8 @@ export default {
     ...mapGetters(["user"])
   },
   created() {
+    //load the laravel-echo
+    this.MessageEcho();
     this.fetchRooms();
   },
   destroyed() {

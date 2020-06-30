@@ -16,39 +16,47 @@ class MessageEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 
-    private $message;
+    public $message, $updated, $room_id, $deleted, $users, $id;
 
 
 
-    public function __construct(message $message)
+    public function __construct($params)
     {
-        $this->message = $message;
+
+        extract($params, EXTR_REFS);
+        $this->message = $message ?? null;
+        $this->id = $id ?? null;
+        $this->room_id = $room_id ?? $message->room_id ?? null;
+        $this->updated = $updated ?? null;
+        $this->deleted = $deleted ?? null;
+        if ($this->room_id)
+            $this->users = DB::table('room_user')->where("room_id", $this->room_id)->select("user_id")->get();
     }
 
 
     public function broadcastOn()
     {
-        try {
-            $this->message->room_id;
+        $presenceChannels = [];
+        if ($this->users->count())
+            foreach ($this->users as $user)
+                $presenceChannels[] = new PrivateChannel('App.User.' .  $user->user_id);
 
 
-            $rooms_users = DB::table('room_user')
-                ->where("room_id", $this->message->room_id)
-                ->select("user_id")->get();
-            $presenceChannels = [];
-            if ($rooms_users->count()) {
-                foreach ($rooms_users as $room_user) {
-                    $presenceChannels[] = new PrivateChannel('App.User.' .  $room_user->user_id);
-                }
-            }
-            return $presenceChannels;
-        } catch (QueryException $e) {
-            return false;
-        }
+        return $presenceChannels;
     }
 
     public function broadcastWith()
     {
-        return ['message' => $this->message];
+        if ($this->updated)
+            return ['message' => $this->message, 'is_updated' => true];
+
+        if ($this->deleted)
+            return ['message' =>  ["id" => $this->id], 'is_deleted' => true];
+
+        if ($this->message)
+            return ['message' => $this->message];
+
+
+        return ['message' => null, 'is_view' => true];
     }
 }

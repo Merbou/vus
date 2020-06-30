@@ -43,8 +43,6 @@ export default {
     },
     fetchRoom({ room }) {
         this.room = room;
-        //whene room is picked load the laravel-echo
-        this.MessageEcho();
         //if current user have access to
         this.menuActionsOption(room.owner == this.user.id);
         this._httpCancel && this._httpCancel.cancel();
