@@ -33,8 +33,13 @@ class room extends Model
         return $this->belongsToMany('App\User');
     }
 
+    public function users_ids()
+    {
+        return $this->belongsToMany('App\User')->pluck('users.id');
+    }
+
     public function user_owner()
     {
-        return $this->hasOne('App\User',"owner");
+        return $this->hasOne('App\User', "owner");
     }
 }

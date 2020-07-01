@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\ModelsChat\message;
+use App\ModelsChat\room;
+use App\Policies\messagePolicy;
+use App\Policies\roomPolicy;
 use Laravel\Passport\Passport;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
@@ -14,7 +18,8 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        // 'App\Model' => 'App\Policies\ModelPolicy',
+        message::class => messagePolicy::class,
+        room::class => roomPolicy::class,
     ];
 
     /**
@@ -28,5 +33,8 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
 
+        // Gate::before(function ($user, $ability) {
+        //     return $user->hasRole('super-admin') ? true : null;
+        // });
     }
 }

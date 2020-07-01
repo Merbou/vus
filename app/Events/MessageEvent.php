@@ -16,7 +16,7 @@ class MessageEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 
-    public $message, $updated, $room_id, $deleted, $users, $id;
+    public $message, $updated, $room_id, $deleted, $id, $typing;
 
 
 
@@ -27,22 +27,29 @@ class MessageEvent implements ShouldBroadcast
         $this->message = $message ?? null;
         $this->id = $id ?? null;
         $this->room_id = $room_id ?? $message->room_id ?? null;
+        $this->typing = $typing ?? null;
         $this->updated = $updated ?? null;
         $this->deleted = $deleted ?? null;
-        if ($this->room_id)
-            $this->users = DB::table('room_user')->where("room_id", $this->room_id)->select("user_id")->get();
     }
 
 
     public function broadcastOn()
     {
-        $presenceChannels = [];
-        if ($this->users->count())
-            foreach ($this->users as $user)
-                $presenceChannels[] = new PrivateChannel('App.User.' .  $user->user_id);
+        try {
+
+            if ($this->room_id)
+                $users = DB::table('room_user')->where("room_id", $this->room_id)->select("user_id")->get();
+            $presenceChannels = [];
+            if ($users->count())
+                foreach ($users as $user)
+                    $presenceChannels[] = new PrivateChannel('App.User.' .  $user->user_id);
 
 
-        return $presenceChannels;
+            return $presenceChannels;
+        } catch (QueryException $e) {
+
+            return response()->json($e, 400);
+        }
     }
 
     public function broadcastWith()
@@ -52,6 +59,9 @@ class MessageEvent implements ShouldBroadcast
 
         if ($this->deleted)
             return ['message' =>  ["id" => $this->id], 'is_deleted' => true];
+
+        if ($this->typing)
+            return ['message' =>  ["typing_id" => $this->typing], 'is_typing' => true];
 
         if ($this->message)
             return ['message' => $this->message];

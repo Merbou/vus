@@ -62,6 +62,7 @@
           class="container"
           autocomplete="on"
           v-on:submit.prevent="validate()"
+          :disabled="clicked"
         >
           <ValidationProvider name="Room name" rules="max:30|alpha_dash">
             <v-text-field
@@ -83,7 +84,7 @@
       <v-card-actions>
         <div class="flex-grow-1"></div>
         <v-btn color="blue darken-1" text @click="close()">cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="validate()">Create</v-btn>
+        <v-btn color="blue darken-1" text @click="validate()" :disabled="clicked">Create</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -118,6 +119,7 @@ export default {
       people: [],
       select: null,
       loading: false,
+      clicked: false,
       room_name: ""
     };
   },
@@ -136,6 +138,7 @@ export default {
       }
     },
     create() {
+      this.clicked = true;
       this.select = this.select.filter(e => typeof e === "object");
       const room_name = this.room_name;
       const ids = this.select.map(e => e.id);
@@ -157,6 +160,9 @@ export default {
         .finally(() => {
           this.$emit("clearRoomIndex");
           this.close();
+          setTimeout(() => {
+            this.clicked = false;
+          }, 1000);
         });
     },
     createVirtualroom({ room_name, select }) {

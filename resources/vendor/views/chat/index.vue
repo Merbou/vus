@@ -64,6 +64,7 @@
       @addRoom="addRoom"
       @searchRoom="searchRoom"
       @focusMessageFrom="focusMessageFrom"
+      @typingMessage="typingMessage"
       @menuActionHandler="menuActionHandler"
     ></chat-window>
   </div>
@@ -115,7 +116,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user","channel"])
   },
   created() {
     //load the laravel-echo

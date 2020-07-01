@@ -8,7 +8,8 @@ import {
     sendMessagesApi,
     editMessagesApi,
     deleteMessagesApi,
-    viewMessagesApi
+    viewMessagesApi,
+    // typingMessagesApi
 } from "@/api/chat/message.js";
 
 import notify from "@/utils/notify";
@@ -121,17 +122,28 @@ export default {
     focusMessageFrom({ room_id }) {
         if (!room_id) return;
         if (this.messages.findIndex(e => e.seen === 0) > -1) {
+            if (this.room && this.room.last_message) this.room.last_message.new = 0
             viewMessagesApi(room_id).catch(err => console.log(err));
         }
 
     },
-    channelChat(e) {
-        console.log(e)
-        if (e.is_view || !e.message) {
+    typingMessage({ room_id, message }) {
+        // if (!room_id || !message) return;
+        // typingMessagesApi(this.user.id, room_id).catch(err => console.log(err));
+    },
+    channelChat({ message, is_updated, is_deleted, is_typing, is_view }) {
+        console.log({ message, is_updated, is_deleted, is_typing, is_view })
+        if (is_typing) {
+            if (this.room)
+                if (!this.room.typingUsers)
+                    this.room.typingUsers = []
+            this.room.typingUsers.push(message && message.typing_id)
+            return;
+        }
+        if (is_view || !message) {
             this.messages.forEach(e => e.seen = 1)
             return;
         }
-        let { message, is_updated, is_deleted } = e
         //notify browser if is msg
         if (!is_updated && !is_deleted)
             notify.browser();
@@ -140,7 +152,7 @@ export default {
         let index = this.messages.findIndex(e => e.id == message.id);
         if (is_deleted) {
             this.messages[index].content = "this message has been deleted"
-            this.messages[index] = this.timestamp(e.message && e.message.updated_at);
+            this.messages[index].timestamp = this.timestamp(message && message.updated_at);
             this.messages[index].deleted = true
 
             return
@@ -149,7 +161,7 @@ export default {
         //set timestemp format according to chat room
         if (message) {
             message.new = true;
-            message.timestamp = this.timestamp(e.message && e.message.updated_at);
+            message.timestamp = this.timestamp(message && message.updated_at);
         }
 
         //if is updaated msg then delete origin before pushing the new

@@ -65,17 +65,18 @@ export default {
     view: 0
   }),
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user", "channel"])
   },
   mounted() {
     this.fetchNotificationsView();
   },
   created() {
-    Echo.private(`App.User.${this.user.id}`).listen("notificationEvent", e => {
-      this.notifications.push(e.notification);
-      this.view++;
-      notify.browser();
-    });
+    this.channel &&
+      this.channel.listen("notificationEvent", e => {
+        this.notifications.push(e.notification);
+        this.view++;
+        notify.browser();
+      });
   },
   methods: {
     fetchNotifications(page) {

@@ -10,7 +10,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\idsRequest;
 use App\ModelsChat\room;
 use App\User;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class roomController extends Controller
 {
@@ -40,6 +42,8 @@ class roomController extends Controller
     public function single($id)
     {
         try {
+            $this->authorize("view", [room::class, $id]);
+
             $room = room::with([
                 'users:users.id,users.username',
                 'last_message'
@@ -59,6 +63,7 @@ class roomController extends Controller
     public function store(Request $request)
     {
         try {
+
             $data = ["name" => null, "owner" => Auth::id()];
             $rules = ['ids.*' => 'required|integer'];
 
@@ -145,7 +150,8 @@ class roomController extends Controller
 
 
             $room = room::where('id', $id)->with('users')->first();
-            if ($room->owner !== Auth::id()) throw new HttpException("Forbidden");
+            $this->authorize("kick", $room);
+
             $room->users()->detach($request->ids);
             $freshRoom = $room->fresh();
             broadcast(new userEvent(["room_id" => $id, "deleted" => true, "ids" => $request->ids]))->toOthers();
@@ -157,10 +163,6 @@ class roomController extends Controller
             return response()->json(204);
         } catch (QueryException $e) {
             return response()->json($e, 400);
-        } catch (\Exception $e) {
-            return response()->json($e, 422);
-        } catch (HttpException $e) {
-            return response()->json($e, 403);
         }
     }
 
@@ -169,30 +171,23 @@ class roomController extends Controller
     {
         try {
             $room = room::where('id', $id)->first();
-            if ($room->owner !== Auth::id()) throw new HttpException("Forbidden");
-
-            $room->users()->attach($request->ids);
-            $users = User::whereIn("id", $request->ids)->select("id", "username")->get();
+            $this->authorize("invite", $room);
+            $attachedIds = $room->users_ids();
+            $newIds = array_diff($request->ids, $attachedIds->toArray());
+            $room->users()->attach($newIds);
+            $users = User::whereIn("id", $request->ids)->select(['id', "username"])->get();
             if ($users->count())
                 broadcast(new userEvent(['users' => $users, 'room_id' => $id, 'invited' => true]))->toOthers();
             return response()->json(204);
         } catch (QueryException $e) {
             return response()->json($e, 400);
-        } catch (\Exception $e) {
-            return response()->json($e, 422);
-        } catch (HttpException $e) {
-            return response()->json($e, 403);
         }
     }
 
     private function filterIdsWith($ids)
     {
 
-        $ids = User::whereIn('id', $ids)->select("id", "username")
-            ->get()
-            ->map(function ($q) use (&$usernames) {
-                return $q["id"];
-            });
+        $ids = User::whereIn('id', $ids)->pluck("id");
 
         return ["ids" => $ids];
     }

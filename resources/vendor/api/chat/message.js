@@ -28,6 +28,15 @@ export function viewMessagesApi(id) {
 
 
 
+// export function typingMessagesApi(id, room_id) {
+//     return request({
+//         url: `/typing-messages/${id}/${room_id}`,
+//         method: "get",
+//     })
+// }
+
+
+
 export function sendMessagesApi(id, data) {
     return request({
         url: `/message/${id}`,

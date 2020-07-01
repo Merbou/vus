@@ -21,7 +21,13 @@
 
       <v-card-actions>
         <div class="flex-grow-1"></div>
-        <v-btn color="success" text class="white--text" @click="removeUser()">Kick</v-btn>
+        <v-btn
+          color="success"
+          text
+          class="white--text"
+          @click="removeUser()"
+          :disabled="clicked"
+        >Kick</v-btn>
         <v-btn color="secondary" text class="white--text" @click="close()">Cancel</v-btn>
       </v-card-actions>
     </v-card>
@@ -55,12 +61,14 @@ export default {
   },
   data() {
     return {
-      kicked: []
+      kicked: [],
+      clicked: false
     };
   },
   name: "removeUser",
   methods: {
     removeUser() {
+      this.clicked = true;
       const ids = this.kicked.map(e => e.id);
       const room = { ...this.room };
       if (room) {
@@ -85,6 +93,9 @@ export default {
           .finally(() => {
             this.$emit("clearRoomIndex");
             this.close();
+            setTimeout(() => {
+              this.clicked = true;
+            }, 1000);
           });
       } else this.close();
     },

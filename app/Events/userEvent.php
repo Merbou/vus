@@ -15,7 +15,7 @@ class userEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
 
-    public $userList, $invited, $room_id, $deleted, $users, $ids;
+    public $userList, $invited, $room_id, $deleted, $ids;
 
 
 
@@ -27,21 +27,27 @@ class userEvent implements ShouldBroadcast
         $this->room_id = $room_id ?? $message->room_id ?? null;
         $this->invited = $invited ?? null;
         $this->deleted = $deleted ?? null;
-        if ($this->room_id)
-            $this->users = DB::table('room_user')->where("room_id", $this->room_id)->select("user_id")->get();
     }
 
 
     public function broadcastOn()
     {
 
-        $privateChannels = [];
-        if ($this->users->count())
-            foreach ($this->users as $user)
-                $privateChannels[] = new PrivateChannel('App.User.' .  $user->user_id);
+        try {
+
+            if ($this->room_id)
+                $users = DB::table('room_user')->where("room_id", $this->room_id)->select("user_id")->get();
+            $privateChannels = [];
+            if ($users->count())
+                foreach ($users as $user)
+                    $privateChannels[] = new PrivateChannel('App.User.' .  $user->user_id);
 
 
-        return $privateChannels;
+            return $privateChannels;
+        } catch (QueryException $e) {
+
+            return response()->json($e, 400);
+        }
     }
 
     public function broadcastWith()

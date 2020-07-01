@@ -26,13 +26,16 @@
             v-if="roomUsers.length > 2 && message.sender_id !== currentUserId"
             class="text-username"
             :class="{
-							'username-reply': !message.deleted && message.reply_message
+							'username-reply': !message.deleted&&!message.joind &&message.reply_message
 						}"
           >
             <span v-if="!message.joind">{{ message.username }}</span>
           </div>
 
-          <div v-if="!message.deleted && message.reply_message" class="reply-message">
+          <div
+            v-if="!message.deleted &&!message.joind && message.reply_message"
+            class="reply-message"
+          >
             <div class="reply-username">{{ replyUsername }}</div>
 
             <div class="image-reply-container" v-if="isImageReply">
@@ -123,8 +126,8 @@
               <div
                 ref="actionIcon"
                 key="2"
+                v-if="isMessageActions&&!canDropDown()"
                 class="svg-button message-options"
-                v-if="isMessageActions"
                 @click="openOptions"
               >
                 <svg-icon name="dropdown" param="message" />
@@ -154,7 +157,7 @@
           >
             <div
               ref="menuOptions"
-              v-if="optionsOpened&&!message.deleted&&!message.joind"
+              v-if="canDropDown()"
               v-click-outside="closeOptions"
               class="menu-options"
               :class="{ 'menu-left': message.sender_id !== currentUserId }"
@@ -162,17 +165,7 @@
             >
               <div class="menu-list">
                 <div v-for="action in filteredMessageActions" :key="action.name">
-                  <div
-                    v-if="(
-											message.reply_message&&
-											message.reply_message.sender_id !== currentUserId
-											)&&action.name=='replyMessage'"
-                  ></div>
-                  <div
-                    v-else
-                    class="menu-item"
-                    @click="messageActionHandler(action)"
-                  >{{ action.title }}</div>
+                  <div class="menu-item" @click="messageActionHandler(action)">{{ action.title }}</div>
                 </div>
               </div>
             </div>
@@ -317,7 +310,8 @@ export default {
       return (
         this.message.sender_id === this.currentUserId &&
         this.message.seen &&
-        !this.message.deleted
+        !this.message.deleted &&
+        !this.message.joind
       );
     },
     replyUsername() {
@@ -330,6 +324,7 @@ export default {
         this.filteredMessageActions.length &&
         this.messageHover &&
         !this.message.deleted &&
+        !this.message.joind &&
         !this.message.disable_actions
       );
     },
@@ -338,6 +333,7 @@ export default {
         this.showReactionEmojis &&
         this.messageHover &&
         !this.message.deleted &&
+        !this.message.joind &&
         !this.message.disable_reactions
       );
     },
@@ -361,7 +357,7 @@ export default {
       if (this.canEditMessage()) this.hoverMessageId = this.message.id;
     },
     canEditMessage() {
-      return !this.message.deleted;
+      return !this.message.deleted && !this.message.joind;
     },
     onLeaveMessage() {
       this.imageHover = false;
@@ -398,6 +394,9 @@ export default {
       const image = new Image();
       image.src = this.message.file.url;
       image.addEventListener("load", () => (this.imageLoading = false));
+    },
+    canDropDown() {
+      return this.optionsOpened && !this.message.deleted && !this.message.joind;
     },
     openOptions() {
       if (this.optionsClosing) return;

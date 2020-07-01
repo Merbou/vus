@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class messageController extends Controller
@@ -30,6 +31,8 @@ class messageController extends Controller
     public function index($id)
     {
         try {
+            $this->authorize("viewMessages", [room::class, $id]);
+
             $select = [
                 "id", 'content', 'room_id', 'sender_id', 'username',
                 'seen', "edited", "reply_id",
@@ -54,7 +57,9 @@ class messageController extends Controller
     {
         try {
 
-            if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
+            $this->authorize("sendMessages", [room::class, $id]);
+
+            if (!$id  || $id == 'null' || $id == 'undefined') return response()->json(422);
             $request->validate([
                 'content' => 'required|string',
             ]);
@@ -79,8 +84,6 @@ class messageController extends Controller
                 broadcast(new MessageEvent(['message' => $message]))->toOthers();
                 return response()->json($message, 200);
             }
-        } catch (Exception $e) {
-            return response()->json($e, 400);
         } catch (QueryException $e) {
             if (!room::where("id", $id)->first())
                 return response()->json("Room Not existe", 400);
@@ -94,20 +97,19 @@ class messageController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
+
+            if (!$id  || $id == 'null' || $id == 'undefined') return response()->json(422);
 
             $request->validate([
                 'content' => 'required|string',
             ]);
 
-
             $message = message::where('id', $id)->first();
+            $this->authorize("update", $message);
+
             $message->update(['content' => $request->content, 'edited' => 1]);
             broadcast(new MessageEvent(['message' => $message, 'updated' => true]))->toOthers();
             return response()->json($message, 200);
-        } catch (Exception $e) {
-
-            return response()->json($e, 400);
         } catch (QueryException $e) {
             if (!room::where("id", $id)->first())
                 return response()->json("Room Not existe", 400);
@@ -119,9 +121,11 @@ class messageController extends Controller
     public function destroy($id)
     {
         try {
-            if (!$id  || $id == 'null' || $id == 'undefined') throw new Exception();
+            if (!$id  || $id == 'null' || $id == 'undefined') return response()->json(422);
 
             $message = message::findOrFail($id);
+            $this->authorize("delete", $message);
+
             $room_id = $message->room_id;
 
             if ($message->delete()) {
@@ -137,4 +141,16 @@ class messageController extends Controller
             return response()->json($e, 404);
         }
     }
+
+
+
+    // public function typing($id,$room_id)
+    // {
+    //     try {
+    //         broadcast(new MessageEvent(["typing" => $id, 'room_id' => $room_id]))->toOthers();
+    //         return response()->json(204);
+    //     } catch (QueryException $e) {
+    //         return response()->json($e, 400);
+    //     }
+    // }
 }

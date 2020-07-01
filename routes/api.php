@@ -59,7 +59,8 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::post("/message/{id}", "chat\\messageController@store");
     Route::put("/edit-message/{id}", "chat\\messageController@update");
     Route::delete("/destroy-message/{id}", "chat\\messageController@destroy");
-
+    // Route::get("/typing-messages/{id}/{room_id}", "chat\\messageController@typing");
+    
     //Notifications
     Route::get("/notifications", "api\\notification\\notificationController@index");
     Route::put("/view-notifications", "api\\notification\\notificationController@view");

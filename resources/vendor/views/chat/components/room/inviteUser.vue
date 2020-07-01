@@ -56,7 +56,13 @@
 
       <v-card-actions>
         <div class="flex-grow-1"></div>
-        <v-btn color="green" text class="white--text" @click="inviteUser()">Invite</v-btn>
+        <v-btn
+          color="green"
+          text
+          class="white--text"
+          @click="inviteUser()"
+          :disabled="clicked"
+        >Invite</v-btn>
         <v-btn color="secondary" text class="white--text" @click="close()">Cancel</v-btn>
       </v-card-actions>
     </v-card>
@@ -88,7 +94,8 @@ export default {
     return {
       people: [],
       select: null,
-      loading: false
+      loading: false,
+      clicked: false
     };
   },
   methods: {
@@ -107,6 +114,7 @@ export default {
       }
     },
     inviteUser() {
+      this.clicked = true;
       const users = this.room.users;
       this.select = this.select.filter(
         e => users.map(e => e.id).indexOf(e.id) == -1 && typeof e === "object"
@@ -132,6 +140,9 @@ export default {
           .finally(() => {
             this.$emit("clearRoomIndex");
             this.close();
+            setTimeout(() => {
+              this.clicked = true;
+            }, 1000);
           });
       else this.close();
     },

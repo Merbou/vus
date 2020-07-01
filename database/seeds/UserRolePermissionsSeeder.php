@@ -42,6 +42,7 @@ class UserRolePermissionsSeeder extends Seeder
         $role2->givePermissionTo('users.chart');
         $role2->givePermissionTo('users.table');
         $role2->givePermissionTo('chat');
+        $role2->givePermissionTo('chat.@view all messages');
         $role2->givePermissionTo('contacts.@read contacts');
         $role2->givePermissionTo('contacts.@delete contacts');
         $role2->givePermissionTo('setting');

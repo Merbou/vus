@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Cache;
 use Laravel\Passport\HasApiTokens;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -59,5 +60,10 @@ class User extends Authenticatable
     public function rooms()
     {
         return $this->belongsToMany('App\ModelsChat\room');
+    }
+    
+    public function online()
+    {
+        return Cache::has("online-user" . $this->id);
     }
 }

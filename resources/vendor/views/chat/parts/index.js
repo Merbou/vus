@@ -4,7 +4,7 @@ export default {
     ...room,
     ...messages,
     MessageEcho() {
-        Echo.private(`App.User.${this.user.id}`)
+        this.channel&&this.channel
             .listen("MessageEvent", e => {
                 this.channelChat(e)
             })

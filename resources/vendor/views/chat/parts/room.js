@@ -43,6 +43,7 @@ export default {
     },
     fetchRoom({ room }) {
         this.room = room;
+        this.room.typingUsers = []
         //if current user have access to
         this.menuActionsOption(room.owner == this.user.id);
         this._httpCancel && this._httpCancel.cancel();
@@ -54,7 +55,7 @@ export default {
         this.fetchMessages({ room });
     },
     channelRoomUser({ users, user_ids, room_id, is_invited, is_deleted }) {
-        console.log({ users, user_ids, room_id, is_invited, is_deleted })
+        console.log(users)
         if (!users && !user_ids && !room_id) return;
         let index = this.rooms.findIndex(e => e.room_id === parseInt(room_id));
 
