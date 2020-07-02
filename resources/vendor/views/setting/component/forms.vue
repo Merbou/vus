@@ -49,8 +49,8 @@
     </v-row>
 
     <v-layout>
-      <v-flex xs12 md12 lg12 sm12 class="text-right mt-5">
-        <v-btn outlined color="success" @click="validate()" rounded>update</v-btn>
+      <v-flex xs12 md12 lg12 sm12 class="mt-5" :class="{'ltr-class':RTL,'rtl-class':!RTL}">
+        <v-btn outlined color="success" @click="validate()"  rounded>update</v-btn>
       </v-flex>
     </v-layout>
   </ValidationObserver>
@@ -61,6 +61,7 @@ import { isEmpty } from "lodash";
 import { ValidationObserver } from "vee-validate";
 import { confirmed, alpha_dash } from "../validate";
 import { passwd, personalInformation, identity, fileForm } from "./pages";
+import { mapGetters } from 'vuex';
 
 export default {
   components: {
@@ -90,6 +91,9 @@ export default {
       avatar: "",
       alarm: false
     };
+  },
+  computed:{
+...mapGetters(["RTL"])
   },
   mounted() {
     this.initform(this.user);
@@ -132,3 +136,11 @@ export default {
   }
 };
 </script>
+<style>
+.ltr-class{
+      direction: ltr;
+}
+.rtl-class{
+      direction: rtl;
+}
+</style>

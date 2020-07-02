@@ -1,11 +1,9 @@
 'use strict';
 
 import { isEmpty } from "lodash"
-import { sidebar, setSidebar } from "@/utils/sidebar"
 export default {
     state: {
         routes: [],
-        sidebar: sidebar(),
         loading: false,
         dialog: {
             open: false,
@@ -31,11 +29,6 @@ export default {
         },
         TOGGLE_DIALOG: (state, opVal) => {
             state.dialog = Object.assign(state.dialog, opVal)
-        },
-        TOGGLE_SIDEBAR: (state) => {
-            state.sidebar = state.sidebar ? 0 : 1
-            setSidebar(state.sidebar)
-
         },
         SET_LOADING: (state, val) => {
             state.loading = val
@@ -89,17 +82,6 @@ export default {
         },
 
 
-        /**
-         * toggle sideBar
-         * @param {callback}
-         * 
-         * @param None 
-         */
-
-        toggleSideBar({ commit }) {
-            commit('TOGGLE_SIDEBAR')
-
-        },
         /**
          * toggle sideBar
          * @param {callback}

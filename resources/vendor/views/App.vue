@@ -19,9 +19,23 @@ export default {
   components: {
     materielAsker,
     materielLoading,
-    materielSnackbar,
+    materielSnackbar
   },
-  name: "App"
+  name: "App",
+  computed: {
+    ...mapGetters(["RTL", "dark"])
+  },
+  created() {
+    this.$vuetify.rtl = this.RTL;
+    this.$vuetify.theme.dark = this.dark;
+  },
+  watch: {
+    RTL(val) {
+      this.$vuetify.rtl = val;
+    },
+    dark(val) {
+      this.$vuetify.theme.dark = val;
+    }
+  }
 };
-</script> 
- 
+</script>

@@ -8,7 +8,7 @@
           <template v-slot:activator="{ on }">
             <v-icon
               color="error"
-              class="ml-4 mt-4"
+              class="mx-4 mt-4"
               :disabled="!(selected && selected.length>0)"
               @click="ShowDeleteItem(selected)"
               v-on="on"
@@ -22,7 +22,7 @@
       <template v-slot:actions="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-icon small class="mr-2 mx-2" @click="ShowDeleteItem([item])" v-on="on">fas fa-trash</v-icon>
+            <v-icon small class="mx-2 mx-2" @click="ShowDeleteItem([item])" v-on="on">fas fa-trash</v-icon>
           </template>
           <span>Delete message</span>
         </v-tooltip>
@@ -34,14 +34,14 @@
             <v-icon
               v-if="item.vu"
               small
-              class="mr-2"
+              class="mx-2"
               @click="readItem(item,true)"
               v-on="on"
             >fas fa-envelope-open</v-icon>
             <v-icon
               v-else
               small
-              class="mr-2"
+              class="mx-2"
               @click="readItem(item,false)"
               v-on="on"
             >fas fa-envelope</v-icon>

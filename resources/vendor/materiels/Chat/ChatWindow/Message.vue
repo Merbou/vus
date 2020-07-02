@@ -514,6 +514,7 @@ export default {
   align-items: end;
   min-width: 100px;
   box-sizing: content-box;
+  direction: ltr !important;
 }
 
 .message-container-offset {

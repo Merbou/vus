@@ -5,7 +5,9 @@ export default {
     channel: state => state.auth.channel,
     routes: state => state.app.routes,
     dialog: state => state.app.dialog,
-    sidebar: state => state.app.sidebar,
     loading: state => state.app.loading,
     vSnackbar: state => state.app.vSnackbar,
+    sidebar: state => state.layout.sidebar,
+    RTL: state => state.layout.RTL,
+    dark: state => state.layout.dark,
 }

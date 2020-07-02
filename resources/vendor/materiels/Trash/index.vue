@@ -6,11 +6,11 @@
           <template v-slot:activator="{ on }">
             <v-icon
               color="error"
-              class="ml-4 mt-4"
+              class="mx-4 mt-4"
               :disabled="!(selected && selected.length>0)"
               @click="ShowItem(selected,'delete')"
               v-on="on"
-              depressed
+              depressed 
             >fas fa-trash</v-icon>
           </template>
           <span>delete</span>
@@ -19,7 +19,7 @@
           <template v-slot:activator="{ on }">
             <v-icon
               color="success"
-              class="ml-4 mt-4"
+              class="mx-4 mt-4"
               :disabled="!(selected && selected.length>0)"
               @click="ShowItem(selected,'recycle')"
               v-on="on"
@@ -35,7 +35,7 @@
           <template v-slot:activator="{ on }">
             <v-icon
               small
-              class="mr-2 mx-2"
+              class="mx-2 mx-2"
               @click="ShowItem([item],'delete')"
               v-on="on"
             >fas fa-trash</v-icon>
@@ -48,7 +48,7 @@
           <template v-slot:activator="{ on }">
             <v-icon
               small
-              class="mr-2 mx-2"
+              class="mx-2 mx-2"
               @click="ShowItem([item],'recycle')"
               v-on="on"
             >fas fa-recycle</v-icon>

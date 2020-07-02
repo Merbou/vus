@@ -45,7 +45,7 @@
               class="state-circle"
               :class="{ 'state-online': userStatus(room) === 'online' }"
             ></div>
-            <div class="room-name text-ellipsis">{{ nameFromUsers(room["users"]) }}</div>
+            <div class="room-name text-ellipsis" :title="nameFromUsers(room['users'])">{{ nameFromUsers(room["users"]) }}</div>
             <div v-if="room.last_message" class="text-date">{{ room.last_message.timestamp }}</div>
           </div>
           <div
@@ -197,7 +197,7 @@ export default {
 
 .icon-search {
   display: flex;
-  position: absolute;
+  position: inherit;
   left: 30px;
 
   svg {

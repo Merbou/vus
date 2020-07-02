@@ -1,6 +1,6 @@
 <template>
-  <v-overlay :value="loader">
-    <v-dialog :value="loader" persistent width="300">
+  <v-overlay :value="loading">
+    <v-dialog :value="loading" persistent width="300">
       <v-card color="primary" dark>
         <v-card-text>
           Please wait
@@ -17,17 +17,6 @@ export default {
   name: "materielLoading",
   computed: {
     ...mapGetters(["loading"])
-  },
-  data(){
-    return {
-      loader:false
-    }
-  },
-  watch: {
-    loading(val) {
-      console.log(val)
-      this.loader = val;
-    }
   }
 };
 </script> 

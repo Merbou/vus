@@ -1,6 +1,5 @@
-      <router-view />
 <template >
-  <v-container class="app-main" fluid>
+  <v-container class="app-main" :class="{'app-light':!dark}" fluid>
     <transition name="fade-transform" mode="out-in">
       <router-view />
     </transition>
@@ -8,8 +7,12 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
-  name: "appMain"
+  name: "appMain",
+  computed: {
+    ...mapGetters(["dark"])
+  }
 };
 </script>
 
@@ -17,8 +20,13 @@ export default {
 .app-main {
   left: 0;
   top: 0;
-  background: #eeeeee;
   z-index: 0;
   min-height: calc(100vh - 50px);
+}
+.app-light {
+  background: #eeeeee;
+}
+.app-dark {
+  background: #272727;
 }
 </style>

@@ -1,9 +1,17 @@
 <template>
-  <v-app-bar color="white" mb-5 dark flat app fade-img-on-scroll dense>
-    <v-app-bar-nav-icon class="ml-1" color="grey darken-4" @click.stop="toggleSideBar"></v-app-bar-nav-icon>
+  <v-app-bar
+    color="white"
+    mb-5
+    dark
+    flat
+    app
+    fade-img-on-scroll
+    dense
+  >
+    <v-app-bar-nav-icon class="mx-1" color="grey darken-4" @click.stop="toggleSideBar"></v-app-bar-nav-icon>
 
     <v-spacer></v-spacer>
-    <notification/>
+    <notification />
 
     <v-menu :close-on-content-click="false" bottom offset-y>
       <template v-slot:activator="{ on }">
@@ -13,7 +21,7 @@
       <v-card>
         <v-list>
           <v-list-item>
-            <v-list-item-avatar  height="50" width="50">
+            <v-list-item-avatar height="50" width="50">
               <img :src="'/storage/'+user.picture_path" :alt="user.username" />
             </v-list-item-avatar>
 

@@ -8,7 +8,7 @@
       <v-tab-item value="tab-1">
         <materiel-trash :headers="headers" :modulePath="modulePath" />
       </v-tab-item>
-    </v-tabs-items>
+    </v-tabs-items> 
   </v-tabs>
 </template>
 

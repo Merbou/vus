@@ -1,5 +1,5 @@
 <template>
-  <v-menu offset-y :close-on-content-click="false">
+  <v-menu offset-y :close-on-content-click="false" >
     <template v-slot:activator="{ on }">
       <v-badge color="green" :content="view" v-show="view>0" overlap left>
         <v-icon

@@ -101,7 +101,6 @@ export default {
 
         this.pagination = Object.assign(this.pagination, res);
         this.data = this.data = data;
-
       }
     },
     pareDate(date) {

@@ -4,6 +4,7 @@
     <nav-bar />
     <v-content>
       <app-main :key="'appMain'" />
+      <setting/>
     </v-content>
     <v-footer padless>
       <app-Footer app />
@@ -12,13 +13,14 @@
 </template>
 
 <script>
-import { appMain, navBar, sideBar, appFooter } from "./component/";
+import { appMain, navBar, sideBar, appFooter, setting } from "./component/";
 export default {
   components: {
     appMain,
     sideBar,
     navBar,
-    appFooter
+    appFooter,
+    setting
   },
   name: "home"
 };

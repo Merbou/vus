@@ -6,6 +6,7 @@
     dark
     width="200"
     :value="sidebar"
+    :right="RTL"
     class="side-bar"
   >
     <vs-list :items="routes" v-if="routes.length" />
@@ -22,7 +23,12 @@ export default {
     vsList
   },
   computed: {
-    ...mapGetters(["routes", "sidebar"])
+    ...mapGetters(["routes", "sidebar", "RTL"])
+  },
+  methods: {
+    toggleSideBar() {
+      this.$store.dispatch("toggleRTL");
+    }
   }
 };
 </script>

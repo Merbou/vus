@@ -40,6 +40,7 @@
         :isMobile="isMobile"
         :loadingRooms="loadingRooms"
         :roomInfo="$listeners.roomInfo"
+        :rtl="rtl"
         @toggleRoomsList="toggleRoomsList"
         @roomInfo="roomInfo"
         @fetchMessages="fetchMessages"
@@ -83,6 +84,7 @@ export default {
     room_id: { type: [String, Number], default: null },
     messages: { type: Array, default: () => [] },
     messagesLoaded: { type: Boolean, default: false },
+    rtl: { type: Boolean, default: false },
     menuActions: { type: Array, default: () => [] },
     messageActions: {
       type: Array,

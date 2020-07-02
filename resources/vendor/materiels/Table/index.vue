@@ -40,7 +40,7 @@ export default {
     footer: {
       type: Boolean,
       default: false
-    }
+    },
   },
   data() {
     return {

@@ -4,7 +4,7 @@
       <div class="room-wrapper">
         <div
           v-if="!singleRoom"
-          class="svg-button toggle-button"
+          class="svg-button toggle-button mx-2"
           :class="{ 'rotate-icon': !showRoomsList && !isMobile }"
           @click="$emit('toggleRoomsList')"
         >
@@ -21,20 +21,28 @@
             :style="{ 'background-image': `url('${room.avatar}')` }"
           ></div>
           <div>
-            <div class="room-name">{{ nameFromUsers(room["users"]) }}</div>
+            <div
+              class="room-name"
+              :title="nameFromUsers(room['users'])"
+            >{{ nameFromUsers(room["users"]) }}</div>
             <div v-if="typingUsers" class="room-info">{{ typingUsers }} {{ textMessages.IS_TYPING }}</div>
             <div v-else class="room-info">{{ userStatus }}</div>
           </div>
         </div>
         <div
           class="svg-button room-options"
-          v-if="menuActions.length"
+          v-if="menuActions.length&&room.room_id"
           @click="menuOpened = !menuOpened"
         >
           <svg-icon name="menu" />
         </div>
         <transition name="slide-left" v-if="menuActions.length">
-          <div v-if="menuOpened" v-click-outside="closeMenu" class="menu-options">
+          <div
+            v-if="menuOpened"
+            v-click-outside="closeMenu"
+            :class="{'menu-options-left':rtl,'menu-options-right':!rtl}"
+            class="menu-options"
+          >
             <div class="menu-list">
               <div v-for="action in menuActions" :key="action.name">
                 <div class="menu-item" @click="menuActionHandler(action)">{{ action.title }}</div>
@@ -246,6 +254,7 @@ export default {
     messageActions: { type: Array, required: true },
     showFiles: { type: Boolean, required: true },
     showEmojis: { type: Boolean, required: true },
+    rtl: { type: Boolean, default: false },
     showReactionEmojis: { type: Boolean, required: true },
     textFormatting: { type: Boolean, required: true },
     loadingRooms: { type: Boolean, required: true },
@@ -645,6 +654,11 @@ export default {
   font-weight: 500;
   line-height: 22px;
   color: var(--chat-header-color-name);
+  display: inline-block;
+  width: 700px;
+  white-space: nowrap;
+  overflow: hidden !important;
+  text-overflow: ellipsis;
 }
 
 .room-info {
@@ -668,6 +682,7 @@ export default {
 
 .messages-container {
   padding: 0 5px 5px;
+  direction: ltr !important;
 }
 
 .text-started {
@@ -895,6 +910,11 @@ textarea {
     .room-name {
       font-size: 16px;
       line-height: 22px;
+      display: inline-block;
+      width: 400px;
+      white-space: nowrap;
+      overflow: hidden !important;
+      text-overflow: ellipsis;
     }
 
     .room-info {

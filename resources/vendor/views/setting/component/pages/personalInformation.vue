@@ -1,9 +1,12 @@
 <template>
-  <v-card :disabled="loading" raised :loading="loading" >
+  <v-card :disabled="loading" raised :loading="loading">
     <v-card-text>
       <v-flex xs12 md12 lg12 sm12>
         <ValidationProvider name="phone">
           <VuePhoneNumberInput
+          :class="{'rtl-class':RTL}"
+          :dark-color="'#272727'"
+            :dark="dark"
             v-model="form.phone"
             @change="fireInfo"
             label="phone"
@@ -50,6 +53,7 @@ import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import { alpha_dash } from "../../validate";
 
 import { ValidationProvider } from "vee-validate";
+import { mapGetters } from "vuex";
 
 export default {
   name: "personalInformation",
@@ -74,6 +78,9 @@ export default {
       },
       show: false
     };
+  },
+  computed: {
+    ...mapGetters(["dark","RTL"])
   },
   mounted() {
     this.initform(this.user);
@@ -104,6 +111,8 @@ export default {
 </script>
 
 <style>
+.rtl-class{
+  direction: rtl !important;
+}
 </style>
-<style>
-</style>
+

@@ -45,6 +45,8 @@
       @close="close()"
     />
     <chat-window
+      :theme="(dark)?'dark':'light'"
+      :rtl="RTL"
       :showFiles="false"
       :showEmojis="false"
       :showReactionEmojis="false"
@@ -116,7 +118,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user","channel"])
+    ...mapGetters(["user", "channel", "dark","RTL"])
   },
   created() {
     //load the laravel-echo

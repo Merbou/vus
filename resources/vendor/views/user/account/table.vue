@@ -78,7 +78,6 @@ import materielTable from "@/materiels/Table";
 import { blockUserApi } from "@/api/user/account";
 import { assignRole } from "./components";
 import { fetchOnlyRolesApi, assignRoleApi } from "@/api/user/privilege/role.js";
-
 export default {
   components: { materielTable, assignRole },
   data() {
