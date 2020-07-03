@@ -31,7 +31,7 @@ export default {
       updateUserApi(formData)
         .then(Response => {
           this.snackbar({
-            text: "The setting was updated successfully !",
+            text: this.$i18n.t('setting.success'),
             color: "success"
           });
           this.$store.dispatch("setInfo", Response);
@@ -40,7 +40,7 @@ export default {
         .catch(rej => {
           console.log(rej)
           this.snackbar({
-            text: "The setting was not updated.",
+            text: this.$i18n.t('setting.error'),
             color: "error"
           });
           this.errors = rej && rej.data && rej.data.errors;

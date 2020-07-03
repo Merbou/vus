@@ -3,7 +3,7 @@
     <v-card-text>
       <v-col wrap>
         <div xs12 md12 lg12 sm12>
-          <ValidationProvider name="lastname" rules="alpha_dash">
+          <ValidationProvider :name="$t('label.lastname')" rules="alpha_dash">
             <v-text-field
               @change="fireInfo"
               slot-scope="{
@@ -14,7 +14,7 @@
               :error-messages="errors"
               @update:error="firePage(errors)"
               :success="form.lastname?valid:null"
-              label="lastname"
+              :label="$t('label.lastname')"
               outlined
               solo
               rounded
@@ -23,7 +23,7 @@
           </ValidationProvider>
         </div>
         <div xs12 md12 lg12 sm12>
-          <ValidationProvider name="firstname" rules="alpha_dash">
+          <ValidationProvider :name="$t('label.firstname')" rules="alpha_dash">
             <v-text-field
               @change="fireInfo"
               slot-scope="{
@@ -34,7 +34,7 @@
               :error-messages="errors"
               @update:error="firePage(errors)"
               :success="form.firstname?valid:null"
-              label="firstname"
+              :label="$t('label.firstname')"
               outlined
               solo
               rounded
@@ -43,7 +43,7 @@
           </ValidationProvider>
         </div>
         <div xs12 md12 lg12 sm12>
-          <ValidationProvider name="username" rules="alpha_dash">
+          <ValidationProvider :name="$t('label.username')" rules="alpha_dash">
             <v-text-field
               @change="fireInfo"
               slot-scope="{
@@ -54,7 +54,7 @@
               :error-messages="errors"
               @update:error="firePage(errors)"
               :success="form.username?valid:null"
-              label="username"
+              :label="$t('label.username')"
               outlined
               solo
               rounded

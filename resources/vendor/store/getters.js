@@ -10,4 +10,5 @@ export default {
     sidebar: state => state.layout.sidebar,
     RTL: state => state.layout.RTL,
     dark: state => state.layout.dark,
+    locale: state => state.layout.locale,
 }

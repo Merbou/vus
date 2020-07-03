@@ -27,7 +27,7 @@
                 <v-icon x-large v-on="on">fas fa-camera-retro</v-icon>
               </template>
               <span v-if="errors_d.length" class="red lighten-1">{{errors_d[0]}}</span>
-              <span v-else>Change Avatar</span>
+              <span v-else>{{$t('_setting.change_avatar')}}</span>
             </v-tooltip>
           </v-overlay>
         </template>

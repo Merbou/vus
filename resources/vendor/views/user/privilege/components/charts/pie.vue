@@ -16,11 +16,20 @@ export default {
   components: {
     apexchart
   },
+  props: {
+    dark: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       loading: false,
       series: [],
       chartOptions: {
+        theme:{
+          mode:""
+        },
         labels: [],
         responsive: [
           {
@@ -39,6 +48,7 @@ export default {
     };
   },
   created() {
+    this.chartOptions.theme.mode = this.dark ? "dark" : "light";
     this.fetchRolesPercentage();
   },
   methods: {

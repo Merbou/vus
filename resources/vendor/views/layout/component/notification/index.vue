@@ -1,23 +1,18 @@
 <template>
-  <v-menu offset-y :close-on-content-click="false" >
+  <v-menu offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on }">
       <v-badge color="green" :content="view" v-show="view>0" overlap left>
-        <v-icon
-          dark
-          color="grey darken-4"
-          class="mx-3"
-          v-on="on"
-          @click="viewNotification"
-        >far fa-bell</v-icon>
+        <v-icon small tile light class="mx-3" v-on="on" @click="viewNotification">fas fa-bell</v-icon>
       </v-badge>
       <v-icon
-        dark
-        color="grey darken-4"
+        light
         v-show="view==0"
         class="mx-3"
+        small
+        tile
         v-on="on"
         @click.once="fetchNotifications(0)"
-      >far fa-bell</v-icon>
+      >fas fa-bell</v-icon>
     </template>
     <v-list width="400" :height="height" style="overflow-y:auto" two-line>
       <notify-item :notifications="notifications" v-if="notifications.length>0" />
@@ -37,7 +32,16 @@
         class="d-flex justify-center"
       >
         <v-list-item-title class="d-flex justify-center">
-          <v-chip class="ma-2 d-flex justify-center" link>show more</v-chip>
+          <v-chip class="ma-2 d-flex justify-center" link>{{$t('$notification.show_more')}}</v-chip>
+        </v-list-item-title>
+      </v-list-item>
+      <v-list-item
+        @click="moreNotifications"
+        v-if="!notifications||notifications&&!notifications.length&&!loading"
+        class="d-flex justify-center"
+      >
+        <v-list-item-title class="d-flex justify-center">
+          <v-sheet>{{$t('$notification.empty')}}</v-sheet>
         </v-list-item-title>
       </v-list-item>
     </v-list>
@@ -127,11 +131,6 @@ export default {
           console.log(err);
         });
     }
-  },
-  watch: {
-    // view(val) {
-    //   if (this.val) notifyBrowser();
-    // }
   }
 };
 </script>

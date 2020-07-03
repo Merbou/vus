@@ -48,7 +48,7 @@
         </materiel-table>
       </v-col>
       <v-col cols="12" lg="5" md="4" sm="12">
-        <pieChart />
+        <pieChart :dark="dark" />
       </v-col>
     </v-row>
   </v-container>
@@ -106,7 +106,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["dialog"]),
+    ...mapGetters(["dialog","dark"]),
     value() {
       return this.dialog.value;
     }

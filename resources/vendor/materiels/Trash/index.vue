@@ -10,10 +10,10 @@
               :disabled="!(selected && selected.length>0)"
               @click="ShowItem(selected,'delete')"
               v-on="on"
-              depressed 
+              depressed
             >fas fa-trash</v-icon>
           </template>
-          <span>delete</span>
+          <span>{{$t('tooltip.delete')}}</span>
         </v-tooltip>
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -26,7 +26,7 @@
               depressed
             >fas fa-recycle</v-icon>
           </template>
-          <span>recycle</span>
+          <span>{{$t('tooltip.recycle')}}</span>
         </v-tooltip>
       </template>
 
@@ -40,7 +40,7 @@
               v-on="on"
             >fas fa-trash</v-icon>
           </template>
-          <span>Delete {{moduleName}}</span>
+          <span>{{$t('tooltip.delete')}} {{moduleName}}</span>
         </v-tooltip>
       </template>
       <template v-slot:recycle="{ item }">
@@ -53,7 +53,7 @@
               v-on="on"
             >fas fa-recycle</v-icon>
           </template>
-          <span>Recycle {{moduleName}}</span>
+          <span>{{$t('tooltip.recycle')}} {{moduleName}}</span>
         </v-tooltip>
       </template>
     </materiel-table>
@@ -96,8 +96,12 @@ export default {
     },
     __headers() {
       const optionsArray = [
-        { text: "recycle", value: "recycle" },
-        { text: "delete", value: "delete", sortable: false }
+        { text: this.i18n.t("tooltip.recycle"), value: "recycle" },
+        {
+          text: this.i18n.t("tooltip.delete"),
+          value: "delete",
+          sortable: false
+        }
       ];
       return [...this.headers, ...optionsArray];
     }
@@ -118,7 +122,10 @@ export default {
     },
     ShowItemDialog() {
       this.$store.dispatch("toggleDialog", {
-        message: "Are you sure to " + this.option + " this " + this.moduleName,
+        message: this.i18n.t("asker.message", {
+          opt: this.option,
+          obj: this.moduleName
+        }),
         open: true,
         value: false
       });
@@ -132,7 +139,7 @@ export default {
         .then(Response => {
           this.vLoading(false);
           this.snackbar({
-            text: "The operation completed successfully !",
+            text: this.$i18n.t("alert.success"),
             color: "success"
           });
           this.selected = [];
@@ -140,8 +147,8 @@ export default {
         })
         .catch(error => {
           this.vLoading(false);
-           this.snackbar({
-            text: "The operation did not complete. Try again later!",
+          this.snackbar({
+            text: this.$i18n.t("alert.error"),
             color: "error"
           });
           this.getData().push(this.selected);
@@ -163,9 +170,9 @@ export default {
     },
     initDialog() {
       this.$store.dispatch("initDialog", {
-        title: "Are you sure !",
-        accepte: "Yes",
-        cancel: "Cancel"
+        title: this.$i18n.t("asker.title"),
+        accepte: this.$i18n.t("qst.accepte"),
+        cancel: this.$i18n.t("qst.cancel")
       });
     }
   },

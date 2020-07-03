@@ -16,14 +16,17 @@
       >
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
-            <div>Register</div>
+            <div>
+              <lang-select />
+            </div>
+            <div>{{$t('_register.title')}}</div>
           </v-layout>
         </v-card-title>
 
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider name="Email" rules="email|required">
+              <ValidationProvider :name="$t('label.email')" rules="email|required">
                 <v-text-field
                   autocomplete="on"
                   slot-scope="{
@@ -33,7 +36,7 @@
                   v-model="RegisterForm.email"
                   :error-messages="errorRender(errors,backErrors.email)"
                   :success="(valid)?null:valid"
-                  label="Email"
+                  :label="$t('label.email')"
                   outlined
                   solo
                   rounded
@@ -44,7 +47,7 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider name="Pseudo" rules="required">
+              <ValidationProvider :name="$t('label.username')" rules="required">
                 <v-text-field
                   autocomplete="on"
                   slot-scope="{
@@ -54,7 +57,7 @@
                   v-model="RegisterForm.username"
                   :error-messages="errorRender(errors,backErrors.username)"
                   :success="(valid)?null:valid"
-                  label="Pseudo"
+                  :label="$t('label.username')"
                   outlined
                   solo
                   rounded
@@ -66,7 +69,7 @@
             </v-flex>
 
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider name="Password" rules="required|min:8" vid="confirm">
+              <ValidationProvider :name="$t('label.password')" rules="required|min:8" vid="confirm">
                 <v-text-field
                   slot-scope="{
                             errors,
@@ -81,7 +84,7 @@
                   :error-messages="errorRender(errors,backErrors.password)"
                   :success="(valid)?null:valid"
                   :counter="30"
-                  label="password"
+                  :label="$t('label.password')"
                   @click:append="show = !show"
                   :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
@@ -90,7 +93,7 @@
             </v-flex>
             <v-flex xs12 md12 lg12 sm12>
               <ValidationProvider
-                name="Password confirmation"
+                :name="$t('label.password_confirmation')"
                 rules="required|confirmed:confirm|min:8"
               >
                 <v-text-field
@@ -108,7 +111,7 @@
                   :success="(valid)?null:valid"
                   data-vv-as="password"
                   :counter="30"
-                  label="password configuration"
+                  :label="$t('label.password_confirmation')"
                   @click:append="show = !show"
                   :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
@@ -120,7 +123,12 @@
         <v-card-actions>
           <v-layout>
             <v-flex xs12 md12 lg12 sm12 class="text-right">
-              <v-btn class="ma-2 white--text" color="blue" @click="validate" rounded>Register</v-btn>
+              <v-btn
+                class="ma-2 white--text"
+                color="blue"
+                @click="validate"
+                rounded
+              >{{$t('_register.submit')}}</v-btn>
             </v-flex>
           </v-layout>
         </v-card-actions>
@@ -136,13 +144,15 @@ import {
   withValidation
 } from "vee-validate";
 import { required, email, min, confirmed } from "../validate";
+import LangSelect from "@/materiels/LangSelect";
 
 export default {
   name: "Login",
   components: {
     ValidationObserver,
     ValidationProvider,
-    withValidation
+    withValidation,
+    LangSelect
   },
 
   data() {
@@ -174,7 +184,7 @@ export default {
           this.loading = false;
           this.vLoading(false);
           this.snackbar({
-            text: "Please confirm your email address",
+            text: this.$i18n.t("_register.successAuth"),
             color: "info"
           });
           this.$router.push({ path: "/mail-confirmation" }).catch(err => {});

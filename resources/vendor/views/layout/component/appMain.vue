@@ -1,5 +1,5 @@
 <template >
-  <v-container class="app-main" :class="{'app-light':!dark}" fluid>
+  <v-container class="app-main" :class="{'app-light':!dark,'app-dark':dark}" fluid>
     <transition name="fade-transform" mode="out-in">
       <router-view />
     </transition>

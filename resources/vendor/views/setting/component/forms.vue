@@ -10,8 +10,8 @@
         >
           <v-tabs-slider></v-tabs-slider>
 
-          <v-tab href="#tab-1">Information</v-tab>
-          <v-tab href="#tab-2">Password</v-tab>
+          <v-tab href="#tab-1">{{$t('_setting.tab_1')}}</v-tab>
+          <v-tab href="#tab-2">{{$t('_setting.tab_2')}}</v-tab>
 
           <v-tabs-items v-model="tab">
             <v-tab-item value="tab-1">
@@ -50,7 +50,7 @@
 
     <v-layout>
       <v-flex xs12 md12 lg12 sm12 class="mt-5" :class="{'ltr-class':RTL,'rtl-class':!RTL}">
-        <v-btn outlined color="success" @click="validate()"  rounded>update</v-btn>
+        <v-btn outlined color="success" @click="validate()"  rounded>{{$t('_setting.submit')}}</v-btn>
       </v-flex>
     </v-layout>
   </ValidationObserver>

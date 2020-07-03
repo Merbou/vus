@@ -2,7 +2,17 @@
   <div>
     <sheet :open="open" @close="open=false" :rtl="RTL" :dark="dark" />
     <v-fab-transition>
-      <v-btn color="green darken-3" small dark absolute bottom :left="RTL" :right="!RTL" fab @click="open=true">
+      <v-btn
+        color="green darken-3"
+        small
+        dark
+        absolute
+        bottom
+        :left="RTL"
+        :right="!RTL"
+        fab
+        @click="open=true"
+      >
         <v-icon>fas fa-cog</v-icon>
       </v-btn>
     </v-fab-transition>
@@ -23,7 +33,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["RTL","dark"])
+    ...mapGetters(["RTL", "dark"])
   }
 };
 </script>

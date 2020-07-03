@@ -1,21 +1,15 @@
 <template>
-  <v-app-bar
-    color="white"
-    mb-5
-    dark
-    flat
-    app
-    fade-img-on-scroll
-    dense
-  >
+  <v-app-bar color="white" mb-5 flat app fade-img-on-scroll dense>
     <v-app-bar-nav-icon class="mx-1" color="grey darken-4" @click.stop="toggleSideBar"></v-app-bar-nav-icon>
 
     <v-spacer></v-spacer>
+
+    <Lang-select is_white />
     <notification />
 
     <v-menu :close-on-content-click="false" bottom offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn color="grey darken-4" text dark v-on="on">my Account</v-btn>
+        <v-btn color="grey darken-4" text dark v-on="on">{{$t('$navbar.account')}}</v-btn>
       </template>
 
       <v-card>
@@ -43,15 +37,15 @@
               <template v-slot:activator="{ on }">
                 <v-icon text v-on="on">fas fa-cog</v-icon>
               </template>
-              <span>Setting</span>
+              <span>{{$t('$navbar.setting')}}</span>
             </v-tooltip>
           </router-link>
           <v-spacer></v-spacer>
           <div class="flex-grow-1"></div>
           <router-link class="inlineBlock" to="/dashboard" style="text-decoration: none;">
-            <v-btn text>Home</v-btn>
+            <v-btn text>{{$t('$navbar.home')}}</v-btn>
           </router-link>
-          <v-btn style="display:block;" text @click="logout">logout</v-btn>
+          <v-btn style="display:block;" text @click="logout">{{$t('$navbar.logout')}}</v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>
@@ -61,9 +55,11 @@
 <script>
 import { mapGetters } from "vuex";
 import notification from "./notification";
+import LangSelect from "@/materiels/LangSelect";
+
 export default {
   name: "navBar",
-  components: { notification },
+  components: { notification,LangSelect },
   computed: {
     ...mapGetters(["user"])
   },
@@ -75,7 +71,7 @@ export default {
     },
     toggleSideBar() {
       this.$store.dispatch("toggleSideBar");
-    }
+    },
   }
 };
 </script> 

@@ -6,17 +6,27 @@
       autocomplete="on"
       v-on:keyup.enter="validate"
     >
-      <v-card max-width="400" class="mx-auto" :loading="loading" :disabled="loading" shaped elevation="10">
+      <v-card
+        max-width="400"
+        class="mx-auto"
+        :loading="loading"
+        :disabled="loading"
+        shaped
+        elevation="10"
+      >
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
-            <div>Login</div>
+            <div>
+              <lang-select :is_white="dark"/>
+            </div>
+            <div>{{$t('_login.title')}}</div>
           </v-layout>
         </v-card-title>
 
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider name="email" rules="email|required">
+              <ValidationProvider :name="$t('label.email')" rules="email|required">
                 <v-text-field
                   outlined
                   solo
@@ -30,14 +40,14 @@
                   v-model="loginForm.email"
                   :error-messages="errorRender(errors,backErrors.email)"
                   :success="(valid)?null:valid"
-                  label="email"
+                  :label="$t('label.email')"
                   required
                 ></v-text-field>
               </ValidationProvider>
             </v-flex>
 
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider name="password" rules="required|min:8">
+              <ValidationProvider :name="$t('label.password')" rules="required|min:8">
                 <v-text-field
                   outlined
                   solo
@@ -50,7 +60,7 @@
                   v-model="loginForm.password"
                   :error-messages="errorRender(errors,backErrors.password)"
                   :success="(valid)?null:valid"
-                  label="password"
+                  :label="$t('label.password')"
                   @click:append="show = !show"
                   :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
@@ -60,10 +70,15 @@
           </v-layout>
         </v-card-text>
         <v-card-actions class="d-flex justify-space-between">
-          <v-btn text small>
-            <router-link to="/register">Register</router-link>
-          </v-btn>
-          <v-btn class="ma-2 white--text" color="blue" @click="validate" rounded >login</v-btn>
+          <router-link to="/register" style="text-decoration: none">
+            <v-btn text small>{{$t('_login.register')}}</v-btn>
+          </router-link>
+          <v-btn
+            class="ma-2 white--text"
+            color="blue"
+            @click="validate"
+            rounded
+          >{{$t('_login.submit')}}</v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>
@@ -77,13 +92,14 @@ import {
   withValidation
 } from "vee-validate";
 import { required, email, min } from "../validate";
-
+import LangSelect from "@/materiels/LangSelect";
 export default {
   name: "Login",
   components: {
     ValidationObserver,
     ValidationProvider,
-    withValidation
+    withValidation,
+    LangSelect
   },
 
   data() {
@@ -101,7 +117,11 @@ export default {
       redirect: undefined
     };
   },
+  
   methods: {
+    dark(){
+      return this.$vuetify.theme.dark
+    },
     handleLogin() {
       this.loading = true;
 
@@ -109,7 +129,10 @@ export default {
         .dispatch("login", this.loginForm)
         .then(response => {
           this.loading = false;
-          this.snackbar({ text: "welcome back!", color: "success" });
+          this.snackbar({
+            text: this.$i18n.t("_login.successAuth"),
+            color: "success"
+          });
           this.$router.push({ path: "/dashboard" }).catch(err => {});
         })
         .catch(error => {
@@ -118,7 +141,7 @@ export default {
             Object.assign(this.backErrors, error.data.errors);
           } else if (error && error.status == 403) {
             this.snackbar({
-              text: "email or password is wrong!",
+              text: this.$i18n.t("_login.errorAuth"),
               color: "error"
             });
           }

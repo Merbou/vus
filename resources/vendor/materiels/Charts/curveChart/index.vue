@@ -28,6 +28,10 @@ export default {
     type: {
       type: String,
       required: true
+    },
+    dark:{
+      type:Boolean,
+      default:false
     }
   },
   data() {
@@ -35,6 +39,9 @@ export default {
       selection: "all",
 
       chartOptions: {
+        theme: {
+          mode: ""
+        },
         annotations: {
           yaxis: [
             {
@@ -97,8 +104,13 @@ export default {
       }
     };
   },
-
+  created(){
+    this.darkMode()
+  },
   methods: {
+    darkMode() {
+      this.chartOptions.theme.mode = this.dark?"dark":"light";
+    },
     ChangeSelection(chartOptions) {
       this.chartOptions = chartOptions;
     }

@@ -11,14 +11,14 @@
       >
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
-            <div>Activation</div>
+            <div>{{$t('_mail.title')}}</div>
           </v-layout>
         </v-card-title>
 
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider name="code" rules="integer|required">
+              <ValidationProvider :name="$t('label.code')" rules="integer|required">
                 <v-text-field
                   :loading="loading"
                   outlined
@@ -29,7 +29,7 @@
                   rounded
                   single-line
                   :error-messages="errorRender(errors,BackErrors.code)"
-                  label="Code activation"
+                  :label="$t('label.code')"
                   required
                 ></v-text-field>
               </ValidationProvider>
@@ -37,8 +37,13 @@
           </v-layout>
         </v-card-text>
         <v-card-actions class="d-flex justify-space-between">
-          <v-btn text small @click="sendMail(true)">Resend</v-btn>
-          <v-btn class="ma-2 white--text" color="blue" @click="validate" rounded>Verifie</v-btn>
+          <v-btn text small @click="sendMail(true)">{{$t('_mail.resend')}}</v-btn>
+          <v-btn
+            class="ma-2 white--text"
+            color="blue"
+            @click="validate"
+            rounded
+          >{{$t('_mail.submit')}}</v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>
@@ -89,7 +94,7 @@ export default {
           this.vLoading(false);
           this.$store.dispatch("mailVerifed", response).then(() => {
             this.snackbar({
-              text: "welcome to your dashboard :)",
+              text: this.$i18n.t("_mail.success"),
               color: "success"
             });
 

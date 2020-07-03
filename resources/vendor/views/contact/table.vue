@@ -15,7 +15,7 @@
               depressed
             >fas fa-trash</v-icon>
           </template>
-          <span>delete</span>
+          <span>{{$t('tooltip.delete')}}</span>
         </v-tooltip>
       </template>
 
@@ -24,15 +24,15 @@
           <template v-slot:activator="{ on }">
             <v-icon small class="mx-2 mx-2" @click="ShowDeleteItem([item])" v-on="on">fas fa-trash</v-icon>
           </template>
-          <span>Delete message</span>
+          <span>{{$t('tooltip.delete_it')}}</span>
         </v-tooltip>
       </template>
 
-      <template v-slot:vu="{ item }">
+      <template v-slot:view="{ item }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-icon
-              v-if="item.vu"
+              v-if="item.view"
               small
               class="mx-2"
               @click="readItem(item,true)"
@@ -46,7 +46,7 @@
               v-on="on"
             >fas fa-envelope</v-icon>
           </template>
-          <span>Read it</span>
+          <span>{{$t('tooltip.read_it')}}</span>
         </v-tooltip>
       </template>
     </materiel-table>
@@ -63,15 +63,15 @@ export default {
     return {
       headers: [
         {
-          text: "email",
+          text: this.$i18n.t("label.email"),
           align: "left",
           value: "email"
         },
-        { text: "subject", value: "subject" },
-        { text: "creation date", value: "created_at" },
-        { text: "read", value: "vu" },
+        { text: this.$i18n.t("label.subject"), value: "subject" },
+        { text: this.$i18n.t("label.creation_date"), value: "created_at" },
+        { text: this.$i18n.t("_contact.read"), value: "view" },
         {
-          text: "actions",
+          text: this.$i18n.t("label.actions"),
           value: "actions",
           sortable: false
         }
@@ -93,11 +93,11 @@ export default {
   },
   methods: {
     readContact(item) {
-      item.vu = 1;
+      item.view = 1;
       readContactApi(item.id)
         .then(result => {})
         .catch(err => {
-          item.vu = 0;
+          item.view = 0;
         });
     },
     readItem(item, type) {
@@ -123,7 +123,7 @@ export default {
         .then(Response => {
           this.vLoading(false);
           this.snackbar({
-            text: "The operation completed successfully !",
+            text: this.$i18n.t("alert.success"),
             color: "success"
           });
           this.selected = [];
@@ -132,7 +132,7 @@ export default {
         .catch(error => {
           this.vLoading(false);
           this.snackbar({
-            text: "The operation did not complete. Try again later!",
+            text: this.$i18n.t("alert.error"),
             color: "error"
           });
 
@@ -155,10 +155,10 @@ export default {
     },
     initDialog() {
       this.$store.dispatch("initDialog", {
-        message: "Are you sure to delete this contact",
-        title: "Are you sure !",
-        accepte: "Yes",
-        cancel: "Cancel"
+        title: this.$i18n.t("asker.title"),
+        message: this.$i18n.t("asker.message", { obj: "contact" ,opt:"delete"}),
+        accepte: this.$i18n.t("qst.accepte"),
+        cancel: this.$i18n.t("qst.cancel")
       });
     }
   },

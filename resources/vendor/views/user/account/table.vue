@@ -21,8 +21,8 @@
               >fas fa-user-check</v-icon>
               <v-icon class="state" v-else v-on="on" small color="red">fas fa-user-times</v-icon>
             </template>
-            <span v-if="item.email_verified_at">account verified</span>
-            <span v-else>account not verified</span>
+            <span v-if="item.email_verified_at">{{$t('_user_table.verified')}}</span>
+            <span v-else>{{$t('_user_table.not_verified')}}</span>
           </v-tooltip>
 
           <v-tooltip bottom>
@@ -35,7 +35,7 @@
                 color="green"
                 small
                 dark
-              >yes</v-chip>
+              >{{$t('qst.yes')}}</v-chip>
               <v-chip
                 class="state"
                 @click="blockItem(item)"
@@ -44,9 +44,9 @@
                 v-else
                 color="red"
                 dark
-              >no</v-chip>
+              >{{$t('qst.no')}}</v-chip>
             </template>
-            <span>blocked</span>
+            <span>{{$t('tooltip.blocked')}}</span>
           </v-tooltip>
         </div>
       </template>
@@ -64,8 +64,8 @@
             <v-icon class="my-2" v-on="on" v-if="item.sex">fas fa-male</v-icon>
             <v-icon class="my-2" v-on="on" v-else>fas fa-female</v-icon>
           </template>
-          <span v-if="item.sex">Man</span>
-          <span v-else>Woman</span>
+          <span v-if="item.sex">{{$t('label.man')}}</span>
+          <span v-else>{{$t('label.woman')}}</span>
         </v-tooltip>
       </template>
     </materiel-table>
@@ -84,17 +84,17 @@ export default {
     return {
       headers: [
         {
-          text: "email",
+          text: this.$i18n.t('label.email'),
           align: "left",
           value: "email"
         },
-        { text: "username", value: "username" },
-        { text: "Full name", value: "fullname" },
-        { text: "sex", value: "sex" },
-        { text: "creation date", value: "created_at" },
-        { text: "State", value: "state" },
+        { text: this.$i18n.t('label.username'), value: "username" },
+        { text: this.$i18n.t('label.fullname'), value: "fullname" },
+        { text: this.$i18n.t('label.sex'), value: "sex" },
+        { text: this.$i18n.t('label.creation_date'), value: "created_at" },
+        { text: this.$i18n.t('label.state'), value: "state" },
         {
-          text: "Roles",
+          text: this.$i18n.t('label.roles'),
           value: "roles",
           sortable: false
         }
@@ -130,13 +130,13 @@ export default {
       assignRoleApi(data)
         .then(() => {
           this.snackbar({
-            text: "the role was assigned to user successfully !",
+            text: this.$i18n.t('_user_table.success'),
             color: "success"
           });
         })
         .catch(err => {
           this.snackbar({
-            text: "The operation did not complete. Try again later!",
+            text: this.$i18n.t('alert.error'),
             color: "error"
           });
           this.getData()[index].roles = roles;
@@ -151,13 +151,13 @@ export default {
       blockUserApi(this.getData()[editedIndex].id)
         .then(Response => {
           this.snackbar({
-            text: "The operation completed successfully !",
+            text: this.$i18n.t('alert.success'),
             color: "success"
           });
         })
         .catch(error => {
           this.snackbar({
-            text: "The operation did not complete. Try again later!",
+            text: this.$i18n.t('alert.error'),
             color: "error"
           });
           this.getData()[editedIndex].is_active = !is_active;

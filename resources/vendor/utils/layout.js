@@ -1,12 +1,13 @@
-const app_keys = ["RTL", "dark"]
+const app_keys = ["sidebar","RTL", "dark", "locale"]
 
 export function getRessources() {
     const ressources = {}
     app_keys.forEach(key => {
         let ress = localStorage.getItem(key)
-        if (ress) {
+        if (ress === "true" || ress === "false")
             ressources[key] = ress === "true";
-        }
+        else if (ress && ress !== "null" && ress !== "undefined")
+            ressources[key] = ress
         else {
             localStorage.setItem(key, false)
             ressources[key] = false;

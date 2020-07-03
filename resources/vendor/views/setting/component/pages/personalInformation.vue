@@ -2,14 +2,14 @@
   <v-card :disabled="loading" raised :loading="loading">
     <v-card-text>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider name="phone">
+        <ValidationProvider :name="$t('label.phone')">
           <VuePhoneNumberInput
-          :class="{'rtl-class':RTL}"
-          :dark-color="'#272727'"
+            :class="{'rtl-class':RTL}"
+            :dark-color="'#272727'"
             :dark="dark"
             v-model="form.phone"
             @change="fireInfo"
-            label="phone"
+            :label="$t('label.phone')"
             outlined
             solo
             rounded
@@ -21,7 +21,7 @@
         </ValidationProvider>
       </v-flex>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider name="sex" rules="alpha_dash">
+        <ValidationProvider :name="$t('label.sex')" rules="alpha_dash">
           <v-select
             slot-scope="{
                             errors
@@ -39,7 +39,7 @@
             item-text="text"
             item-value="value"
             :items="[{text:'Homme',value:1},{text:'Femme',value:0}]"
-            label="sex"
+            :label="$t('label.sex')"
           ></v-select>
         </ValidationProvider>
       </v-flex>
@@ -80,7 +80,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["dark","RTL"])
+    ...mapGetters(["dark", "RTL"])
   },
   mounted() {
     this.initform(this.user);
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style>
-.rtl-class{
+.rtl-class {
   direction: rtl !important;
 }
 </style>

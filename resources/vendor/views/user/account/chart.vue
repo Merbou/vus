@@ -1,12 +1,13 @@
 <template>
   <div>
-    <curve-chart :series="series" type="line" :loading="loading" />
+    <curve-chart :dark="dark" :series="series" type="line" :loading="loading" />
   </div>
 </template>
 
 <script>
 import { fetchAccountCountApi } from "@/api/user/chart";
 import curveChart from "@/materiels/Charts/curveChart/index";
+import { mapGetters } from 'vuex';
 export default {
   name: "chartUser",
   components: {
@@ -17,6 +18,9 @@ export default {
       series: [{ data: [] }],
       loading:false
     };
+  },
+  computed:{
+    ...mapGetters(["dark"])
   },
   mounted() {
     this.fetchData();

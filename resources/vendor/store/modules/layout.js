@@ -1,25 +1,29 @@
 'use strict';
-import { sidebar, setSidebar } from "@/utils/sidebar"
-import { getRessources, setRessources, removeRessources } from "@/utils/layout"
+import { getRessources, setRessources } from "@/utils/layout"
 
 export default {
     state: {
-        sidebar: sidebar(),
-        RTL: getRessources()["RTL"],
+        sidebar: getRessources()["sidebar"],
+        RTL: getRessources()["locale"] === 'ar' ? true : getRessources()["RTL"],
         dark: getRessources()["dark"],
+        locale: getRessources()["locale"],
     },
     mutations: {
         TOGGLE_SIDEBAR: (state) => {
-            state.sidebar = state.sidebar ? 0 : 1
-            setSidebar(state.sidebar)
+            state.sidebar = state.sidebar ? false : true
+            setRessources({ sidebar: state.sidebar })
         },
-        TOGGLE_RTL: (state) => {
-            state.RTL = state.RTL ? false : true
+        TOGGLE_RTL: (state, bool) => {
+            state.RTL = bool !== undefined ? bool : state.RTL ? false : true
             setRessources({ RTL: state.RTL })
         },
         TOGGLE_DARK: (state) => {
             state.dark = state.dark ? false : true
             setRessources({ dark: state.dark })
+        },
+        CHANGE_LOCAL: (state, locale) => {
+            state.locale = locale
+            setRessources({ locale: state.locale })
         },
     },
     actions: {
@@ -28,12 +32,17 @@ export default {
             commit('TOGGLE_SIDEBAR')
         },
 
-        toggleRTL({ commit }) {
-            commit('TOGGLE_RTL')
+        toggleRTL({ commit }, bool) {
+            commit('TOGGLE_RTL', bool)
         },
 
         toggleDark({ commit }) {
             commit('TOGGLE_DARK')
+        },
+
+        changeLocale({ commit }, locale) {
+            if (locale === null && locale === undefined) return;
+            commit('CHANGE_LOCAL', locale)
         },
 
     },

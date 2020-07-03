@@ -366,19 +366,19 @@ var map = {
 	],
 	"./chat/message": [
 		"./resources/vendor/api/chat/message.js",
-		12
+		13
 	],
 	"./chat/message.js": [
 		"./resources/vendor/api/chat/message.js",
-		12
+		13
 	],
 	"./chat/room": [
 		"./resources/vendor/api/chat/room.js",
-		13
+		14
 	],
 	"./chat/room.js": [
 		"./resources/vendor/api/chat/room.js",
-		13
+		14
 	],
 	"./contact": [
 		"./resources/vendor/api/contact/index.js",
@@ -430,51 +430,51 @@ var map = {
 	],
 	"./trash/contact": [
 		"./resources/vendor/api/trash/contact.js",
-		14
+		15
 	],
 	"./trash/contact.js": [
 		"./resources/vendor/api/trash/contact.js",
-		14
+		15
 	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		15
+		16
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		15
+		16
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		16
+		17
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		16
+		17
 	],
 	"./user/privilege/permission": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		17
+		18
 	],
 	"./user/privilege/permission.js": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		17
+		18
 	],
 	"./user/privilege/role": [
 		"./resources/vendor/api/user/privilege/role.js",
-		18
+		19
 	],
 	"./user/privilege/role.js": [
 		"./resources/vendor/api/user/privilege/role.js",
-		18
+		19
 	],
 	"./user/search": [
 		"./resources/vendor/api/user/search.js",
-		19
+		20
 	],
 	"./user/search.js": [
 		"./resources/vendor/api/user/search.js",
-		19
+		20
 	]
 };
 function webpackAsyncContext(req) {

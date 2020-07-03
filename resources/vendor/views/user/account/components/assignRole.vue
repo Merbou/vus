@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="open" width="300" @click:outside="close">
     <v-card>
-      <v-card-title>Select roles</v-card-title>
+      <v-card-title>{{$t('_user_table.select_roles')}}</v-card-title>
       <v-card-text>
         <v-select
           :key="item.id"
@@ -18,7 +18,7 @@
             <v-chip v-if="index === 0">
               <span>{{ item.name }}</span>
             </v-chip>
-            <span v-if="index === 1" class="grey--text caption">(+{{ selected.length - 1 }} others )</span>
+            <span v-if="index === 1" class="grey--text caption">(+{{ selected.length - 1 }} {{$t('_user_table.others')}} )</span>
           </template>
         </v-select>
       </v-card-text>

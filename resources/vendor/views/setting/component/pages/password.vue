@@ -2,7 +2,7 @@
   <v-card raised :disabled="loading" :loading="loading">
     <v-card-text>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider name="last_password" :rules="_c_rule+'|min:8|alpha_dash'">
+        <ValidationProvider :name="$t('label.password')" :rules="_c_rule+'|min:8|alpha_dash'">
           <v-text-field
             slot-scope="{
                             errors,
@@ -18,7 +18,7 @@
             :error-messages="errors_d.length?errors_d:errors"
             :success="form.last_password?valid:null"
             :counter="30"
-            label="Password"
+            :label="$t('label.password')"
             @click:append="show = !show"
             :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
             :type="show ? 'text' : 'password'"
@@ -27,7 +27,7 @@
       </v-flex>
       <v-flex xs12 md12 lg12 sm12>
         <ValidationProvider
-          name="New password"
+          :name="$t('label.new_password')"
           vid="password"
           ref="password"
           :rules="_c_rule+'|min:8|alpha_dash'"
@@ -47,7 +47,7 @@
             :error-messages="errors"
             :success="form.password?valid:null"
             :counter="30"
-            label="New password"
+            :label="$t('label.new_password')"
             @click:append="show = !show"
             :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
             :type="show ? 'text' : 'password'"
@@ -55,7 +55,7 @@
         </ValidationProvider>
       </v-flex>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider name="confirm" :rules="_c_rule+'|confirmed:password|alpha_dash'">
+        <ValidationProvider :name="$t('label.password_confirmation')" :rules="_c_rule+'|confirmed:password|alpha_dash'">
           <v-text-field
             slot-scope="{
                             errors,
@@ -71,7 +71,7 @@
             :error-messages="errors"
             :success="form.password_confirmation?valid:null"
             data-vv-as="password"
-            name="password_confirmation"
+            :name="$t('label.password_confirmation')"
             :counter="30"
             label="password confirm"
             @click:append="show = !show"
