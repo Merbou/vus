@@ -1,7 +1,8 @@
 <template>
   <v-container>
-    <new-role @create="storeRole" :open="dialogs.create" @close="closeDialog" />
+    <new-role @create="storeRole" :dark="dark" :open="dialogs.create" @close="closeDialog" />
     <assign-permissions
+      :dark="dark"
       :open="dialogs.tree"
       :item="item"
       :selected="item&&item.permissions&&item.permissions.map(e=>e.id)"
@@ -14,10 +15,15 @@
         <materiel-table :headers="headers" :modulePath="modulePath" ref="table">
           <template v-slot:top>
             <v-toolbar flat>
-              <v-toolbar-title>Roles</v-toolbar-title>
+              <v-toolbar-title>{{$t('_user_privilege.title')}}</v-toolbar-title>
               <v-divider class="mx-4" inset vertical></v-divider>
               <div class="flex-grow-1"></div>
-              <v-btn color="primary" dark @click="dialogs['create'] = true" class="mb-2">New role</v-btn>
+              <v-btn
+                color="primary"
+                dark
+                @click="dialogs['create'] = true"
+                class="mb-2"
+              >{{$t('_user_privilege.create_role')}}</v-btn>
             </v-toolbar>
           </template>
 
@@ -31,7 +37,7 @@
                   v-on="on"
                 >fas fa-trash</v-icon>
               </template>
-              <span>Delete Role</span>
+              <span>{{$t('tooltip.delete',{obj:$tc('label.role',1)})}}</span>
             </v-tooltip>
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
@@ -42,7 +48,7 @@
                   v-on="on"
                 >fas fa-edit</v-icon>
               </template>
-              <span>Assign permissions</span>
+              <span>{{$t('tooltip.assign',{obj:$tc('label.permission',1)})}}</span>
             </v-tooltip>
           </template>
         </materiel-table>
@@ -79,13 +85,13 @@ export default {
       dialogs: { tree: false, create: false },
       headers: [
         {
-          text: "Role",
+          text: this.$i18n.tc("label.role", 2),
           align: "left",
           sortable: false,
           value: "name"
         },
         {
-          text: "Actions",
+          text: this.$i18n.tc("label.actions"),
           value: "actions",
           sortable: false
         }
@@ -106,7 +112,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["dialog","dark"]),
+    ...mapGetters(["dialog", "dark"]),
     value() {
       return this.dialog.value;
     }
@@ -130,7 +136,7 @@ export default {
         .then(res => {
           this.vLoading(false);
           this.snackbar({
-            text: "The role is stored successfully !",
+            text: this.$i18n.t("_user_privilege.success_role_store"),
             color: "success"
           });
           this.getData()[index].id = res.id;
@@ -138,7 +144,7 @@ export default {
         .catch(err => {
           this.vLoading(false);
           this.snackbar({
-            text: "The operation did not complete. Try again later!",
+            text: this.$i18n.t("alert.failed"),
             color: "error"
           });
           this.remove(index);
@@ -150,14 +156,14 @@ export default {
       deleteRoleApi(this.item.id)
         .then(() => {
           this.snackbar({
-            text: "The operation completed successfully !",
+            text: this.$i18n.t("alert.complete"),
             color: "success"
           });
           this.item = { id: "", name: "" };
         })
         .catch(err => {
           this.snackbar({
-            text: "The operation did not complete. Try again later!",
+            text: this.$i18n.t("alert.failed"),
             color: "error"
           });
           const index = this.save(this.item);
@@ -182,7 +188,7 @@ export default {
         .then(() => {
           this.vLoading(false);
           this.snackbar({
-            text: "the permissions was assigned to role successfully !",
+            text: this.$i18n.t("_user_privilege.success_assign_permissions"),
             color: "success"
           });
           this.item = { id: "", name: "" };
@@ -190,7 +196,7 @@ export default {
         .catch(err => {
           this.vLoading(false);
           this.snackbar({
-            text: "The operation did not complete. Try again later!",
+            text: this.$i18n.t("alert.failed"),
             color: "error"
           });
           this.item = { id: "", name: "" };
@@ -200,7 +206,10 @@ export default {
       this.item = item;
       this.option = option;
       this.$store.dispatch("toggleDialog", {
-        message: `Are you sure to ${option} this role`,
+        message: this.$i18n.t("asker.message", {
+          obj: this.$i18n.tc("label.role", 1),
+          opt: this.$i18n.tc(`tooltip.${option}`)
+        }),
         open: true,
         value: false
       });

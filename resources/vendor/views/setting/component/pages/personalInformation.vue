@@ -2,14 +2,14 @@
   <v-card :disabled="loading" raised :loading="loading">
     <v-card-text>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider :name="$t('label.phone')">
+        <ValidationProvider :name="$tc('label.phone',0)">
           <VuePhoneNumberInput
             :class="{'rtl-class':RTL}"
             :dark-color="'#272727'"
             :dark="dark"
             v-model="form.phone"
             @change="fireInfo"
-            :label="$t('label.phone')"
+            :label="$tc('label.phone',0)"
             outlined
             solo
             rounded
@@ -21,7 +21,7 @@
         </ValidationProvider>
       </v-flex>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider :name="$t('label.sex')" rules="alpha_dash">
+        <ValidationProvider :name="$tc('label.sex',0)" rules="alpha_dash">
           <v-select
             slot-scope="{
                             errors
@@ -39,7 +39,7 @@
             item-text="text"
             item-value="value"
             :items="[{text:'Homme',value:1},{text:'Femme',value:0}]"
-            :label="$t('label.sex')"
+            :label="$tc('label.sex',0)"
           ></v-select>
         </ValidationProvider>
       </v-flex>

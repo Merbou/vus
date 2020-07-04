@@ -27,8 +27,8 @@ export default {
       loading: false,
       series: [],
       chartOptions: {
-        theme:{
-          mode:""
+        theme: {
+          mode: ""
         },
         labels: [],
         responsive: [
@@ -57,8 +57,9 @@ export default {
       fetchRolesPercentageApi()
         .then(_res => {
           this.loading = false;
-          _res.forEach(element => {
-            this.chartOptions.labels.push(element.labels);
+          _res.forEach(e => {
+            const label = this.$i18n.t(`roles.${e.label}`);
+            this.chartOptions.labels.push(label);
           });
           this.series = _res.map(e => parseFloat(e.series).toFixed(2) * 100);
         })

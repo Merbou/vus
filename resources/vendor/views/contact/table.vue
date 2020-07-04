@@ -15,7 +15,7 @@
               depressed
             >fas fa-trash</v-icon>
           </template>
-          <span>{{$t('tooltip.delete')}}</span>
+          <span>{{$tc('tooltip.delete')}}</span>
         </v-tooltip>
       </template>
 
@@ -24,7 +24,7 @@
           <template v-slot:activator="{ on }">
             <v-icon small class="mx-2 mx-2" @click="ShowDeleteItem([item])" v-on="on">fas fa-trash</v-icon>
           </template>
-          <span>{{$t('tooltip.delete_it')}}</span>
+          <span>{{$t('tooltip.delete',{obj:$tc('label.contact',1)})}}</span>
         </v-tooltip>
       </template>
 
@@ -46,7 +46,7 @@
               v-on="on"
             >fas fa-envelope</v-icon>
           </template>
-          <span>{{$t('tooltip.read_it')}}</span>
+          <span>{{$t('tooltip.read',{obj:$tc('label.contact',1)})}}</span>
         </v-tooltip>
       </template>
     </materiel-table>
@@ -63,15 +63,15 @@ export default {
     return {
       headers: [
         {
-          text: this.$i18n.t("label.email"),
+          text: this.$i18n.tc("label.email"),
           align: "left",
           value: "email"
         },
-        { text: this.$i18n.t("label.subject"), value: "subject" },
-        { text: this.$i18n.t("label.creation_date"), value: "created_at" },
+        { text: this.$i18n.tc("label.subject"), value: "subject" },
+        { text: this.$i18n.tc("label.creation_date"), value: "created_at" },
         { text: this.$i18n.t("_contact.read"), value: "view" },
         {
-          text: this.$i18n.t("label.actions"),
+          text: this.$i18n.tc("label.actions"),
           value: "actions",
           sortable: false
         }
@@ -123,7 +123,7 @@ export default {
         .then(Response => {
           this.vLoading(false);
           this.snackbar({
-            text: this.$i18n.t("alert.success"),
+            text: this.$i18n.t("alert.complete"),
             color: "success"
           });
           this.selected = [];
@@ -132,7 +132,7 @@ export default {
         .catch(error => {
           this.vLoading(false);
           this.snackbar({
-            text: this.$i18n.t("alert.error"),
+            text: this.$i18n.t("alert.failed"),
             color: "error"
           });
 
@@ -156,7 +156,10 @@ export default {
     initDialog() {
       this.$store.dispatch("initDialog", {
         title: this.$i18n.t("asker.title"),
-        message: this.$i18n.t("asker.message", { obj: "contact" ,opt:"delete"}),
+        message: this.$i18n.t("asker.message", {
+          obj: "contact",
+          opt: "delete"
+        }),
         accepte: this.$i18n.t("qst.accepte"),
         cancel: this.$i18n.t("qst.cancel")
       });

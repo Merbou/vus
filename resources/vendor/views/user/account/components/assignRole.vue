@@ -18,7 +18,10 @@
             <v-chip v-if="index === 0">
               <span>{{ item.name }}</span>
             </v-chip>
-            <span v-if="index === 1" class="grey--text caption">(+{{ selected.length - 1 }} {{$t('_user_table.others')}} )</span>
+            <span
+              v-if="index === 1"
+              class="grey--text caption"
+            >(+{{ selected.length - 1 }} {{$t('_user_table.others')}} )</span>
           </template>
         </v-select>
       </v-card-text>

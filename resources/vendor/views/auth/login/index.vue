@@ -17,7 +17,7 @@
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
             <div>
-              <lang-select :is_white="dark"/>
+              <lang-select :is_white="!dark" />
             </div>
             <div>{{$t('_login.title')}}</div>
           </v-layout>
@@ -26,7 +26,7 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider :name="$t('label.email')" rules="email|required">
+              <ValidationProvider :name="$tc('label.email')" rules="email|required">
                 <v-text-field
                   outlined
                   solo
@@ -40,14 +40,14 @@
                   v-model="loginForm.email"
                   :error-messages="errorRender(errors,backErrors.email)"
                   :success="(valid)?null:valid"
-                  :label="$t('label.email')"
+                  :label="$tc('label.email')"
                   required
                 ></v-text-field>
               </ValidationProvider>
             </v-flex>
 
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider :name="$t('label.password')" rules="required|min:8">
+              <ValidationProvider :name="$tc('label.password')" rules="required|min:8">
                 <v-text-field
                   outlined
                   solo
@@ -60,7 +60,7 @@
                   v-model="loginForm.password"
                   :error-messages="errorRender(errors,backErrors.password)"
                   :success="(valid)?null:valid"
-                  :label="$t('label.password')"
+                  :label="$tc('label.password')"
                   @click:append="show = !show"
                   :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
@@ -93,6 +93,7 @@ import {
 } from "vee-validate";
 import { required, email, min } from "../validate";
 import LangSelect from "@/materiels/LangSelect";
+import { mapGetters } from "vuex";
 export default {
   name: "Login",
   components: {
@@ -117,11 +118,10 @@ export default {
       redirect: undefined
     };
   },
-  
+  computed: {
+    ...mapGetters(["dark"])
+  },
   methods: {
-    dark(){
-      return this.$vuetify.theme.dark
-    },
     handleLogin() {
       this.loading = true;
 

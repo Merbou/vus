@@ -5,6 +5,7 @@
       :open="openAddRoom"
       :roomsLength="rooms.length"
       :user="user"
+      :dark="dark"
       @putRoomIndex="putRoomIndex"
       @pushRoomContent="pushRoomContent"
       @clearRoomIndex="clearRoomIndex"
@@ -16,6 +17,7 @@
       v-if="openquitRoom"
       :open="openquitRoom"
       :room="room"
+      :dark="dark"
       :user="user"
       @shiftRoom="shiftRoom"
       @pushRoom="pushRoom"
@@ -27,6 +29,7 @@
       :open="openInviteUser"
       :room="room"
       :user="user"
+      :dark="dark"
       @clearRoomIndex="clearRoomIndex"
       @putRoomIndex="putRoomIndex"
       @pushRoomContent="pushRoomContent"
@@ -37,6 +40,7 @@
       :open="openRemoveUser"
       :room="room"
       :user="user"
+      :dark="dark"
       @putRoomIndex="putRoomIndex"
       @pushRoomContent="pushRoomContent"
       @clearRoomIndex="clearRoomIndex"
@@ -56,6 +60,8 @@
       :rooms="rooms"
       :messages="messages"
       :menuActions="menuActions"
+      :messageActions="messageActions"
+      :textMessages="textMessages"
       :loadingRooms="loadingRooms"
       :messagesLoaded="messagesLoaded"
       @fetchMessages="fetchMessages"
@@ -112,13 +118,38 @@ export default {
       menuActions: [
         {
           name: "quitRoom",
-          title: "Quit Room"
+          title: this.$i18n.t("$menu_chat_room.quitRoom")
         }
-      ]
+      ],
+      messageActions: [
+        {
+          name: "replyMessage",
+          title: this.$i18n.t("$menu_chat_message.replyMessage")
+        },
+        {
+          name: "editMessage",
+          title: this.$i18n.t("$menu_chat_message.editMessage"),
+          onlyMe: true
+        },
+        {
+          name: "deleteMessage",
+          title: this.$i18n.t("$menu_chat_message.deleteMessage"),
+          onlyMe: true
+        }
+      ],
+      textMessages: {
+        ROOMS_EMPTY: this.$i18n.t("_chat.rooms_empty"),
+        NEW_MESSAGES: this.$i18n.t("_chat.new_messages"),
+        MESSAGE_DELETED: this.$i18n.t("_chat.messages_deleted"),
+        MESSAGES_EMPTY: this.$i18n.t("_chat.messages_empty"),
+        CONVERSATION_STARTED: this.$i18n.t("_chat.conversation_started"),
+        TYPE_MESSAGE: this.$i18n.t("_chat.type_messages"),
+        SEARCH: this.$i18n.t("_chat.search")
+      }
     };
   },
   computed: {
-    ...mapGetters(["user", "channel", "dark","RTL"])
+    ...mapGetters(["user", "channel", "dark", "RTL"])
   },
   created() {
     //load the laravel-echo

@@ -70,7 +70,7 @@ export default {
             kicked_users.forEach(user => {
                 this.channelChat({
                     message: {
-                        content: `${user.username} has been leave the conversation`,
+                        content: this.$i18n.t("_chat.echo_leave_user", { username: user.username }),
                         id: `_vv${this.messages.length + user.id}`,
                         sender_id: user.id,
                         username: user.username,
@@ -87,8 +87,8 @@ export default {
                 this.rooms[index] && this.rooms[index].users.push(user)
                 this.channelChat({
                     message: {
-                        content: `${user.username} has been joined the conversation`,
-                        id: `v${this.messages.length + user.id}`,
+                        content: this.$i18n.t("_chat.echo_join_user", { username: user.username }),
+                        id: `_vv${this.messages.length + user.id}`,
                         sender_id: user.id,
                         username: user.username,
                         room_id: parseInt(room_id),

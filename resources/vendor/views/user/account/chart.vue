@@ -15,7 +15,7 @@ export default {
   },
   data() {
     return {
-      series: [{ data: [] }],
+      series: [{name:this.$i18n.t('_user_curve_chart.label'), data: [] }],
       loading:false
     };
   },

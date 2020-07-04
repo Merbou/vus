@@ -8,9 +8,9 @@
       <v-card-actions>
         <div class="flex-grow-1"></div>
 
-        <v-btn color="secondary" @click="accepte">{{dialog.accepte}}</v-btn>
+        <v-btn class="white--text" color="blue darken-1" @click="accepte">{{$t('qst.yes')}}</v-btn>
 
-        <v-btn color="warning " @click="cancel">{{dialog.cancel}}</v-btn>
+        <v-btn :color="dark?'light':'secondary'" @click="cancel">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -20,7 +20,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "materielAsker",
   computed: {
-    ...mapGetters(["dialog"])
+    ...mapGetters(["dialog","dark"])
   },
   methods: {
     cancel() {

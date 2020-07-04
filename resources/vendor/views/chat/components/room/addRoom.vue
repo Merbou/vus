@@ -2,11 +2,11 @@
   <v-dialog :value="open" max-width="500px" @click:outside="close">
     <v-card>
       <v-card-title>
-        <span class="headline">New Room</span>
+        <span class="headline">{{$t('$new_room.title')}}</span>
       </v-card-title>
 
       <v-card-text>
-        <ValidationProvider name="Search field" rules="max:30|alpha_dash">
+        <ValidationProvider :name="$t('label.search')" rules="max:30|alpha_dash">
           <v-combobox
             :loading="loading"
             v-model="select"
@@ -17,7 +17,7 @@
             @update:search-input="searchPeople"
             item-value="id"
             item-text="username"
-            label="invite someone"
+            :label="$tc('label.invite_someone')"
             no-filter
             outlined
             multiple
@@ -47,11 +47,10 @@
                   v-else
                   class="accent white--text"
                   left
-                  v-text="data.item.username.slice(0, 1).toUpperCase()"
-                ></v-list-item-avatar>
+                >{{data.item.username.slice(0, 1).toUpperCase()}}</v-list-item-avatar>
                 <v-list-item-content>
-                  <v-list-item-title v-html="data.item.username"></v-list-item-title>
-                  <v-list-item-subtitle v-html="data.item.email"></v-list-item-subtitle>
+                  <v-list-item-title>{{data.item.username}}</v-list-item-title>
+                  <v-list-item-subtitle>{{data.item.email}}</v-list-item-subtitle>
                 </v-list-item-content>
               </template>
             </template>
@@ -64,7 +63,7 @@
           v-on:submit.prevent="validate()"
           :disabled="clicked"
         >
-          <ValidationProvider name="Room name" rules="max:30|alpha_dash">
+          <ValidationProvider :name="$tc('label.name',1)" rules="max:30|alpha_dash">
             <v-text-field
               slot-scope="{
                             errors,
@@ -73,7 +72,7 @@
               v-model="room_name"
               :error-messages="errors"
               :success="valid"
-              label="Room name (optionnal)"
+              :label="$tc('label.name',1)"
               outlined
               solo
               rounded
@@ -83,8 +82,13 @@
       </v-card-text>
       <v-card-actions>
         <div class="flex-grow-1"></div>
-        <v-btn color="blue darken-1" text @click="close()">cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="validate()" :disabled="clicked">Create</v-btn>
+        <v-btn :color="dark?'light':'secondary'" text @click="close()">{{$t('qst.cancel')}}</v-btn>
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="validate()"
+          :disabled="clicked"
+        >{{$t('$new_room.create')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -112,6 +116,10 @@ export default {
     user: {
       type: Object,
       default: {}
+    },
+    dark:{
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -120,7 +128,9 @@ export default {
       select: null,
       loading: false,
       clicked: false,
-      room_name: ""
+      room_name: "",
+      t_name: this.$i18n.t("label.name"),
+      t_opti: this.$i18n.t("label.optionnal")
     };
   },
   methods: {
@@ -138,6 +148,7 @@ export default {
       }
     },
     create() {
+      if (!this.select || !this.select.length) return;
       this.clicked = true;
       this.select = this.select.filter(e => typeof e === "object");
       const room_name = this.room_name;

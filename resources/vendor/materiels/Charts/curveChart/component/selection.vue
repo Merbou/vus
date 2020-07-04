@@ -1,26 +1,31 @@
 <template>
   <div class="toolbar">
     <v-row align="center" justify="center">
-      <v-btn-toggle rounded>
+      <v-btn-toggle rounded class="one_direction">
         <v-btn
           @click="updateData('one_month')"
           id="one_month"
           small
           :class="{active: selection==='one_month'}"
-        >One month</v-btn>
+        >{{$t('$curve_chart_selection.one_month')}}</v-btn>
         <v-btn
           @click="updateData('six_months')"
           id="six_months"
           small
           :class="{active: selection==='six_months'}"
-        >Six months</v-btn>
+        >{{$t('$curve_chart_selection.six_months')}}</v-btn>
         <v-btn
           @click="updateData('one_year')"
           id="one_year"
           small
           :class="{active: selection==='one_year'}"
-        >One year</v-btn>
-        <v-btn small @click="updateData('all')" id="all" :class="{active: selection==='all'} ">All</v-btn>
+        >{{$t('$curve_chart_selection.one_year')}}</v-btn>
+        <v-btn
+          small
+          @click="updateData('all')"
+          id="all"
+          :class="{active: selection==='all'} "
+        >{{$t('$curve_chart_selection.all')}}</v-btn>
       </v-btn-toggle>
     </v-row>
   </div>
@@ -112,3 +117,8 @@ var resetCssClasses = function(activeEl) {
   activeEl.target.classList.add("active");
 };
 </script>
+<style>
+.one_direction {
+  direction: ltr !important;
+}
+</style>

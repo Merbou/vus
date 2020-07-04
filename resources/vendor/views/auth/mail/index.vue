@@ -11,6 +11,9 @@
       >
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
+            <div>
+              <lang-select :is_white="!dark" />
+            </div>
             <div>{{$t('_mail.title')}}</div>
           </v-layout>
         </v-card-title>
@@ -18,7 +21,7 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider :name="$t('label.code')" rules="integer|required">
+              <ValidationProvider :name="$tc('label.code')" rules="integer|required">
                 <v-text-field
                   :loading="loading"
                   outlined
@@ -29,7 +32,7 @@
                   rounded
                   single-line
                   :error-messages="errorRender(errors,BackErrors.code)"
-                  :label="$t('label.code')"
+                  :label="$tc('label.code')"
                   required
                 ></v-text-field>
               </ValidationProvider>
@@ -79,7 +82,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user", "dark"])
   },
 
   methods: {

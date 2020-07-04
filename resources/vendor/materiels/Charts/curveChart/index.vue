@@ -49,7 +49,7 @@ export default {
               borderColor: "#999",
               label: {
                 show: true,
-                text: "Le nombre d'inscription",
+                text: this.$i18n.t('_user_curve_chart.yaxis'),
                 style: {
                   color: "#fff",
                   background: "#00E396"
@@ -64,7 +64,7 @@ export default {
               yAxisIndex: 0,
               label: {
                 show: true,
-                text: "La date d'inscription",
+                text: this.$i18n.t('_user_curve_chart.xaxis'),
 
                 style: {
                   color: "#fff",

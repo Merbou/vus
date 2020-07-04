@@ -1,7 +1,7 @@
 <template>
   <v-dialog :value="open" scrollable max-width="300px" @click:outside="close">
     <v-card>
-      <v-card-title>select</v-card-title>
+      <v-card-title>{{$t('$assign_permission.title')}}</v-card-title>
       <v-divider></v-divider>
       <v-card-text style="height: 300px;">
         <v-treeview
@@ -15,8 +15,8 @@
       </v-card-text>
       <v-divider></v-divider>
       <v-card-actions>
-        <v-btn color="blue darken-1" text @click="close()">cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="assing()">save</v-btn>
+        <v-btn :color="dark?'light':'secondary'" text @click="close()">{{$t('qst.cancel')}}</v-btn>
+        <v-btn class="white--text" color="blue darken-1" @click="assing()">{{$t('$assign_permission.submit')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -44,6 +44,10 @@ export default {
     selected: {
       type: Array,
       default: () => []
+    },
+    dark: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

@@ -6,7 +6,7 @@ export default {
         chart: "graphique",
         privilege: "privilège",
         chat: "chat",
-        trash: "poubelle",
+        trash: "corbeille",
         setting: "réglage",
         contacts: "Contacts",
     },

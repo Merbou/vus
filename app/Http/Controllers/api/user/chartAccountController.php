@@ -35,8 +35,8 @@ class chartAccountController extends Controller
             $roles_percentages = DB::table('users')
                 ->join('model_has_roles', 'users.id', '=', 'model_id')
                 ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->select(DB::raw("count(*)/$total as series"), DB::raw('roles.name as labels'))
-                ->groupBy("labels")
+                ->select(DB::raw("count(*)/$total as series"), DB::raw('roles.name as label'))
+                ->groupBy("label")
                 ->get();
 
             return response()->json($roles_percentages, 206);

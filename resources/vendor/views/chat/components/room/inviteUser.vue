@@ -1,7 +1,7 @@
 <template>
   <v-dialog :value="open" max-width="500px" @click:outside="close">
     <v-card>
-      <v-card-title class="headline">Invite someone out</v-card-title>
+      <v-card-title class="headline">{{$t('$invite_user_room.title')}}</v-card-title>
       <v-card-text>
         <v-combobox
           :loading="loading"
@@ -13,7 +13,7 @@
           @update:search-input="searchPeople"
           item-value="id"
           item-text="username"
-          label="invite someone"
+          :label="$t('label.invite_someone')"
           no-filter
           outlined
           multiple
@@ -46,8 +46,8 @@
                 v-text="data.item.username.slice(0, 1).toUpperCase()"
               ></v-list-item-avatar>
               <v-list-item-content>
-                <v-list-item-title v-html="data.item.username"></v-list-item-title>
-                <v-list-item-subtitle v-html="data.item.email"></v-list-item-subtitle>
+                <v-list-item-title>{{data.item.username}}</v-list-item-title>
+                <v-list-item-subtitle>{{data.item.email}}</v-list-item-subtitle>
               </v-list-item-content>
             </template>
           </template>
@@ -62,8 +62,8 @@
           class="white--text"
           @click="inviteUser()"
           :disabled="clicked"
-        >Invite</v-btn>
-        <v-btn color="secondary" text class="white--text" @click="close()">Cancel</v-btn>
+        >{{$t('$invite_user_room.submit')}}</v-btn>
+        <v-btn :color="dark?'light':'secondary'" text class="white--text" @click="close()">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -88,6 +88,10 @@ export default {
     user: {
       type: Object,
       default: {}
+    },
+    dark: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -114,6 +118,7 @@ export default {
       }
     },
     inviteUser() {
+      if (!this.select || !this.select.length) return;
       this.clicked = true;
       const users = this.room.users;
       this.select = this.select.filter(

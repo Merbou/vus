@@ -3,10 +3,10 @@ import { getRessources, setRessources } from "@/utils/layout"
 
 export default {
     state: {
-        sidebar: getRessources()["sidebar"],
+        sidebar: getRessources()["sidebar"] ? getRessources()["sidebar"] : false,
         RTL: getRessources()["locale"] === 'ar' ? true : getRessources()["RTL"],
-        dark: getRessources()["dark"],
-        locale: getRessources()["locale"],
+        dark: getRessources()["dark"] ? getRessources()["dark"] : false,
+        locale: getRessources()["locale"] ? getRessources()["locale"] : "en",
     },
     mutations: {
         TOGGLE_SIDEBAR: (state) => {

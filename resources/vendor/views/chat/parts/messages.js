@@ -151,7 +151,7 @@ export default {
 
         let index = this.messages.findIndex(e => e.id == message.id);
         if (is_deleted) {
-            this.messages[index].content = "this message has been deleted"
+            this.messages[index].content = this.$i18n.t("_chat.echo_messages_deleted")
             this.messages[index].timestamp = this.timestamp(message && message.updated_at);
             this.messages[index].deleted = true
 

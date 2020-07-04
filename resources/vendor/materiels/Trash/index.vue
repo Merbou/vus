@@ -13,7 +13,7 @@
               depressed
             >fas fa-trash</v-icon>
           </template>
-          <span>{{$t('tooltip.delete')}}</span>
+          <span>{{$tc('tooltip.delete')}}</span>
         </v-tooltip>
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -26,7 +26,7 @@
               depressed
             >fas fa-recycle</v-icon>
           </template>
-          <span>{{$t('tooltip.recycle')}}</span>
+          <span>{{$tc('tooltip.recycle')}}</span>
         </v-tooltip>
       </template>
 
@@ -40,7 +40,7 @@
               v-on="on"
             >fas fa-trash</v-icon>
           </template>
-          <span>{{$t('tooltip.delete')}} {{moduleName}}</span>
+          <span>{{$t('tooltip.delete',{obj:$t(`label.${moduleName}`)})}}</span>
         </v-tooltip>
       </template>
       <template v-slot:recycle="{ item }">
@@ -53,7 +53,7 @@
               v-on="on"
             >fas fa-recycle</v-icon>
           </template>
-          <span>{{$t('tooltip.recycle')}} {{moduleName}}</span>
+          <span>{{$t('tooltip.recycle',{obj:$t(`label.${moduleName}`)})}}</span>
         </v-tooltip>
       </template>
     </materiel-table>
@@ -96,9 +96,9 @@ export default {
     },
     __headers() {
       const optionsArray = [
-        { text: this.i18n.t("tooltip.recycle"), value: "recycle" },
+        { text: this.$i18n.tc("tooltip.recycle"), value: "recycle" },
         {
-          text: this.i18n.t("tooltip.delete"),
+          text: this.$i18n.tc("tooltip.delete"),
           value: "delete",
           sortable: false
         }
@@ -123,8 +123,8 @@ export default {
     ShowItemDialog() {
       this.$store.dispatch("toggleDialog", {
         message: this.i18n.t("asker.message", {
-          opt: this.option,
-          obj: this.moduleName
+          obj: this.$i18n.tc(`label.${this.moduleName}`, 1),
+          opt: this.$i18n.tc(`tooltip.${option}`)
         }),
         open: true,
         value: false
@@ -139,7 +139,7 @@ export default {
         .then(Response => {
           this.vLoading(false);
           this.snackbar({
-            text: this.$i18n.t("alert.success"),
+            text: this.$i18n.t("alert.complete"),
             color: "success"
           });
           this.selected = [];
@@ -148,7 +148,7 @@ export default {
         .catch(error => {
           this.vLoading(false);
           this.snackbar({
-            text: this.$i18n.t("alert.error"),
+            text: this.$i18n.t("alert.failed"),
             color: "error"
           });
           this.getData().push(this.selected);

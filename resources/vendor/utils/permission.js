@@ -3,7 +3,7 @@ export function premissionsDrop(_routes, _permissions) {
     //return routes according to permissions 
     //["users","contacts.@delete","contacts.@read"] =>["users","contacts"]
     _permissions = justPermissionsPage(_permissions)
-    
+
     return _routes.map(_ro => {
 
         if (_ro.children) {
@@ -56,8 +56,7 @@ export function permissionsRoute(to, permissions) {
 
 
 
-export function toTree(permissions) {
-
+export function toTree(permissions, translations) {
     //reforme permissions string to tree of array "users.table"=>"users".children[{"table"}]
     const _permissions = permissions.map(e => {
         const elm = e.name.split('.')
@@ -77,8 +76,6 @@ export function toTree(permissions) {
             e_clone.id = Symbol(e_clone.id)
         }
 
-        // if (e_clone.name[0] === "@")
-        //     e_clone.name = e_clone.name.substring(1)
         return e_clone
     })
     return _permissions.filter((e, i) => _permissions.map(e => e.name).indexOf(e.name) === i)
@@ -97,3 +94,15 @@ function justPermissionsPage(_permissions) {
     })
     return [...new Set(_permissions)]
 }
+
+// function translatePermissionsName(permissions, translations) {
+//     if (!translations) return permissions;
+//     const _permissions = [...permissions]
+    
+//     _permissions.map(e => {
+//         e.name = translations.hasOwnProperty(e.name) ? translations[e.name] : e.name;
+//         return e
+//     });
+    
+//     return _permissions
+// }

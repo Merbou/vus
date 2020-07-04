@@ -46,7 +46,7 @@
                 dark
               >{{$t('qst.no')}}</v-chip>
             </template>
-            <span>{{$t('tooltip.blocked')}}</span>
+            <span>{{$tc('tooltip.block',1)}}</span>
           </v-tooltip>
         </div>
       </template>
@@ -64,8 +64,8 @@
             <v-icon class="my-2" v-on="on" v-if="item.sex">fas fa-male</v-icon>
             <v-icon class="my-2" v-on="on" v-else>fas fa-female</v-icon>
           </template>
-          <span v-if="item.sex">{{$t('label.man')}}</span>
-          <span v-else>{{$t('label.woman')}}</span>
+          <span v-if="item.sex">{{$tc('label.sex',1)}}</span>
+          <span v-else>{{$tc('label.sex',2)}}</span>
         </v-tooltip>
       </template>
     </materiel-table>
@@ -84,17 +84,17 @@ export default {
     return {
       headers: [
         {
-          text: this.$i18n.t('label.email'),
+          text: this.$i18n.tc("label.email"),
           align: "left",
           value: "email"
         },
-        { text: this.$i18n.t('label.username'), value: "username" },
-        { text: this.$i18n.t('label.fullname'), value: "fullname" },
-        { text: this.$i18n.t('label.sex'), value: "sex" },
-        { text: this.$i18n.t('label.creation_date'), value: "created_at" },
-        { text: this.$i18n.t('label.state'), value: "state" },
+        { text: this.$i18n.tc("label.username"), value: "username" },
+        { text: this.$i18n.tc("label.fullname"), value: "fullname" },
+        { text: this.$i18n.tc("label.sex", 0), value: "sex" },
+        { text: this.$i18n.tc("label.creation_date"), value: "created_at" },
+        { text: this.$i18n.tc("label.state"), value: "state" },
         {
-          text: this.$i18n.t('label.roles'),
+          text: this.$i18n.tc("label.role", 2),
           value: "roles",
           sortable: false
         }
@@ -130,13 +130,13 @@ export default {
       assignRoleApi(data)
         .then(() => {
           this.snackbar({
-            text: this.$i18n.t('_user_table.success'),
+            text: this.$i18n.t("_user_table.success_assign_role"),
             color: "success"
           });
         })
         .catch(err => {
           this.snackbar({
-            text: this.$i18n.t('alert.error'),
+            text: this.$i18n.t("alert.failed"),
             color: "error"
           });
           this.getData()[index].roles = roles;
@@ -151,13 +151,13 @@ export default {
       blockUserApi(this.getData()[editedIndex].id)
         .then(Response => {
           this.snackbar({
-            text: this.$i18n.t('alert.success'),
+            text: this.$i18n.t("alert.complete"),
             color: "success"
           });
         })
         .catch(error => {
           this.snackbar({
-            text: this.$i18n.t('alert.error'),
+            text: this.$i18n.t("alert.failed"),
             color: "error"
           });
           this.getData()[editedIndex].is_active = !is_active;

@@ -1,12 +1,12 @@
 <template>
   <v-dialog :value="open" max-width="300" @click:outside="close">
     <v-card>
-      <v-card-title class="headline">Are you sure !</v-card-title>
-      <v-card-text>Are you sure to quit this room.</v-card-text>
+      <v-card-title class="headline">{{$t('asker.title')}}</v-card-title>
+      <v-card-text>{{$t('asker.message',{opt:'quit',obj:'room'})}}</v-card-text>
       <v-card-actions>
         <div class="flex-grow-1"></div>
-        <v-btn color="success" text class="white--text" @click="quitRoom()">Yes</v-btn>
-        <v-btn color="secondary" text class="white--text" @click="close()">Cancel</v-btn>
+        <v-btn color="success" text class="white--text" @click="quitRoom()">{{$t('qst.yes')}}</v-btn>
+        <v-btn :color="dark?'light':'secondary'" text class="white--text" @click="close()">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -24,6 +24,10 @@ export default {
     room: {
       type: Object,
       required: true
+    },
+    dark: {
+      type: Boolean,
+      default: false
     }
   },
   name: "quitRoom",

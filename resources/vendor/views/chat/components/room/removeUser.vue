@@ -1,7 +1,7 @@
 <template>
   <v-dialog :value="open" max-width="500px" @click:outside="close">
     <v-card>
-      <v-card-title class="headline">Kick someone out</v-card-title>
+      <v-card-title class="headline">{{$t('$remove_user_room.title')}}</v-card-title>
       <v-card-text>
         <v-select
           v-model="kicked"
@@ -10,7 +10,6 @@
           chips
           item-text="username"
           return-object
-          label="Chips"
           outlined
           multiple
           solo
@@ -27,8 +26,8 @@
           class="white--text"
           @click="removeUser()"
           :disabled="clicked"
-        >Kick</v-btn>
-        <v-btn color="secondary" text class="white--text" @click="close()">Cancel</v-btn>
+        >{{$t('$remove_user_room.submit')}}</v-btn>
+        <v-btn :color="dark?'light':'secondary'" text class="white--text" @click="close()">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -50,6 +49,10 @@ export default {
     user: {
       type: Object,
       required: true
+    },
+    dark: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -68,6 +71,8 @@ export default {
   name: "removeUser",
   methods: {
     removeUser() {
+      if (!this.kicked || !this.kicked.length) return;
+
       this.clicked = true;
       const ids = this.kicked.map(e => e.id);
       const room = { ...this.room };

@@ -17,7 +17,7 @@
         <v-card-title>
           <v-layout align-center justify-space-between fill-height>
             <div>
-              <lang-select />
+              <lang-select :is_white="!dark" />
             </div>
             <div>{{$t('_register.title')}}</div>
           </v-layout>
@@ -26,7 +26,7 @@
         <v-card-text>
           <v-layout wrap>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider :name="$t('label.email')" rules="email|required">
+              <ValidationProvider :name="$tc('label.email')" rules="email|required">
                 <v-text-field
                   autocomplete="on"
                   slot-scope="{
@@ -36,7 +36,7 @@
                   v-model="RegisterForm.email"
                   :error-messages="errorRender(errors,backErrors.email)"
                   :success="(valid)?null:valid"
-                  :label="$t('label.email')"
+                  :label="$tc('label.email')"
                   outlined
                   solo
                   rounded
@@ -47,7 +47,7 @@
               </ValidationProvider>
             </v-flex>
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider :name="$t('label.username')" rules="required">
+              <ValidationProvider :name="$tc('label.username')" rules="required">
                 <v-text-field
                   autocomplete="on"
                   slot-scope="{
@@ -57,7 +57,7 @@
                   v-model="RegisterForm.username"
                   :error-messages="errorRender(errors,backErrors.username)"
                   :success="(valid)?null:valid"
-                  :label="$t('label.username')"
+                  :label="$tc('label.username')"
                   outlined
                   solo
                   rounded
@@ -69,7 +69,11 @@
             </v-flex>
 
             <v-flex xs12 md12 lg12 sm12>
-              <ValidationProvider :name="$t('label.password')" rules="required|min:8" vid="confirm">
+              <ValidationProvider
+                :name="$tc('label.password')"
+                rules="required|min:8"
+                vid="confirm"
+              >
                 <v-text-field
                   slot-scope="{
                             errors,
@@ -84,7 +88,7 @@
                   :error-messages="errorRender(errors,backErrors.password)"
                   :success="(valid)?null:valid"
                   :counter="30"
-                  :label="$t('label.password')"
+                  :label="$tc('label.password')"
                   @click:append="show = !show"
                   :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
@@ -93,7 +97,7 @@
             </v-flex>
             <v-flex xs12 md12 lg12 sm12>
               <ValidationProvider
-                :name="$t('label.password_confirmation')"
+                :name="$tc('label.password_confirmation')"
                 rules="required|confirmed:confirm|min:8"
               >
                 <v-text-field
@@ -111,7 +115,7 @@
                   :success="(valid)?null:valid"
                   data-vv-as="password"
                   :counter="30"
-                  :label="$t('label.password_confirmation')"
+                  :label="$tc('label.password_confirmation')"
                   @click:append="show = !show"
                   :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
                   :type="show ? 'text' : 'password'"
@@ -172,6 +176,9 @@ export default {
       loading: false,
       redirect: undefined
     };
+  },
+  computed: {
+    ...mapGetters(["dark"])
   },
   methods: {
     handleRegister() {

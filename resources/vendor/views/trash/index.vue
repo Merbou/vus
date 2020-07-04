@@ -23,12 +23,12 @@ export default {
       tab: null,
       headers: [
         {
-          text: this.$i18n.t("label.email"),
+          text: this.$i18n.tc("label.email"),
           align: "left",
           value: "email"
         },
-        { text: this.$i18n.t("label.subject"), value: "subject" },
-        { text: this.$i18n.t("label.creation_date"), value: "created_at" }
+        { text: this.$i18n.tc("label.subject"), value: "subject" },
+        { text: this.$i18n.tc("label.creation_date"), value: "created_at" }
       ],
       modulePath: "trash/contact.js"
     };

@@ -4,7 +4,7 @@ export default {
     ...room,
     ...messages,
     MessageEcho() {
-        this.channel&&this.channel
+        this.channel && this.channel
             .listen("MessageEvent", e => {
                 this.channelChat(e)
             })
@@ -39,22 +39,22 @@ export default {
             this.menuActions = [
                 {
                     name: "inviteUser",
-                    title: "Invite User"
+                    title: this.$i18n.t("$menu_chat_room.inviteUser")
                 },
                 {
                     name: "removeUser",
-                    title: "Remove User"
+                    title: this.$i18n.t("$menu_chat_room.removeUser")
                 },
                 {
                     name: "quitRoom",
-                    title: "Quit Room"
+                    title: this.$i18n.t("$menu_chat_room.quitRoom")
                 }
             ];
         else
             this.menuActions = [
                 {
                     name: "quitRoom",
-                    title: "Quit Room"
+                    title: this.$i18n.t("$menu_chat_room.quitRoom")
                 }
             ];
     },
