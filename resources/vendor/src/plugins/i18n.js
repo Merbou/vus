@@ -2,9 +2,11 @@ import Vue from 'vue'
 
 import VueI18n from 'vue-i18n'
 import messages from "@/locales"
-import { getRessources } from "@/utils/layout"
+import ressources from "@/utils/layout"
+const ress = new ressources();
+
 const opts = {
-    locale: getRessources()["locale"], // set locale
+    locale: ress.get()["locale"], // set locale
     fallbackLocale: 'en',
     messages
 

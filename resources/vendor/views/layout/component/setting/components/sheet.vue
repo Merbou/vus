@@ -1,15 +1,20 @@
 <template>
-  <v-bottom-sheet :value="open" hide-overlay @click:outside="close" inset>
-    <v-sheet class="text-center" height="150px">
+  <v-bottom-sheet :value="open" hide-overlay @click:outside="close" inset height="180">
+    <v-sheet class="text-center">
       <v-item-group>
         <v-container>
           <v-row>
             <v-col md="4" mx-3>
               <v-item>
-                <v-switch :value="switchRtl" label="RTL" flat inset @change="toggleRtl"></v-switch>
+                <v-switch :value="rtl" label="RTL" flat inset @change="toggleRtl"></v-switch>
               </v-item>
               <v-item>
-                <v-switch  :value="!switchDark" label="Dark mode" flat inset @change="toggleDark"></v-switch>
+                <v-switch :value="dark" label="Dark mode" flat inset @change="toggleDark"></v-switch>
+              </v-item>
+            </v-col>
+            <v-col md="4" mx-3>
+              <v-item>
+                <vue-palette :dark="dark" :palettes="palettes" @input="changeTheme" />
               </v-item>
             </v-col>
           </v-row>
@@ -20,7 +25,11 @@
 </template>
 
 <script>
+import vuePalette from "@/materiels/vuePalette";
 export default {
+  components: {
+    vuePalette
+  },
   props: {
     open: {
       type: Boolean,
@@ -33,12 +42,15 @@ export default {
     dark: {
       type: Boolean,
       default: false
-    },
+    }
   },
   data() {
     return {
-      switchRtl: this.rtl,
-      switchDark: this.dark
+      palettes: [
+        ["#17252A", "#2B7A78", "#3AAFA9", "#DEF2F1", "#FEFFFF"],
+        ["#F8E9A1", "#F76C6C", "#A8D0E6", "#374785", "#24305E"],
+        ["#0B0C10", "#1F2833", "#C5C6C7", "#66FCF1", "#45A29E"]
+      ]
     };
   },
   methods: {
@@ -50,10 +62,16 @@ export default {
     },
     toggleDark() {
       this.$store.dispatch("toggleDark");
+    },
+    changeTheme(palette) {
+      this.$store.dispatch("changeTheme", palette);
     }
   }
 };
 </script>
 
 <style>
+.v-color-picker__controls {
+  display: none;
+}
 </style>

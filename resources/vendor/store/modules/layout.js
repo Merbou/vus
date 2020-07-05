@@ -1,29 +1,35 @@
 'use strict';
-import { getRessources, setRessources } from "@/utils/layout"
+import ressources from "@/utils/layout"
 
+const ress=new ressources();
 export default {
     state: {
-        sidebar: getRessources()["sidebar"] ? getRessources()["sidebar"] : false,
-        RTL: getRessources()["locale"] === 'ar' ? true : getRessources()["RTL"],
-        dark: getRessources()["dark"] ? getRessources()["dark"] : false,
-        locale: getRessources()["locale"] ? getRessources()["locale"] : "en",
+        sidebar: ress.get()["sidebar"] ? ress.get()["sidebar"] : false,
+        RTL: ress.get()["locale"] === 'ar' ? true : ress.get()["RTL"],
+        dark: ress.get()["dark"] ? ress.get()["dark"] : false,
+        locale: ress.get()["locale"] ? ress.get()["locale"] : ress.set({ locale: "en" })["locale"],
+        palette: ress.get()["palette"] ? ress.get()["palette"] : null,
     },
     mutations: {
         TOGGLE_SIDEBAR: (state) => {
             state.sidebar = state.sidebar ? false : true
-            setRessources({ sidebar: state.sidebar })
+            ress.set({ sidebar: state.sidebar })
         },
         TOGGLE_RTL: (state, bool) => {
             state.RTL = bool !== undefined ? bool : state.RTL ? false : true
-            setRessources({ RTL: state.RTL })
+            ress.set({ RTL: state.RTL })
         },
         TOGGLE_DARK: (state) => {
             state.dark = state.dark ? false : true
-            setRessources({ dark: state.dark })
+            ress.set({ dark: state.dark })
         },
         CHANGE_LOCAL: (state, locale) => {
             state.locale = locale
-            setRessources({ locale: state.locale })
+            ress.set({ locale: state.locale })
+        },
+        CHANGE_THEME: (state, palette) => {
+            state.palette = palette
+            ress.set({ palette: state.palette })
         },
     },
     actions: {
@@ -43,6 +49,11 @@ export default {
         changeLocale({ commit }, locale) {
             if (locale === null && locale === undefined) return;
             commit('CHANGE_LOCAL', locale)
+        },
+
+        changeTheme({ commit }, palette) {
+            if (palette === null && palette === undefined && !palette instanceof Array) return;
+            commit('CHANGE_THEME', palette)
         },
 
     },

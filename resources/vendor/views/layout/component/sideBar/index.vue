@@ -33,7 +33,7 @@ export default {
 };
 </script>
 <style >
-nav.side-bar.v-navigation-drawer.v-navigation-drawer--fixed.v-navigation-drawer--mini-variant.v-navigation-drawer--open.v-navigation-drawer--open-on-hover.theme--dark {
+/* nav.side-bar.v-navigation-drawer.v-navigation-drawer--fixed.v-navigation-drawer--mini-variant.v-navigation-drawer--open.v-navigation-drawer--open-on-hover.theme--dark {
   width: 67px !important ;
-}
+} */
 </style>

@@ -1,6 +1,6 @@
 <template>
   <v-list-item-icon v-if="icon">
-    <v-icon>fas fa-{{icon}}</v-icon>
+    <v-icon small>fas fa-{{icon}}</v-icon>
   </v-list-item-icon>
 </template>
 
