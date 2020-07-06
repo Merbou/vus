@@ -2,12 +2,7 @@
   <ValidationObserver ref="obs" class="container">
     <v-row no-gutters justify="space-around" align="center">
       <v-col lg="5" md="5" sm="12" cols="12">
-        <v-tabs
-          :background-color="!alarm?'info':'red lighten-1'"
-          centered
-          dark
-          v-model="tab"
-        >
+        <v-tabs :background-color="!alarm?'info':'red lighten-1'" centered dark v-model="tab">
           <v-tabs-slider></v-tabs-slider>
 
           <v-tab href="#tab-1">{{$t('_setting.tab_1')}}</v-tab>
@@ -40,6 +35,7 @@
           <file-form
             @processFile="setAvatar"
             :picture_path="form.picture_path"
+            :user="user"
             :errors="errors&&errors.avatar?errors.avatar:[]"
             :loading="loading"
           />
@@ -50,7 +46,7 @@
 
     <v-layout>
       <v-flex xs12 md12 lg12 sm12 class="mt-5" :class="{'ltr-class':RTL,'rtl-class':!RTL}">
-        <v-btn color="info" @click="validate()"  rounded>{{$t('_setting.submit')}}</v-btn>
+        <v-btn color="info" @click="validate()" rounded>{{$t('_setting.submit')}}</v-btn>
       </v-flex>
     </v-layout>
   </ValidationObserver>
@@ -61,7 +57,7 @@ import { isEmpty } from "lodash";
 import { ValidationObserver } from "vee-validate";
 import { confirmed, alpha_dash } from "../validate";
 import { passwd, personalInformation, identity, fileForm } from "./pages";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 
 export default {
   components: {
@@ -92,8 +88,8 @@ export default {
       alarm: false
     };
   },
-  computed:{
-...mapGetters(["RTL"])
+  computed: {
+    ...mapGetters(["RTL"])
   },
   mounted() {
     this.initform(this.user);
@@ -137,10 +133,10 @@ export default {
 };
 </script>
 <style>
-.ltr-class{
-      direction: ltr;
+.ltr-class {
+  direction: ltr;
 }
-.rtl-class{
-      direction: rtl;
+.rtl-class {
+  direction: rtl;
 }
 </style>

@@ -3,17 +3,18 @@
 namespace App\Http\Controllers\api\user;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Filesystem\Filesystem;
 use App\Http\Controllers\Controller;
-use App\User;
 use App\Http\Requests\userRequest;
+use App\User;
 use \Auth;
 use Exception;
 use Hash;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Storage;
 
 class handleAccountController extends Controller
 {
-   
+
 
     /**
      * blocked the specified resource in storage.
@@ -69,14 +70,12 @@ class handleAccountController extends Controller
             if (!empty($request->phone) && $request->phone !== "null" && $request->phone !== "undefined")
                 $user->phone = $request->phone;
 
-            if (!empty($avatar) && $request->avatar !== "null" && $request->avatar !== "undefined") {
-                $user->picture_path = $this->store($avatar, Auth::id());
-            } else {
-                #when sex is updated if(personal pict not exist) change pict according to sex
-                $user->picture_path = $this->changeAvatarIfNotExist($request->sex, $user);
-                if ($request->sex == 1 || $request->sex == 0)
-                    $user->sex = $request->sex;
-            }
+            if (!empty($avatar) && $request->avatar !== "null" && $request->avatar !== "undefined")
+                $user->picture_path = $this->store($avatar);
+
+
+            if ($request->sex == 1 || $request->sex == 0)
+                $user->sex = $request->sex;
 
             if (!empty($request->password) && $request->password !== "null" && $request->password !== "undefined") {
                 if (Hash::check($request->last_password, $user->password)) {
@@ -100,21 +99,12 @@ class handleAccountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    private function store($image, $id)
+    private function store($image)
     {
-        return $image->store("public/User$id/avatar");
-    }
-
-
-    private function changeAvatarIfNotExist($newSex, $user)
-    {
-        $root_path_avatar = config("auth.avatars");
-        $root_path_avatars = ["$root_path_avatar/man.png", "$root_path_avatar/woman.png"];
-
-        if (in_array($user->picture_path, $root_path_avatars) || !$user->picture_path)
-            if ($newSex) return $root_path_avatars[0];
-            else return $root_path_avatars[1];
-
-        return $user->picture_path;
+        $id = Auth::id();
+        $dir_user_avatar = "public/User$id/avatar";
+        $files =   Storage::allFiles($dir_user_avatar);
+        Storage::delete($files);
+        return $image->store($dir_user_avatar);
     }
 }

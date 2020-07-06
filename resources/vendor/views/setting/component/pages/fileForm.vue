@@ -5,14 +5,8 @@
     class="mb-2"
     :color="errors_d.length?'red lighten-1':''"
   >
-    <v-avatar size="110" class="ma-1">
-      <v-img
-        @click="launchFilePicker()"
-        style="cursor:pointer"
-        :src="(url)?url:path"
-        aspect-ratio="1"
-        class="grey lighten-2"
-      >
+    <v-avatar size="110" class="ma-1 avatar" v-if="path||url" @click="launchFilePicker()">
+      <v-img :src="url?url:path" aspect-ratio="1" class="grey lighten-2">
         <template v-slot:default>
           <v-overlay
             :absolute="true"
@@ -38,10 +32,32 @@
           </v-row>
         </template>
       </v-img>
-      <ValidationProvider name="image" rules="mimes:image/jpg,image/png,image/jpeg|size:900">
-        <input type="file" ref="avatar" style="display:none" @change="processFile($event,errors)" />
-      </ValidationProvider>
     </v-avatar>
+
+    <v-avatar color="info" size="110" class="avatar" v-else-if="!url" @click="launchFilePicker()">
+      <template v-slot:default>
+        <h1 class="text-h1 white--text font-weight-bold">{{user.username.slice(0, 1).toUpperCase()}}</h1>
+        <v-overlay
+          :absolute="true"
+          :class="{'shadow_upload_avatar:hover':loading,shadow_upload_avatar:!loading}"
+          :value="true"
+        >
+          <v-avatar v-if="loading">
+            <v-progress-circular x-large indeterminate color="grey lighten-5"></v-progress-circular>
+          </v-avatar>
+          <v-tooltip v-else bottom>
+            <template v-slot:activator="{ on }">
+              <v-icon x-large v-on="on">fas fa-camera-retro</v-icon>
+            </template>
+            <span v-if="errors_d.length" class="red lighten-1">{{errors_d[0]}}</span>
+            <span v-else>{{$t('_setting.change_avatar')}}</span>
+          </v-tooltip>
+        </v-overlay>
+      </template>
+    </v-avatar>
+    <ValidationProvider name="image" rules="mimes:image/jpg,image/png,image/jpeg|size:1000">
+      <input type="file" ref="avatar" style="display:none" @change="processFile($event,errors)" />
+    </ValidationProvider>
   </v-card>
 </template>
 <script>
@@ -58,9 +74,13 @@ export default {
       type: Boolean,
       default: false
     },
+    user: {
+      type: Object,
+      default: () => {}
+    },
     picture_path: {
       type: String,
-      default: "public/root/avatars/man.png"
+      default: ""
     },
     errors: {
       type: Array,
@@ -75,10 +95,8 @@ export default {
   },
   computed: {
     path() {
-      let picture_path = this.picture_path
-        ? this.picture_path
-        : "public/root/avatars/man.png";
-      return "/storage/" + picture_path;
+      if (this.picture_path) return "/storage/" + this.picture_path;
+      return null;
     }
   },
 
@@ -112,5 +130,11 @@ export default {
 }
 .shadow_upload_avatar:hover {
   opacity: 1.2;
+}
+.text-h1 {
+  font-size: 60px;
+}
+.avatar {
+  cursor: pointer;
 }
 </style>

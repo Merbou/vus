@@ -33,10 +33,7 @@ export default {
         },
 
         SET_COMPLATE: (state, user) => {
-            let picture_path = "public/root/avatars/"
             const { roles, ..._user } = user
-            if (!_user.picture_path)
-                _user.picture_path = _user.sex ? picture_path + "man.png" : picture_path + "woman.png"
             state.user = _user
             state.roles = roles.map(e => e.name)
             state.permissions = permissionsExtraction(roles)

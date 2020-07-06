@@ -115,6 +115,5 @@ return [
     'password_timeout' => 10800,
 
     
-    'avatars' => 'public/root/avatars',
 
 ];

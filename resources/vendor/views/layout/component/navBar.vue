@@ -15,8 +15,12 @@
       <v-card>
         <v-list>
           <v-list-item>
-            <v-list-item-avatar height="50" width="50">
-              <img :src="'/storage/'+user.picture_path" :alt="user.username" />
+            <v-list-item-avatar color="info" size="60">
+              <h1
+                v-if="!user.picture_path"
+                class="text-h1 white--text font-weight-bold"
+              >{{user.username.slice(0, 1).toUpperCase()}}</h1>
+              <img v-else :src="'/storage/'+user.picture_path" :alt="user.username" />
             </v-list-item-avatar>
 
             <v-list-item-content>
