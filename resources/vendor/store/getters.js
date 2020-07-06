@@ -11,4 +11,5 @@ export default {
     RTL: state => state.layout.RTL,
     dark: state => state.layout.dark,
     locale: state => state.layout.locale,
+    palette: state => state.layout.palette,
 }

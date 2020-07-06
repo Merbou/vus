@@ -14,7 +14,7 @@
           :items-per-page="50"
           class="elevation-1"
           :page.sync="pagination.page"
-          :hide-default-footer="footer"
+          :hide-default-footer="true"
           :search="search"
           :show-select="select"
           dense
@@ -37,6 +37,8 @@
               v-model="pagination.page"
               :length="pagination.last_page"
               @input="onPageChange(pagination.page)"
+              v-if="pagination.page<pagination.last_page"
+              color="info"
             ></v-pagination>
           </v-container>
         </div>

@@ -3,7 +3,7 @@
     <v-row no-gutters justify="space-around" align="center">
       <v-col lg="5" md="5" sm="12" cols="12">
         <v-tabs
-          :background-color="!alarm?'deep-purple accent-4':'red lighten-1'"
+          :background-color="!alarm?'info':'red lighten-1'"
           centered
           dark
           v-model="tab"
@@ -50,7 +50,7 @@
 
     <v-layout>
       <v-flex xs12 md12 lg12 sm12 class="mt-5" :class="{'ltr-class':RTL,'rtl-class':!RTL}">
-        <v-btn outlined color="success" @click="validate()"  rounded>{{$t('_setting.submit')}}</v-btn>
+        <v-btn color="info" @click="validate()"  rounded>{{$t('_setting.submit')}}</v-btn>
       </v-flex>
     </v-layout>
   </ValidationObserver>

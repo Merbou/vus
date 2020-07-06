@@ -21,9 +21,8 @@
       <v-card-actions>
         <div class="flex-grow-1"></div>
         <v-btn
-          color="success"
-          text
-          class="white--text"
+          color="info"
+          dark
           @click="removeUser()"
           :disabled="clicked"
         >{{$t('$remove_user_room.submit')}}</v-btn>

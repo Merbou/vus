@@ -1,5 +1,5 @@
 <template>
-  <v-tabs background-color="deep-purple accent-4" centered dark v-model="tab">
+  <v-tabs background-color="info" centered dark v-model="tab">
     <v-tabs-slider></v-tabs-slider>
 
     <v-tab href="#tab-1">{{$t('_trash.tab_1')}}</v-tab>

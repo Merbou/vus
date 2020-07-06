@@ -7,8 +7,9 @@
           class="svg-button toggle-button mx-2"
           :class="{ 'rotate-icon': !showRoomsList && !isMobile }"
           @click="$emit('toggleRoomsList')"
+          
         >
-          <svg-icon name="toggle" />
+          <svg-icon name="toggle"/>
         </div>
         <div
           class="info-wrapper"

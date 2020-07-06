@@ -16,7 +16,7 @@
       <v-divider></v-divider>
       <v-card-actions>
         <v-btn :color="dark?'light':'secondary'" text @click="close()">{{$t('qst.cancel')}}</v-btn>
-        <v-btn class="white--text" color="blue darken-1" @click="assing()">{{$t('$assign_permission.submit')}}</v-btn>
+        <v-btn dark color="info" @click="assing()">{{$t('$assign_permission.submit')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

@@ -1,13 +1,14 @@
 'use strict';
 import ressources from "@/utils/layout"
 
-const ress=new ressources();
+const ress = new ressources();
 export default {
     state: {
         sidebar: ress.get()["sidebar"] ? ress.get()["sidebar"] : false,
         RTL: ress.get()["locale"] === 'ar' ? true : ress.get()["RTL"],
         dark: ress.get()["dark"] ? ress.get()["dark"] : false,
-        locale: ress.get()["locale"] ? ress.get()["locale"] : ress.set({ locale: "en" })["locale"],
+        locale: ress.get()["locale"] && ress.get()["locale"] !== "" ?
+            ress.get()["locale"] : ress.set({ locale: "en" })["locale"],
         palette: ress.get()["palette"] ? ress.get()["palette"] : null,
     },
     mutations: {

@@ -14,6 +14,7 @@
 
 <script>
 import single from "./components/single";
+import { isEqual } from "lodash";
 export default {
   name: "vuePalette",
   components: { single },
@@ -22,15 +23,24 @@ export default {
       type: Array,
       required: true
     },
-    dark:{
-      type:Boolean,
-      default:false
+    pick: {
+      type: Array,
+      default: () => []
+    },
+    dark: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       active: -1
     };
+  },
+  mounted() {
+    this.active = this.palettes.findIndex(palette =>
+      isEqual(palette, this.pick)
+    );
   },
   methods: {
     picked({ colors, order }) {

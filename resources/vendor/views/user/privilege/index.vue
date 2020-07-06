@@ -19,10 +19,10 @@
               <v-divider class="mx-4" inset vertical></v-divider>
               <div class="flex-grow-1"></div>
               <v-btn
-                color="primary"
+                color="info"
                 dark
                 @click="dialogs['create'] = true"
-                class="mb-2"
+                class="mb-2 "
               >{{$t('_user_privilege.create_role')}}</v-btn>
             </v-toolbar>
           </template>

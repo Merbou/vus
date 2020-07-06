@@ -57,9 +57,8 @@
       <v-card-actions>
         <div class="flex-grow-1"></div>
         <v-btn
-          color="green"
-          text
-          class="white--text"
+          color="info"
+          dark
           @click="inviteUser()"
           :disabled="clicked"
         >{{$t('$invite_user_room.submit')}}</v-btn>

@@ -1,15 +1,15 @@
 <template>
-  <v-app-bar color="white" mb-5 flat app fade-img-on-scroll dense>
-    <v-app-bar-nav-icon class="mx-1" color="grey darken-4" @click.stop="toggleSideBar"></v-app-bar-nav-icon>
+  <v-app-bar color="white" mb-5 flat app fade-img-on-scroll dense class="nav-bar">
+    <v-app-bar-nav-icon class="mx-1" dark @click.stop="toggleSideBar"></v-app-bar-nav-icon>
 
     <v-spacer></v-spacer>
 
-    <Lang-select is_white />
+    <Lang-select :is_white="false" />
     <notification />
 
     <v-menu :close-on-content-click="false" bottom offset-y>
       <template v-slot:activator="{ on }">
-        <v-btn color="grey darken-4" text dark v-on="on">{{$t('$navbar.account')}}</v-btn>
+        <v-btn text dark v-on="on">{{$t('$navbar.account')}}</v-btn>
       </template>
 
       <v-card>
@@ -59,7 +59,7 @@ import LangSelect from "@/materiels/LangSelect";
 
 export default {
   name: "navBar",
-  components: { notification,LangSelect },
+  components: { notification, LangSelect },
   computed: {
     ...mapGetters(["user"])
   },
@@ -71,7 +71,7 @@ export default {
     },
     toggleSideBar() {
       this.$store.dispatch("toggleSideBar");
-    },
+    }
   }
 };
 </script> 

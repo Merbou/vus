@@ -82,13 +82,8 @@
       </v-card-text>
       <v-card-actions>
         <div class="flex-grow-1"></div>
+        <v-btn color="info" dark @click="validate()" :disabled="clicked">{{$t('$new_room.create')}}</v-btn>
         <v-btn :color="dark?'light':'secondary'" text @click="close()">{{$t('qst.cancel')}}</v-btn>
-        <v-btn
-          color="blue darken-1"
-          text
-          @click="validate()"
-          :disabled="clicked"
-        >{{$t('$new_room.create')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -117,7 +112,7 @@ export default {
       type: Object,
       default: {}
     },
-    dark:{
+    dark: {
       type: Boolean,
       default: false
     }

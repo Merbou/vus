@@ -16,7 +16,7 @@
                 class="state"
                 v-if="item.email_verified_at"
                 v-on="on"
-                color="green"
+                color="success"
                 small
               >fas fa-user-check</v-icon>
               <v-icon class="state" v-else v-on="on" small color="red">fas fa-user-times</v-icon>
@@ -32,7 +32,7 @@
                 @click="blockItem(item)"
                 v-on="on"
                 v-if="item.is_active"
-                color="green"
+                color="success"
                 small
                 dark
               >{{$t('qst.yes')}}</v-chip>

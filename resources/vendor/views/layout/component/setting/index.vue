@@ -1,9 +1,9 @@
 <template>
   <div>
-    <sheet :open="open" @close="open=false" :rtl="RTL" :dark="dark" />
+    <sheet :open="open" @close="open=false" :rtl="RTL" :dark="dark" :palette="palette" />
     <v-fab-transition>
       <v-btn
-        color="green darken-3"
+        color="info"
         small
         dark
         absolute
@@ -33,7 +33,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["RTL", "dark"])
+    ...mapGetters(["RTL", "dark","palette"])
   }
 };
 </script>

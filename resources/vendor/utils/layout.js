@@ -18,13 +18,14 @@ export default class {
             _keys.forEach(_key => {
                 try {
                     let ress = JSON.parse(localStorage.getItem(_key))
-                    // if (typeof ress !== `${_type}`.toLowerCase()) throw `${_key} is type invalide`
+                    if (typeof ress !== `${_type.name}`.toLowerCase() && !ress instanceof _type)
+                        throw `${_key} is type invalide`
                     if (ress !== null && ress !== undefined) this.ressources[_key] = ress;
                     else throw "there is no value in cache"
                 } catch (error) {
                     console.log(error)
-                    localStorage.setItem(_key, JSON.stringify(new _type))
-                    this.ressources[_key] = new _type;
+                    localStorage.setItem(_key, JSON.stringify(new _type()))
+                    this.ressources[_key] = new _type();
                 }
             });
         }

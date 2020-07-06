@@ -20,10 +20,10 @@
 <script>
 import { mapGetters } from "vuex";
 export default {
-  props:{
-    is_white:{
-      type:Boolean,
-      default:true
+  props: {
+    is_white: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
@@ -32,9 +32,11 @@ export default {
   methods: {
     changeLocale(locale) {
       this.langSide(locale);
-      
+
       this.$i18n.locale = locale;
       this.$store.dispatch("changeLocale", locale);
+      if (this.$vuetify && this.$vuetify.lang)
+        this.$vuetify.lang.current = locale;
 
       this.snackbar({
         text: this.$i18n.t("alert.switchLocale"),
@@ -42,11 +44,12 @@ export default {
       });
     },
     langSide(locale) {
-      const RTL_LANG = ["ar"], LTR_LANG = ["en", "fr"];
+      const RTL_LANG = ["ar"],
+        LTR_LANG = ["en", "fr"];
       if (RTL_LANG.indexOf(locale) > -1)
         this.$store.dispatch("toggleRTL", true);
       else if (LTR_LANG.indexOf(locale) > -1)
-        this.$store.dispatch("toggleRTL",false);
+        this.$store.dispatch("toggleRTL", false);
     }
   }
 };

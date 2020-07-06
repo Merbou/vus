@@ -1,7 +1,7 @@
 <template>
   <v-overlay :value="loading">
     <v-dialog :value="loading" persistent width="300">
-      <v-card color="primary" dark>
+      <v-card color="success" dark>
         <v-card-text>
           Please wait
           <v-progress-linear indeterminate :color="'white'" class="mb-0"></v-progress-linear>

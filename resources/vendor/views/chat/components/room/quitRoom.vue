@@ -5,7 +5,7 @@
       <v-card-text>{{$t('asker.message',{opt:'quit',obj:'room'})}}</v-card-text>
       <v-card-actions>
         <div class="flex-grow-1"></div>
-        <v-btn color="success" text class="white--text" @click="quitRoom()">{{$t('qst.yes')}}</v-btn>
+        <v-btn color="info" dark @click="quitRoom()">{{$t('qst.yes')}}</v-btn>
         <v-btn :color="dark?'light':'secondary'" text class="white--text" @click="close()">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>

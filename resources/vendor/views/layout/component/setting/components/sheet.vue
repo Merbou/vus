@@ -6,15 +6,15 @@
           <v-row>
             <v-col md="4" mx-3>
               <v-item>
-                <v-switch :value="rtl" label="RTL" flat inset @change="toggleRtl"></v-switch>
+                <v-switch v-model="rtl_model" label="RTL" flat inset @change="toggleRtl"></v-switch>
               </v-item>
               <v-item>
-                <v-switch :value="dark" label="Dark mode" flat inset @change="toggleDark"></v-switch>
+                <v-switch v-model="dark_model" label="Dark mode" flat inset @change="toggleDark"></v-switch>
               </v-item>
             </v-col>
             <v-col md="4" mx-3>
               <v-item>
-                <vue-palette :dark="dark" :palettes="palettes" @input="changeTheme" />
+                <vue-palette :dark="dark" :palettes="palettes" @input="changeTheme" :pick="palette" />
               </v-item>
             </v-col>
           </v-row>
@@ -26,6 +26,8 @@
 
 <script>
 import vuePalette from "@/materiels/vuePalette";
+import colors from "./palettes";
+
 export default {
   components: {
     vuePalette
@@ -42,15 +44,17 @@ export default {
     dark: {
       type: Boolean,
       default: false
+    },
+    palette: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
-      palettes: [
-        ["#17252A", "#2B7A78", "#3AAFA9", "#DEF2F1", "#FEFFFF"],
-        ["#F8E9A1", "#F76C6C", "#A8D0E6", "#374785", "#24305E"],
-        ["#0B0C10", "#1F2833", "#C5C6C7", "#66FCF1", "#45A29E"]
-      ]
+      palettes: colors,
+      rtl_model: this.rtl,
+      dark_model: this.dark
     };
   },
   methods: {

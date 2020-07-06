@@ -2,13 +2,13 @@
   <v-menu offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on }">
       <v-badge color="green" :content="view" v-show="view>0" overlap left>
-        <v-icon small tile light class="mx-3" v-on="on" @click="viewNotification">fas fa-bell</v-icon>
+        <v-icon small tile dark class="mx-3" v-on="on" @click="viewNotification">fas fa-bell</v-icon>
       </v-badge>
       <v-icon
-        light
         v-show="view==0"
         class="mx-3"
         small
+        dark
         tile
         v-on="on"
         @click.once="fetchNotifications(0)"
@@ -60,6 +60,12 @@ import notifyItem from "./components/notifyItem.vue";
 export default {
   components: {
     notifyItem
+  },
+  props: {
+    dark: {
+      type: Boolean,
+      default: false
+    }
   },
   data: () => ({
     loading: false,

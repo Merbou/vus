@@ -32,7 +32,7 @@
       <v-card-actions>
         <div class="flex-grow-1"></div>
         <v-btn :color="dark?'light':'secondary'" text @click="close()">{{$t('qst.cancel')}}</v-btn>
-        <v-btn class="white--text" color="blue darken-1" @click="validate()">{{$t('$new_role.submit')}}</v-btn>
+        <v-btn dark color="info" @click="validate()">{{$t('$new_role.submit')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
