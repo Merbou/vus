@@ -130,7 +130,7 @@
                 class="svg-button message-options"
                 @click="openOptions"
               >
-                <svg-icon name="dropdown" param="message" />
+                <svg-icon name="options" param="message" />
               </div>
 
               <emoji-picker
@@ -738,17 +738,18 @@ export default {
 }
 
 .message-options {
-  background: var(--chat-icon-bg-dropdown-message);
   border-radius: 50%;
   position: absolute;
   top: 7px;
   right: 7px;
 
   svg {
-    height: 17px;
-    width: 17px;
-    padding: 5px;
+    height: 20px;
+    width: 20px;
+    padding: 3px;
+    fill: var(--chat-message-color-timestamp);
     margin: -5px;
+
   }
 }
 

@@ -7,9 +7,8 @@
           class="svg-button toggle-button mx-2"
           :class="{ 'rotate-icon': !showRoomsList && !isMobile }"
           @click="$emit('toggleRoomsList')"
-          
         >
-          <svg-icon name="toggle"/>
+          <svg-icon name="toggle" />
         </div>
         <div
           class="info-wrapper"
@@ -41,7 +40,7 @@
           <div
             v-if="menuOpened"
             v-click-outside="closeMenu"
-            :class="{'menu-options-left':rtl,'menu-options-right':!rtl}"
+            :class="{'menu-options-left':rtl,'menu-options-right':!rtl,'menu-plural':true}"
             class="menu-options"
           >
             <div class="menu-list">
@@ -678,6 +677,8 @@ export default {
   overflow-y: scroll;
   margin-right: 1px;
   margin-top: 60px;
+  padding-bottom: 37px;
+
   -webkit-overflow-scrolling: touch;
 }
 
@@ -692,7 +693,7 @@ export default {
   font-style: italic;
   text-align: center;
   margin-top: 30px;
-  margin-bottom: 20px;
+  margin-bottom: 45px !important;
 }
 
 .icon-scroll {
