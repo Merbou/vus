@@ -6,8 +6,9 @@ const MAP_KEYS = new Map([
         String, ['locale']
     ],
     [
-        Array, ['palette']
-    ]
+        Array, ['palette', 'appBar']
+    ],
+
 ])
 
 export default class {
@@ -24,8 +25,8 @@ export default class {
                     else throw "there is no value in cache"
                 } catch (error) {
                     console.log(error)
-                    localStorage.setItem(_key, JSON.stringify(new _type()))
-                    this.ressources[_key] = new _type();
+                    localStorage.setItem(_key, JSON.stringify(_type()))
+                    this.ressources[_key] = _type();
                 }
             });
         }

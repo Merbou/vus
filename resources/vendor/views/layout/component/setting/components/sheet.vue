@@ -1,8 +1,9 @@
 <template>
   <v-bottom-sheet :value="open" hide-overlay @click:outside="close" inset height="180">
-    <v-sheet class="text-center">
-      <v-item-group>
-        <v-container>
+    <v-card max-height="400">
+      <v-card-title>{{$t('$setting.title')}}</v-card-title>
+      <v-container>
+        <v-item-group>
           <v-row>
             <v-col md="4" mx-3>
               <v-item>
@@ -14,23 +15,40 @@
             </v-col>
             <v-col md="4" mx-3>
               <v-item>
-                <vue-palette :dark="dark" :palettes="palettes" @input="changeTheme" :pick="palette" />
+                <v-card>
+                  <v-card-title>{{$t("$palettes.title")}}</v-card-title>
+                  <v-container>
+                    <vue-palette
+                      :dark="dark"
+                      :palettes="palettes"
+                      @input="changeTheme"
+                      :pick="palette"
+                    />
+                  </v-container>
+                </v-card>
+              </v-item>
+            </v-col>
+            <v-col md="4" mx-3>
+              <v-item>
+                <app-bar-options :appBar="appBar" />
               </v-item>
             </v-col>
           </v-row>
-        </v-container>
-      </v-item-group>
-    </v-sheet>
+        </v-item-group>
+      </v-container>
+    </v-card>
   </v-bottom-sheet>
 </template>
 
 <script>
 import vuePalette from "@/materiels/vuePalette";
 import colors from "./palettes";
+import AppBarOptions from "./AppBarOptions";
 
 export default {
   components: {
-    vuePalette
+    vuePalette,
+    AppBarOptions
   },
   props: {
     open: {
@@ -46,6 +64,10 @@ export default {
       default: false
     },
     palette: {
+      type: Array,
+      default: () => []
+    },
+    appBar: {
       type: Array,
       default: () => []
     }
@@ -77,5 +99,9 @@ export default {
 <style>
 .v-color-picker__controls {
   display: none;
+}
+
+.v-card {
+  overflow-y: auto;
 }
 </style>

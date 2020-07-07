@@ -1,15 +1,16 @@
 'use strict';
 import ressources from "@/utils/layout"
-
+import { isEmpty } from "lodash"
 const ress = new ressources();
 export default {
     state: {
-        sidebar: ress.get()["sidebar"] ? ress.get()["sidebar"] : false,
+        sidebar: ress.get()["sidebar"],
         RTL: ress.get()["locale"] === 'ar' ? true : ress.get()["RTL"],
-        dark: ress.get()["dark"] ? ress.get()["dark"] : false,
+        dark: ress.get()["dark"],
         locale: ress.get()["locale"] && ress.get()["locale"] !== "" ?
             ress.get()["locale"] : ress.set({ locale: "en" })["locale"],
-        palette: ress.get()["palette"] ? ress.get()["palette"] : null,
+        palette: ress.get()["palette"].length ? ress.get()["palette"] : ["#25274D", "#464866", "#AAABB8", "#2E9CCA", "#29648A"],
+        appBar: ress.get()["appBar"],
     },
     mutations: {
         TOGGLE_SIDEBAR: (state) => {
@@ -32,6 +33,10 @@ export default {
             state.palette = palette
             ress.set({ palette: state.palette })
         },
+        CHANGE_APP_BAR: (state, appBar) => {
+            state.appBar = appBar
+            ress.set({ appBar: state.appBar })
+        },
     },
     actions: {
 
@@ -48,13 +53,18 @@ export default {
         },
 
         changeLocale({ commit }, locale) {
-            if (locale === null && locale === undefined) return;
+            if (!locale) return;
             commit('CHANGE_LOCAL', locale)
         },
 
         changeTheme({ commit }, palette) {
-            if (palette === null && palette === undefined && !palette instanceof Array) return;
+            if (!palette && !palette instanceof Array) return;
             commit('CHANGE_THEME', palette)
+        },
+
+        changeAppBar({ commit }, appBar) {
+            if (isEmpty(appBar) && !appBar instanceof Object) return;
+            commit('CHANGE_APP_BAR', appBar)
         },
 
     },

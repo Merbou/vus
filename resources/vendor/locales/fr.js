@@ -10,6 +10,7 @@ export default {
         setting: "réglage",
         contacts: "Contacts",
     },
+    
     alert: {
         switchLocale: "la langue a été changé avec succès"
     }

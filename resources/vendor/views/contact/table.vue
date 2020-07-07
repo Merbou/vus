@@ -68,7 +68,7 @@ export default {
           value: "email"
         },
         { text: this.$i18n.tc("label.subject"), value: "subject" },
-        { text: this.$i18n.tc("label.creation_date"), value: "created_at" },
+        { text: this.$i18n.tc("label.created_at"), value: "created_at" },
         { text: this.$i18n.t("_contact.read"), value: "view" },
         {
           text: this.$i18n.tc("label.actions"),

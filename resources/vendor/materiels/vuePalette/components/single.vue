@@ -11,7 +11,12 @@
       }"
   >
     <icon v-if="active_colors" />
-    <div v-for="(color,index) in colors" :key="color+index" :style="{'background':color}"></div>
+    <div
+      v-for="(color,index) in colors"
+      :key="color+index"
+      class="color"
+      :style="{'background':color}"
+    ></div>
   </div>
 </template>
 
@@ -112,5 +117,8 @@ export default {
 .palette div {
   height: 12px;
   width: 40px;
+}
+.color {
+  flex-grow: 2;
 }
 </style>

@@ -2,11 +2,11 @@
   <v-menu offset-y :close-on-content-click="false">
     <template v-slot:activator="{ on }">
       <v-badge color="green" :content="view" v-show="view>0" overlap left>
-        <v-icon small tile dark class="mx-3" v-on="on" @click="viewNotification">fas fa-bell</v-icon>
+        <v-icon small tile dark class="mx-3 my-2" v-on="on" @click="viewNotification">fas fa-bell</v-icon>
       </v-badge>
       <v-icon
         v-show="view==0"
-        class="mx-3"
+        class="mx-3 my-2"
         small
         dark
         tile

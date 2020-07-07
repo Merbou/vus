@@ -53,9 +53,11 @@ export default {
 
 <style>
 .container-palette {
-  width: 200px;
-  height: 200px;
-  overflow-x: none;
-  overflow-y: auto;
+    width: auto;
+    display: flex;
+    height: 200px;
+    overflow-x: none;
+    overflow-y: auto;
+    flex-direction: column;
 }
 </style>

@@ -25,7 +25,7 @@ export default {
         phone: "Phone",
         sex: "Sex | Man | Woman",
         code: "Code activation",
-        creation_date: "Creation date",
+        created_at: "Creation date",
         state: "State",
         role: "Role | Roles",
         permission: "Permission | Permissions",
@@ -35,6 +35,8 @@ export default {
         subject: "Subject",
         actions: "Actions",
         invite_someone: 'Invite someone',
+        delete: "Delete {obj}",
+        recycle: "Recycle {obj}",
         optionnal: "(optionnal)",
     },
     roles: {
@@ -168,8 +170,15 @@ export default {
         editMessage: "Edit Message",
         deleteMessage: "Delete Message"
     },
-
-
+    $setting: {
+        title: "Customize"
+    },
+    $appBarOptions: {
+        title: "Navbar"
+    },
+    $palettes: {
+        title: "Palette"
+    },
     alert: {
         switchLocale: "language has been successfully changed",
         complete: "The operation completed successfully !",

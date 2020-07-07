@@ -5,7 +5,7 @@
         <v-card-title>
           <v-spacer></v-spacer>
 
-          <v-text-field v-model="search" label="search" single-line hide-details></v-text-field>
+          <v-text-field v-model="search" :label="$t('label.search')" single-line hide-details></v-text-field>
         </v-card-title>
         <v-data-table
           v-model="selected"
@@ -19,12 +19,16 @@
           :show-select="select"
           dense
         >
+          <template v-for="header in headers"  v-slot:[`header.${header.value}`]="table">
+            {{ $tc(`label.${table.header.value}`) }}
+          </template>
           <template v-for="header in headers" v-slot:[itemCase(header.value)]="{ item }">
             <slot
               v-if="header.value!='created_at'"
               :item="item"
               :name="header.value"
             >{{item[header.value]}}</slot>
+
             <slot v-else :item="item" :name="header.value">{{pareDate(item[header.value])}}</slot>
           </template>
           <template v-slot:top>

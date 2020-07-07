@@ -8,7 +8,7 @@
       <v-card-actions>
         <div class="flex-grow-1"></div>
 
-        <v-btn dark color="dark" @click="accepte">{{$t('qst.yes')}}</v-btn>
+        <v-btn dark color="info" @click="accepte">{{$t('qst.yes')}}</v-btn>
 
         <v-btn :color="dark?'light':'secondary'" @click="cancel">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>

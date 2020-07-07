@@ -128,8 +128,9 @@
           <v-layout>
             <v-flex xs12 md12 lg12 sm12 class="text-right">
               <v-btn
-                class="ma-2 white--text"
-                color="blue"
+                class="ma-2"
+                color="success"
+                dark
                 @click="validate"
                 rounded
               >{{$t('_register.submit')}}</v-btn>

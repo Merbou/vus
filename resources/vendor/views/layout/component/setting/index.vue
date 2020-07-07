@@ -1,6 +1,13 @@
 <template>
   <div>
-    <sheet :open="open" @close="open=false" :rtl="RTL" :dark="dark" :palette="palette" />
+    <sheet
+      :open="open"
+      @close="open=false"
+      :rtl="RTL"
+      :dark="dark"
+      :palette="palette"
+      :appBar="appBar"
+    />
     <v-fab-transition>
       <v-btn
         color="info"
@@ -33,10 +40,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["RTL", "dark","palette"])
+    ...mapGetters(["RTL", "dark", "palette", "appBar"])
   }
 };
 </script>
 
-<style>
-</style>

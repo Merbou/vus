@@ -12,4 +12,5 @@ export default {
     dark: state => state.layout.dark,
     locale: state => state.layout.locale,
     palette: state => state.layout.palette,
+    appBar: state => state.layout.appBar,
 }

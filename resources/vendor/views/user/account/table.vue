@@ -176,9 +176,3 @@ export default {
   }
 };
 </script>
-
-<style>
-.state {
-  /* zoom: 0.7; */
-}
-</style>

@@ -73,12 +73,7 @@
           <router-link to="/register" style="text-decoration: none">
             <v-btn text small>{{$t('_login.register')}}</v-btn>
           </router-link>
-          <v-btn
-            class="ma-2 white--text"
-            color="blue"
-            @click="validate"
-            rounded
-          >{{$t('_login.submit')}}</v-btn>
+          <v-btn class="ma-2" color="success" dark @click="validate" rounded>{{$t('_login.submit')}}</v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>

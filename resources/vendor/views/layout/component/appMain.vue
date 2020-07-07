@@ -21,7 +21,7 @@ export default {
   left: 0;
   top: 0;
   z-index: 0;
-  min-height: calc(100vh - 50px);
+  min-height: calc(102vh - 50px);
 }
 .app-light {
   background: #eeeeee;

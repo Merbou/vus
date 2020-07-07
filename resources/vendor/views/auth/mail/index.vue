@@ -41,12 +41,7 @@
         </v-card-text>
         <v-card-actions class="d-flex justify-space-between">
           <v-btn text small @click="sendMail(true)">{{$t('_mail.resend')}}</v-btn>
-          <v-btn
-            class="ma-2 white--text"
-            color="blue"
-            @click="validate"
-            rounded
-          >{{$t('_mail.submit')}}</v-btn>
+          <v-btn class="ma-2" color="success" dark @click="validate" rounded>{{$t('_mail.submit')}}</v-btn>
         </v-card-actions>
       </v-card>
     </ValidationObserver>

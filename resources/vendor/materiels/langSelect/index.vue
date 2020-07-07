@@ -1,7 +1,7 @@
 <template>
   <v-menu offset-y trigger="click" :close-on-content-click="true">
     <template v-slot:activator="{ on }">
-      <v-icon :dark="!is_white" :light="is_white" tile class="mx-3" v-on="on">fas fa-language</v-icon>
+      <v-icon :dark="!is_white" :light="is_white" tile class="mx-3 my-1" v-on="on">fas fa-language</v-icon>
     </template>
     <v-list>
       <v-list-item :disabled="locale==='ar'" @click="changeLocale('ar')">

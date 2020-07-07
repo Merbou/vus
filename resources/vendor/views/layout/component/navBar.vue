@@ -1,5 +1,19 @@
 <template>
-  <v-app-bar color="white" mb-5 flat app fade-img-on-scroll dense class="nav-bar">
+  <v-app-bar
+    color="white"
+    mb-5
+    app
+    class="nav-bar"
+    :flat="OptionIsActive('flat')"
+    :dense="OptionIsActive('dense')"
+    :src="OptionIsActive('image')?getSrcImage():''"
+    :shrink-on-scroll="OptionIsActive('shrink-on-scroll')"
+    :collapse-on-Scroll="OptionIsActive('collapse-on-Scroll')"
+    :hide-on-scroll="OptionIsActive('hide-on-scroll')"
+    :inverted-scroll="OptionIsActive('inverted-scroll')"
+    :prominent="OptionIsActive('prominent')"
+    :elevate-on-scroll="OptionIsActive('elevate-on-scroll')"
+  >
     <v-app-bar-nav-icon class="mx-1" dark @click.stop="toggleSideBar"></v-app-bar-nav-icon>
 
     <v-spacer></v-spacer>
@@ -53,6 +67,10 @@
         </v-card-actions>
       </v-card>
     </v-menu>
+
+    <template v-slot:img="{ props }">
+      <v-img v-bind="props" gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"></v-img>
+    </template>
   </v-app-bar>
 </template>
 
@@ -65,7 +83,7 @@ export default {
   name: "navBar",
   components: { notification, LangSelect },
   computed: {
-    ...mapGetters(["user"])
+    ...mapGetters(["user", "appBar"])
   },
   methods: {
     logout() {
@@ -75,6 +93,12 @@ export default {
     },
     toggleSideBar() {
       this.$store.dispatch("toggleSideBar");
+    },
+    OptionIsActive(options) {
+      return this.appBar.indexOf(options) > -1;
+    },
+    getSrcImage() {
+      return "https://picsum.photos/1920/1080?random";
     }
   }
 };
