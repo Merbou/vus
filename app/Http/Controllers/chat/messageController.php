@@ -144,6 +144,21 @@ class messageController extends Controller
 
 
 
+    public function countViews()
+    {
+        try {
+            $views = DB::table('room_user')
+                ->where("user_id", Auth::id())
+                ->join('rooms', 'room_user.room_id', '=', 'rooms.id')
+                ->join('messages', 'rooms.id', '=', 'messages.room_id')
+                ->where('seen', 0)
+                ->count();
+            return response()->json(["views" => $views], 200);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
+    }
+
     // public function typing($id,$room_id)
     // {
     //     try {

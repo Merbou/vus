@@ -26,6 +26,7 @@ export default {
         sex: "Sex | Man | Woman",
         code: "Code activation",
         created_at: "Creation date",
+        view: "Views",
         state: "State",
         role: "Role | Roles",
         permission: "Permission | Permissions",

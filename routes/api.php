@@ -34,16 +34,18 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
     Route::put("/update-user", "api\user\handleAccountController@update");
     Route::post("/users-q-search", "api\user\indexController@quickSearch");
-    
+
     //chart account
     Route::get("/count-account", "api\user\chartAccountController@count");
     Route::get("/roles-percentage", "api\user\chartAccountController@rolesUserPercentage");
-    
+
     //Contact
     Route::get("/contacts", "api\contact\contactController@index");
     Route::delete("/destroy-contacts", "api\contact\contactController@destroy");
     Route::put("/contact/{id}", "api\contact\contactController@read");
-    
+    Route::get("/contacts-view-count", "api\contact\contactController@countViews");
+
+
     //chats
     //room
     Route::get("/rooms", "chat\\roomController@index");
@@ -56,11 +58,12 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     //message
     Route::get("/messages/{id}", "chat\\messageController@index");
     Route::get("/view-messages/{id}", "chat\\messageController@view");
+    Route::get("/messages-view-count", "chat\\messageController@countViews");
     Route::post("/message/{id}", "chat\\messageController@store");
     Route::put("/edit-message/{id}", "chat\\messageController@update");
     Route::delete("/destroy-message/{id}", "chat\\messageController@destroy");
     // Route::get("/typing-messages/{id}/{room_id}", "chat\\messageController@typing");
-    
+
     //Notifications
     Route::get("/notifications", "api\\notification\\notificationController@index");
     Route::put("/view-notifications", "api\\notification\\notificationController@view");

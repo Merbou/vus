@@ -67,4 +67,19 @@ class contactController extends Controller
             return response()->json($e, 400);
         }
     }
+
+
+
+
+
+    public function countViews()
+    {
+        try {
+            $views = contact::where([["to", Auth::id()], ["vu", 0], ["deleted", 0]])
+                ->count();
+            return response()->json(["views" => $views], 200);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
+    }
 }

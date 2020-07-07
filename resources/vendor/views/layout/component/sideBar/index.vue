@@ -9,7 +9,7 @@
     :right="RTL"
     class="side-bar"
   >
-    <vs-list :items="routes" v-if="routes.length" />
+    <vs-list :items="links" v-if="links.length" />
     <v-skeleton-loader v-else v-for="n in 5" :key="n" class="mx-2 my-3" type="avatar"></v-skeleton-loader>
   </v-navigation-drawer>
 </template>
@@ -23,7 +23,10 @@ export default {
     vsList
   },
   computed: {
-    ...mapGetters(["routes", "sidebar", "RTL"])
+    ...mapGetters(["routes", "sidebar", "RTL"]),
+    links() {
+      return this.routes.filter(_r => !_r.hidden);
+    }
   },
   methods: {
     toggleSideBar() {

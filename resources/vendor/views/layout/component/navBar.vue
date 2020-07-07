@@ -16,6 +16,8 @@
   >
     <v-app-bar-nav-icon class="mx-1" dark @click.stop="toggleSideBar"></v-app-bar-nav-icon>
 
+    <contacts />
+    <messages />
     <v-spacer></v-spacer>
 
     <Lang-select :is_white="false" />
@@ -76,12 +78,14 @@
 
 <script>
 import { mapGetters } from "vuex";
-import notification from "./notification";
+import notification from "./interaction/notification";
+import contacts from "./interaction/contacts";
+import messages from "./interaction/messages";
 import LangSelect from "@/materiels/LangSelect";
 
 export default {
   name: "navBar",
-  components: { notification, LangSelect },
+  components: { notification, LangSelect,contacts,messages },
   computed: {
     ...mapGetters(["user", "appBar"])
   },

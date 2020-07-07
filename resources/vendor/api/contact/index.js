@@ -9,6 +9,13 @@ export function fetchContactsApi(page) {
     })
 }
 
+export function fetchViewsContactsApi() {
+    return request({
+        url: `/contacts-view-count`,
+        method: "get",
+    })
+}
+
 export function deleteContactsApi(ids) {
     return request({
         url: `/destroy-contacts`,

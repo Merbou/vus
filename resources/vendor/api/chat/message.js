@@ -26,7 +26,12 @@ export function viewMessagesApi(id) {
     })
 }
 
-
+export function fetchViewsMessagesApi() {
+    return request({
+        url: `/messages-view-count`,
+        method: "get",
+    })
+}
 
 // export function typingMessagesApi(id, room_id) {
 //     return request({
