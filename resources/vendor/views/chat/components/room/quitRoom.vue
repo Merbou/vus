@@ -6,7 +6,12 @@
       <v-card-actions>
         <div class="flex-grow-1"></div>
         <v-btn color="info" dark @click="quitRoom()">{{$t('qst.yes')}}</v-btn>
-        <v-btn :color="dark?'light':'secondary'" text class="white--text" @click="close()">{{$t('qst.cancel')}}</v-btn>
+        <v-btn
+          :color="dark?'light':'secondary'"
+          text
+          class="white--text"
+          @click="close()"
+        >{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -36,6 +41,7 @@ export default {
       const room = { ...this.room };
       const room_id = room && room.room_id;
       if (room_id) {
+        this.vLoading(true);
         this.$emit("clearRoomIndex");
         this.$emit("shiftRoom", { room });
         quitRoomApi(room_id)
@@ -43,9 +49,14 @@ export default {
           .catch(err => {
             this.$emit("pushRoom", { room });
             console.log(err);
+            this.snackbar({
+              text: this.$i18n.t("alert.failed"),
+              color: "error"
+            });
           })
           .finally(() => {
             this.$emit("clearRoomIndex");
+            this.vLoading(false);
             this.close();
           });
       } else this.close();
@@ -58,4 +69,7 @@ export default {
 </script>
 
 <style>
+.v-dialog {
+    overflow-y: initial !important;
+}
 </style>

@@ -13,7 +13,7 @@
             autocomplete="on"
             v-on:submit.prevent="validate()"
           >
-            <ValidationProvider :name="$tc('label.role',1)" rules="max:20|required|alpha_dash">
+            <ValidationProvider :name="$tc('label.role',1)" rules="max:20|required|alpha_spaces">
               <v-text-field
                 slot-scope="{
                             errors,
@@ -38,7 +38,7 @@
   </v-dialog>
 </template>
 <script>
-import { max, required, alpha_dash } from "../validate";
+import { max, required, alpha_spaces } from "../validate";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 
 export default {

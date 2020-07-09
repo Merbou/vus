@@ -45,6 +45,7 @@ class roomPolicy
 
     public function sendMessages(User $user, $id)
     {
+
         return $user->can('chat.@send messages for all users') ||
             room::where("id", $id)->whereHas('users', function (Builder $query) use ($user) {
                 $query->where('users.id', $user->id);

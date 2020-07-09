@@ -34,6 +34,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
     Route::put("/update-user", "api\user\handleAccountController@update");
     Route::post("/users-q-search", "api\user\indexController@quickSearch");
+    Route::get("/users-g-q-search/{u_query}", "api\user\indexController@globalSearch");
 
     //chart account
     Route::get("/count-account", "api\user\chartAccountController@count");

@@ -3,7 +3,7 @@
     <v-card-text>
       <v-col wrap>
         <div xs12 md12 lg12 sm12>
-          <ValidationProvider :name="$tc('label.lastname')" rules="alpha_dash">
+          <ValidationProvider :name="$tc('label.lastname')" rules="alpha_spaces">
             <v-text-field
               @change="fireInfo"
               slot-scope="{
@@ -23,7 +23,7 @@
           </ValidationProvider>
         </div>
         <div xs12 md12 lg12 sm12>
-          <ValidationProvider :name="$tc('label.firstname')" rules="alpha_dash">
+          <ValidationProvider :name="$tc('label.firstname')" rules="alpha_spaces">
             <v-text-field
               @change="fireInfo"
               slot-scope="{
@@ -43,7 +43,7 @@
           </ValidationProvider>
         </div>
         <div xs12 md12 lg12 sm12>
-          <ValidationProvider :name="$tc('label.username')" rules="alpha_dash">
+          <ValidationProvider :name="$tc('label.username')" rules="alpha_spaces">
             <v-text-field
               @change="fireInfo"
               slot-scope="{
@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import { confirmed, alpha_dash } from "../../validate";
+import { confirmed, alpha_spaces } from "../../validate";
 
 import { ValidationProvider } from "vee-validate";
 

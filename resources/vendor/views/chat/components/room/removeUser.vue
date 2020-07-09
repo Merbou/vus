@@ -1,22 +1,25 @@
 <template>
-  <v-dialog :value="open" max-width="500px" @click:outside="close">
+  <v-dialog :value="open" max-width="500" @click:outside="close">
     <v-card>
       <v-card-title class="headline">{{$t('$remove_user_room.title')}}</v-card-title>
-      <v-card-text>
-        <v-select
-          v-model="kicked"
-          :items="roomWithOutCurrentUser"
-          attach
-          chips
-          item-text="username"
-          return-object
-          outlined
-          multiple
-          solo
-          small-chips
-          rounded
-        ></v-select>
-      </v-card-text>
+      <v-container>
+        <v-card-text>
+          <v-combobox
+            v-model="kicked"
+            :items="roomWithOutCurrentUser"
+            attach
+            chips
+            item-text="username"
+            return-object
+            outlined
+            multiple
+            solo
+            small-chips
+            rounded
+            :label="$tc('label.kick_someone')"
+          ></v-combobox>
+        </v-card-text>
+      </v-container>
 
       <v-card-actions>
         <div class="flex-grow-1"></div>
@@ -26,7 +29,12 @@
           @click="removeUser()"
           :disabled="clicked"
         >{{$t('$remove_user_room.submit')}}</v-btn>
-        <v-btn :color="dark?'light':'secondary'" text class="white--text" @click="close()">{{$t('qst.cancel')}}</v-btn>
+        <v-btn
+          :color="dark?'light':'secondary'"
+          text
+          class="white--text"
+          @click="close()"
+        >{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -90,7 +98,10 @@ export default {
           .then(res => {})
           .catch(err => {
             console.log(err);
-
+            this.snackbar({
+              text: this.$i18n.t("alert.failed"),
+              color: "error"
+            });
             if (noKicked.length < 2) this.$emit("pushRoom", { room });
             else this.$emit("pushRoomContent", { users: users });
           })
@@ -111,4 +122,10 @@ export default {
 </script>
 
 <style>
+.v-input__icon.v-input__icon--append {
+  display: none;
+}
+.v-dialog {
+  overflow-y: initial !important;
+}
 </style>

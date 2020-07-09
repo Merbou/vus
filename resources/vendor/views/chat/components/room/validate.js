@@ -1,7 +1,7 @@
 import { extend } from "vee-validate";
-import { max, alpha_dash, } from "vee-validate/dist/rules";
+import { max, alpha_spaces } from "vee-validate/dist/rules";
 
-extend("alpha_dash", alpha_dash);
+extend("alpha_spaces", alpha_spaces);
 extend("max", max);
 
-export default { max, alpha_dash }
+export default { max, alpha_spaces }

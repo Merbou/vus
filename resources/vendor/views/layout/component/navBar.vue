@@ -16,12 +16,19 @@
   >
     <v-app-bar-nav-icon class="mx-1" dark @click.stop="toggleSideBar"></v-app-bar-nav-icon>
 
+    <!------------------------------------- components ------------------------------------->
+    <!-- contacts icon -->
     <contacts />
+
+    <!-- messages icon -->
     <messages />
     <v-spacer></v-spacer>
 
+    <!-- Lang-select icon -->
     <Lang-select :is_white="false" />
-    <notification />
+
+    <!-- notifications icon -->
+    <notifications />
 
     <v-menu :close-on-content-click="false" bottom offset-y>
       <template v-slot:activator="{ on }">
@@ -52,7 +59,7 @@
         <v-divider></v-divider>
 
         <v-card-actions>
-          <router-link class="inlineBlock" to="/setting" style="text-decoration: none;">
+          <router-link class="inlineBlock" to="/setting">
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-icon text v-on="on">fas fa-cog</v-icon>
@@ -62,7 +69,7 @@
           </router-link>
           <v-spacer></v-spacer>
           <div class="flex-grow-1"></div>
-          <router-link class="inlineBlock" to="/dashboard" style="text-decoration: none;">
+          <router-link class="inlineBlock" to="/dashboard">
             <v-btn text>{{$t('$navbar.home')}}</v-btn>
           </router-link>
           <v-btn style="display:block;" text @click="logout">{{$t('$navbar.logout')}}</v-btn>
@@ -78,14 +85,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import notification from "./interaction/notification";
-import contacts from "./interaction/contacts";
-import messages from "./interaction/messages";
+import { notifications, contacts, messages } from "./interaction/";
 import LangSelect from "@/materiels/LangSelect";
 
 export default {
   name: "navBar",
-  components: { notification, LangSelect,contacts,messages },
+  components: { notifications, LangSelect, contacts, messages },
   computed: {
     ...mapGetters(["user", "appBar"])
   },
@@ -108,3 +113,8 @@ export default {
 };
 </script> 
  
+ <style scoped>
+.inlineBlock {
+  text-decoration: none;
+}
+</style>

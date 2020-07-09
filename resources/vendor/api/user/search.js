@@ -9,3 +9,10 @@ export function searchUserApi(data) {
         data
     })
 }
+
+export function globalSearchUserApi({user_query}, page) {
+    return request({
+        url: `/users-g-q-search/${user_query}?page=${page || 1}`,
+        method: "get",
+    })
+}

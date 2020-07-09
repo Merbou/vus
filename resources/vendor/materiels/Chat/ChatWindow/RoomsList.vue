@@ -45,7 +45,16 @@
               class="state-circle"
               :class="{ 'state-online': userStatus(room) === 'online' }"
             ></div>
-            <div class="room-name text-ellipsis" :title="nameFromUsers(room['users'])">{{ nameFromUsers(room["users"]) }}</div>
+            <div
+              v-if="room.room_name"
+              class="room-name text-ellipsis"
+              :title="room.room_name"
+            >{{ room.room_name}}</div>
+            <div
+              v-else
+              class="room-name text-ellipsis"
+              :title="nameFromUsers(room['users'])"
+            >{{ nameFromUsers(room["users"]) }}</div>
             <div v-if="room.last_message" class="text-date">{{ room.last_message.timestamp }}</div>
           </div>
           <div
@@ -159,11 +168,18 @@ export default {
 
       return `${user.username} - ${content}`;
     },
-		nameFromUsers(_users) {
-		if(!_users||!_users.length)return
-		const _usersWithOutCurrent=[..._users].filter(e=>e.id!==this.currentUserId)
-		return _usersWithOutCurrent&&_usersWithOutCurrent.reduce((acc, curr) => acc + "," + curr.username, "").substring(1);
-		},
+    nameFromUsers(_users) {
+      if (!_users || !_users.length) return;
+      const _usersWithOutCurrent = [..._users].filter(
+        e => e.id !== this.currentUserId
+      );
+      return (
+        _usersWithOutCurrent &&
+        _usersWithOutCurrent
+          .reduce((acc, curr) => acc + "," + curr.username, "")
+          .substring(1)
+      );
+    }
   }
 };
 </script>

@@ -1,12 +1,12 @@
 <template>
-  <v-dialog :value="open" max-width="500px" @click:outside="close">
-    <v-card>
+  <v-dialog :value="open" max-width="500" @click:outside="close" >
+    <v-card v-on:keyup.enter="validate()">
       <v-card-title>
         <span class="headline">{{$t('$new_room.title')}}</span>
       </v-card-title>
 
       <v-card-text>
-        <ValidationProvider :name="$t('label.search')" rules="max:30|alpha_dash">
+        <ValidationProvider :name="$t('label.search')" rules="max:30|alpha_spaces">
           <v-combobox
             :loading="loading"
             v-model="select"
@@ -63,7 +63,7 @@
           v-on:submit.prevent="validate()"
           :disabled="clicked"
         >
-          <ValidationProvider :name="$tc('label.name',1)" rules="max:30|alpha_dash">
+          <ValidationProvider :name="$tc('label.name',1)" rules="max:30|alpha_spaces">
             <v-text-field
               slot-scope="{
                             errors,
@@ -72,7 +72,7 @@
               v-model="room_name"
               :error-messages="errors"
               :success="valid"
-              :label="$tc('label.name',1)"
+              :label="`${$tc('label.name',1)} ${$tc('label.optionnal')}`"
               outlined
               solo
               rounded
@@ -89,7 +89,7 @@
   </v-dialog>
 </template>
 <script>
-import { max, alpha_dash } from "./validate";
+import { max, alpha_spaces } from "./validate";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import { searchUserApi } from "@/api/user/search.js";
 import { createRoomsApi } from "@/api/chat/room.js";
@@ -123,9 +123,7 @@ export default {
       select: null,
       loading: false,
       clicked: false,
-      room_name: "",
-      t_name: this.$i18n.t("label.name"),
-      t_opti: this.$i18n.t("label.optionnal")
+      room_name: ""
     };
   },
   methods: {
@@ -144,6 +142,7 @@ export default {
     },
     create() {
       if (!this.select || !this.select.length) return;
+      this.vLoading(true);
       this.clicked = true;
       this.select = this.select.filter(e => typeof e === "object");
       const room_name = this.room_name;
@@ -154,16 +153,24 @@ export default {
       });
 
       this.$emit("pushRoom", { room });
-
       createRoomsApi({ room_name, ids })
         .then(res => {
           this.$emit("pushRoomContent", { room_id: res.id });
+          this.snackbar({
+            text: this.$i18n.t("alert.complete"),
+            color: "success"
+          });
         })
         .catch(err => {
           console.log(err);
+          this.snackbar({
+            text: this.$i18n.t("alert.failed"),
+            color: "error"
+          });
           this.$emit("shiftRoom", { room });
         })
         .finally(() => {
+          this.vLoading(false);
           this.$emit("clearRoomIndex");
           this.close();
           setTimeout(() => {
@@ -172,10 +179,9 @@ export default {
         });
     },
     createVirtualroom({ room_name, select }) {
-      const room = room_name ? room_name : nameSeries({ users: select });
       return {
         room_id: "v" + this.roomsLength,
-        room_name: room,
+        room_name: room_name,
         users: select,
         owner: this.user.id
       };
@@ -206,5 +212,11 @@ function nameSeries(_obj) {
 }
 </script>
 
-<style>
+<style scoped>
+.v-input__icon.v-input__icon--append {
+  display: none;
+}
+.v-dialog {
+    overflow-y: initial !important;
+}
 </style>

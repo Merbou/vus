@@ -677,7 +677,7 @@ export default {
   overflow-y: scroll;
   margin-right: 1px;
   margin-top: 60px;
-  padding-bottom: 37px;
+  padding-bottom: 39px;
 
   -webkit-overflow-scrolling: touch;
 }

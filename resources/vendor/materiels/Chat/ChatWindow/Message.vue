@@ -105,6 +105,7 @@
 
           <div
             class="options-container"
+            v-show="showReactionEmojis||!message.reply_message||message.reply_message&&message.reply_message.sender_id=== currentUserId"
             :class="{ 'options-image': isImage && !message.reply_message }"
             :style="{
 							width:
@@ -126,6 +127,7 @@
               <div
                 ref="actionIcon"
                 key="2"
+                v-show="!message.reply_message||message.reply_message&&message.reply_message.sender_id=== currentUserId"
                 v-if="isMessageActions&&!canDropDown()"
                 class="svg-button message-options"
                 @click="openOptions"
@@ -749,7 +751,6 @@ export default {
     padding: 3px;
     fill: var(--chat-message-color-timestamp);
     margin: -5px;
-
   }
 }
 

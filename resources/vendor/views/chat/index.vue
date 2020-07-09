@@ -140,7 +140,7 @@ export default {
       textMessages: {
         ROOMS_EMPTY: this.$i18n.t("_chat.rooms_empty"),
         NEW_MESSAGES: this.$i18n.t("_chat.new_messages"),
-        MESSAGE_DELETED: this.$i18n.t("_chat.messages_deleted"),
+        MESSAGE_DELETED: this.$i18n.t("_chat.echo_messages_deleted"),
         MESSAGES_EMPTY: this.$i18n.t("_chat.messages_empty"),
         CONVERSATION_STARTED: this.$i18n.t("_chat.conversation_started"),
         TYPE_MESSAGE: this.$i18n.t("_chat.type_messages"),

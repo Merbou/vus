@@ -1,6 +1,6 @@
 export default {
     theme(palette) {
-        const THEMES_LABEL = ["nav-bar", "side-bar", "primary", "secondary", "info"]
+        const THEMES_LABEL = ["nav-bar", "side-bar", "primary", "light", "info"]
         const _theme = {
             success: "#4caf50",
             error: "#ff5252"

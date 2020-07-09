@@ -67,15 +67,23 @@ export default {
                 }
             })
             .catch(err => {
+
                 console.log(err);
                 //if there is error except "Room Not existe" remove message 
                 if (reply_message && reply_message.id) this.messages[index] = null;
                 else this.messages.splice(index, 1);
                 //if error throw "Room Not existe" delete room & messages
-                if (err.data === "Room Not existe") {
+                if (err.data === "Room Not existe"||err.status==403) {
+                    this.snackbar({
+                        text: this.$i18n.t("$room.not_exist"),
+                        color: "error"
+                    });
                     this.messages = [];
                     this.shiftRoom({ room_id });
-                }
+                } else this.snackbar({
+                    text: this.$i18n.t("alert.failed"),
+                    color: "error"
+                });
             });
     },
     editMessage({ room_id, message_id, new_content, file, reply_message }) {
@@ -90,32 +98,51 @@ export default {
             .then(res => {
             })
             .catch(err => {
+
                 this.messages[index].content = content;
                 this.messages[index].edited = 0;
                 this.messages.splice(first_index, 0, message);
 
-                if (err.data === "Room Not existe") {
+                if (err.data === "Room Not existe"||err.status==403) {
+                    this.snackbar({
+                        text: this.$i18n.t("$room.not_exist"),
+                        color: "error"
+                    });
                     this.messages = [];
                     this.shiftRoom({ room_id });
-                }
+                } else this.snackbar({
+                    text: this.$i18n.t("alert.failed"),
+                    color: "error"
+                });
 
             });
     },
     deleteMessage({ room_id, message_id }) {
 
         const index = this.messages.findIndex(e => e.id == message_id);
-        const message = this.messages.splice(index, 1).pop();
-        const vm = this
+        this.messages[index].deleted = true
+        this.messages[index].seen = true
+        if (this.room && this.room.last_message && this.room.last_message)
+            this.room.last_message.content = this.$i18n.t("_chat.echo_messages_deleted")
         deleteMessagesApi(message_id)
             .then()
             .catch(err => {
-
+                this.messages[index].deleted = false
                 this.messages.splice(index, 0, message);
+                if (this.room && this.room.last_message && this.room.last_message)
+                    this.room.last_message.content = this.messages[index].content
 
-                if (err.data === "Room Not existe") {
+                if (err.data === "Room Not existe"||err.status==403) {
+                    this.snackbar({
+                        text: this.$i18n.t("$room.not_exist"),
+                        color: "error"
+                    });
                     this.messages = [];
                     this.shiftRoom({ room_id });
-                }
+                } else this.snackbar({
+                    text: this.$i18n.t("alert.failed"),
+                    color: "error"
+                });
 
             });
     },
@@ -151,9 +178,12 @@ export default {
 
         let index = this.messages.findIndex(e => e.id == message.id);
         if (is_deleted) {
-            this.messages[index].content = this.$i18n.t("_chat.echo_messages_deleted")
             this.messages[index].timestamp = this.timestamp(message && message.updated_at);
             this.messages[index].deleted = true
+            this.messages[index].seen = true
+            if (this.room && this.room.last_message && this.room.last_message)
+                this.room.last_message.content = this.$i18n.t("_chat.echo_messages_deleted")
+
 
             return
         }

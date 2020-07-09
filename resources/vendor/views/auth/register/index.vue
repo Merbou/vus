@@ -71,7 +71,7 @@
             <v-flex xs12 md12 lg12 sm12>
               <ValidationProvider
                 :name="$tc('label.password')"
-                rules="required|min:8"
+                rules="required|min:8|alpha_spaces|alpha_num"
                 vid="confirm"
               >
                 <v-text-field
@@ -98,7 +98,7 @@
             <v-flex xs12 md12 lg12 sm12>
               <ValidationProvider
                 :name="$tc('label.password_confirmation')"
-                rules="required|confirmed:confirm|min:8"
+                rules="required|confirmed:confirm|min:8|alpha_spaces|alpha_num"
               >
                 <v-text-field
                   slot-scope="{
@@ -148,7 +148,7 @@ import {
   ValidationProvider,
   withValidation
 } from "vee-validate";
-import { required, email, min, confirmed } from "../validate";
+import { required, email, min, confirmed,alpha_spaces,alpha_num } from "../validate";
 import LangSelect from "@/materiels/LangSelect";
 
 export default {

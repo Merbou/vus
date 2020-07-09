@@ -55,7 +55,6 @@
 <script>
 import { isEmpty } from "lodash";
 import { ValidationObserver } from "vee-validate";
-import { confirmed, alpha_dash } from "../validate";
 import { passwd, personalInformation, identity, fileForm } from "./pages";
 import { mapGetters } from "vuex";
 

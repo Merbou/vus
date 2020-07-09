@@ -7,7 +7,13 @@
       :open="dialog"
       @close="closeDialog"
     />
-    <materiel-table :headers="headers" :modulePath="modulePath" ref="table">
+    <materiel-table
+      :headers="headers"
+      :modulePath="modulePath"
+      ref="table"
+      @globalSearch="globalSearchUser"
+      :searched="res_server_side"
+    >
       <template v-slot:state="{item}">
         <div class="d-flex flex-row justify-space-between">
           <v-tooltip bottom>
@@ -31,18 +37,18 @@
                 class="state"
                 @click="blockItem(item)"
                 v-on="on"
-                v-if="item.is_active"
-                color="success"
-                small
+                v-if="!item.is_active"
+                color="error"
+                x-small
                 dark
               >{{$t('qst.yes')}}</v-chip>
               <v-chip
                 class="state"
                 @click="blockItem(item)"
-                small
+                x-small
                 v-on="on"
                 v-else
-                color="red"
+                color="success"
                 dark
               >{{$t('qst.no')}}</v-chip>
             </template>
@@ -53,8 +59,8 @@
 
       <template v-slot:fullname="{item}">{{item.lastname}} {{item.firstname}}</template>
 
-      <template v-slot:roles="{item}">
-        <v-icon :key="item.id" @click="openDialog(item)">fas fa-edit</v-icon>
+      <template v-slot:role="{item}">
+        <v-icon :key="item.id" @click="openDialog(item)" small>fas fa-edit</v-icon>
       </template>
       <template v-slot:fullname="{item}">{{item.lastname}} {{item.firstname}}</template>
 
@@ -76,6 +82,7 @@
 <script>
 import materielTable from "@/materiels/Table";
 import { blockUserApi } from "@/api/user/account";
+import { globalSearchUserApi } from "@/api/user/search";
 import { assignRole } from "./components";
 import { fetchOnlyRolesApi, assignRoleApi } from "@/api/user/privilege/role.js";
 export default {
@@ -91,11 +98,11 @@ export default {
         { text: this.$i18n.tc("label.username"), value: "username" },
         { text: this.$i18n.tc("label.fullname"), value: "fullname" },
         { text: this.$i18n.tc("label.sex", 0), value: "sex" },
-        { text: this.$i18n.tc("label.creation_date"), value: "created_at" },
+        { text: this.$i18n.tc("label.created_at"), value: "created_at" },
         { text: this.$i18n.tc("label.state"), value: "state" },
         {
           text: this.$i18n.tc("label.role", 2),
-          value: "roles",
+          value: "role",
           sortable: false
         }
       ],
@@ -105,7 +112,8 @@ export default {
         id: null,
         roles: []
       },
-      dialog: false
+      dialog: false,
+      res_server_side: {}
     };
   },
 
@@ -161,6 +169,16 @@ export default {
             color: "error"
           });
           this.getData()[editedIndex].is_active = !is_active;
+        });
+    },
+
+    globalSearchUser({ query, page }) {
+      globalSearchUserApi({ user_query: query }, page)
+        .then(({ users }) => {
+          this.res_server_side = users;
+        })
+        .catch(err => {
+          console.log(err);
         });
     },
     openDialog(item) {

@@ -15,6 +15,8 @@
         dark
         absolute
         bottom
+        fixed
+        class="mb-7 float-btn"
         :left="RTL"
         :right="!RTL"
         fab
@@ -44,4 +46,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.float-btn {
+  zoom: 0.8;
+}
+</style>
 

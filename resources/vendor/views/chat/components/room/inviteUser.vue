@@ -62,7 +62,12 @@
           @click="inviteUser()"
           :disabled="clicked"
         >{{$t('$invite_user_room.submit')}}</v-btn>
-        <v-btn :color="dark?'light':'secondary'" text class="white--text" @click="close()">{{$t('qst.cancel')}}</v-btn>
+        <v-btn
+          :color="dark?'light':'secondary'"
+          text
+          class="white--text"
+          @click="close()"
+        >{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -118,6 +123,7 @@ export default {
     },
     inviteUser() {
       if (!this.select || !this.select.length) return;
+      this.vLoading(true);
       this.clicked = true;
       const users = this.room.users;
       this.select = this.select.filter(
@@ -137,11 +143,17 @@ export default {
           })
           .catch(err => {
             console.log(err);
+
+            this.snackbar({
+              text: this.$i18n.t("alert.failed"),
+              color: "error"
+            });
             this.$emit("pushRoomContent", {
               users: users
             });
           })
           .finally(() => {
+            this.vLoading(false);
             this.$emit("clearRoomIndex");
             this.close();
             setTimeout(() => {
@@ -164,4 +176,10 @@ export default {
 </script>
 
 <style>
+.v-input__icon.v-input__icon--append {
+  display: none;
+}
+.v-dialog {
+    overflow-y: initial !important;
+}
 </style>

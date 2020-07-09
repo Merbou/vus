@@ -61,5 +61,7 @@ export default {
 .v-list-group__header.v-list-item.v-list-item--active.v-list-item--link.theme--dark {
   color: #fff !important;
 }
-
+i.v-icon.notranslate.fas.fa-chevron-down.theme--dark {
+  font-size: 15px;
+}
 </style>

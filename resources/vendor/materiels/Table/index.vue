@@ -7,6 +7,8 @@
       :response="response"
       @renderData="fetchData"
       :loading="loading"
+      @globalSearch="globalSearchUser"
+      :searched="searched"
     >
       <template v-for="header in headers" v-slot:[header.value]="{ item }">
         <slot :name="header.value" :item="item"></slot>
@@ -41,6 +43,9 @@ export default {
       type: Boolean,
       default: false
     },
+    searched: {
+      type: Object
+    }
   },
   data() {
     return {
@@ -85,6 +90,9 @@ export default {
         this.apiFunctions = _m;
         this.fetchData();
       });
+    },
+    globalSearchUser(query) {
+      this.$emit("globalSearch", query);
     },
     getData() {
       return this.$refs._str.getData();

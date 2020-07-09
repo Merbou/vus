@@ -29,4 +29,10 @@ class message extends Model
     {
         return $this->belongsTo('App\ModelsChat\room');
     }
+    
+    public function scopeWithoutTimestamps()
+    {
+        $this->timestamps = false;
+        return $this;
+    }
 }

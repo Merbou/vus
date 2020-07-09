@@ -2,7 +2,10 @@
   <v-card raised :disabled="loading" :loading="loading">
     <v-card-text>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider :name="$tc('label.password')" :rules="_c_rule+'|min:8|alpha_dash'">
+        <ValidationProvider
+          :name="$tc('label.password')"
+          :rules="_c_rule+'|min:8|alpha_spaces|alpha_num'"
+        >
           <v-text-field
             slot-scope="{
                             errors,
@@ -30,7 +33,7 @@
           :name="$tc('label.new_password')"
           vid="password"
           ref="password"
-          :rules="_c_rule+'|min:8|alpha_dash'"
+          :rules="_c_rule+'|min:8|alpha_spaces|alpha_num'"
         >
           <v-text-field
             slot-scope="{
@@ -55,7 +58,10 @@
         </ValidationProvider>
       </v-flex>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider :name="$tc('label.password_confirmation')" :rules="_c_rule+'|confirmed:password|alpha_dash'">
+        <ValidationProvider
+          :name="$tc('label.password_confirmation')"
+          :rules="_c_rule+'|confirmed:password|alpha_spaces|alpha_num'"
+        >
           <v-text-field
             slot-scope="{
                             errors,
@@ -87,7 +93,7 @@
 <script>
 import { ValidationProvider } from "vee-validate";
 
-import { min, confirmed, alpha_dash } from "../../validate";
+import { min, confirmed, alpha_spaces, alpha_num } from "../../validate";
 
 export default {
   name: "passwd",
@@ -142,7 +148,7 @@ export default {
       if (error.length) this.$emit("alarm", true);
       else this.$emit("alarm", false);
       return error;
-    },
+    }
   },
   watch: {
     user(val) {

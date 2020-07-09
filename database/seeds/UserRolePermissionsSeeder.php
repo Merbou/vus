@@ -26,6 +26,7 @@ class UserRolePermissionsSeeder extends Seeder
         Permission::create(['guard_name' => 'api', 'name' => 'setting']);
         Permission::create(['guard_name' => 'api', 'name' => 'contacts.@delete contacts']);
         Permission::create(['guard_name' => 'api', 'name' => 'contacts.@read contacts']);
+        Permission::create(['guard_name' => 'api', 'name' => 'chat.@view all messages']);
 
         // create roles and assign existing permissions
         $role1 = Role::create(['guard_name' => 'api', 'name' => 'writer']);
@@ -70,12 +71,12 @@ class UserRolePermissionsSeeder extends Seeder
 
 
         // create demo users
-        $users = Factory(App\User::class, 10)->create();
+        $users = Factory(App\User::class, 500)->create();
         foreach ($users as $user) {
             $user->assignRole($role1);
         }
 
-        $user = Factory(App\User::class, 5)->create();
+        $user = Factory(App\User::class, 100)->create();
 
         foreach ($users as $user) {
             $user->assignRole($role2);

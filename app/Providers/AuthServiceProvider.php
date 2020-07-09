@@ -33,8 +33,8 @@ class AuthServiceProvider extends ServiceProvider
 
         Passport::routes();
 
-        // Gate::before(function ($user, $ability) {
-        //     return $user->hasRole('super-admin') ? true : null;
-        // });
+        Gate::before(function ($user) {
+            return $user->hasRole('super-admin') && $user->is_active ? true : false;
+        });
     }
 }

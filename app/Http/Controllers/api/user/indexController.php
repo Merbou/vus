@@ -29,7 +29,7 @@ class indexController extends Controller
                     $query->where('name', 'super-admin');
                 })
                 ->orderBy('created_at', 'asc')
-                ->paginate(100);
+                ->paginate(20);
 
             if (!$users) throw new  Exception("Error Processing Request");
 
@@ -63,9 +63,46 @@ class indexController extends Controller
             $users = User::query()
                 ->select($selected)
                 ->where("id", "!=", Auth::id())
-                ->whereNotIn("id", $request->ids??[])
+                ->whereNotIn("id", $request->ids ?? [])
                 ->whereLike(['username', 'email', 'firstname', 'lastname'], $request->selected)
                 ->get();
+
+            return response()->json(["users" => $users], 206);
+        } catch (QueryException $e) {
+            return response()->json($e, 400);
+        }
+    }
+
+    public function globalSearch(Request $request)
+    {
+        try {
+
+            if (!$request->u_query) response()->json(204);
+            $request->validate(['ids.*' => 'integer']);
+
+
+            Builder::macro('whereLike', function ($attbs, $patterns) {
+                $this->where(function ($query) use ($attbs, $patterns) {
+                    foreach (Arr::wrap($attbs) as $attb) {
+                        foreach (Arr::wrap($patterns) as $pattern) {
+                            $query->orWhere($attb, "like", "%{$pattern}%");
+                        }
+                    }
+                });
+                return $this;
+            });
+
+            $selected = ["id", "email", "username", "firstname", "lastname", "created_at", "sex", "email_verified_at", "is_active"];
+            $users = User::query()
+                ->select($selected)
+                ->where("id", "!=", Auth::id())
+                ->whereNotIn("id", $request->ids ?? [])
+                ->whereLike([
+                    'username', 'email', 'firstname',
+                    'lastname', 'sex', 'created_at',
+                    'email_verified_at', 'is_active'
+                ], $request->u_query)
+                ->paginate(20);
 
             return response()->json(["users" => $users], 206);
         } catch (QueryException $e) {

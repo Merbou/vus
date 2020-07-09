@@ -67,9 +67,9 @@ class roomController extends Controller
             $data = ["name" => null, "owner" => Auth::id()];
             $rules = ['ids.*' => 'required|integer'];
 
-            if ($request->roomName && $request->roomName !== "null" && $request->roomName !== "undefined") {
-                $rules["roomName"] = 'string';
-                $data["name"] = $request->roomName;
+            if ($request->room_name && $request->room_name !== "null" && $request->room_name !== "undefined") {
+                $rules["room_name"] = 'string';
+                $data["name"] = $request->room_name;
             }
 
 

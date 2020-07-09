@@ -21,7 +21,9 @@ class messageController extends Controller
     public function view($id)
     {
         try {
-            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])->update(['seen' => 1]);
+            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])
+                ->withoutTimestamps()
+                ->update(['seen' => 1]);
             broadcast(new MessageEvent(['room_id' => $id]))->toOthers();
             return response()->json(204);
         } catch (QueryException $e) {
@@ -39,13 +41,16 @@ class messageController extends Controller
                 DB::raw('DATE_FORMAT(created_at, "%H:%i") as timestamp'),
                 DB::raw('DATE_FORMAT(created_at, "%e %b %Y") as date'),
             ];
-            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])->update(['seen' => 1]);
+            $messagesViewd = message::where([['room_id', $id], ["sender_id", "!=", Auth::id()]])
+                ->withoutTimestamps()
+                ->update(['seen' => 1]);
 
             $messages = message::select($select)
                 ->with('replyMessage')
                 ->where([['room_id', $id], ['reply_id', '=', null]])
-                ->orderBy('created_at', 'desc')
+                ->orderBy('updated_at', 'desc')
                 ->paginate(20);
+
             return response()->json($messages, 200);
         } catch (QueryException $e) {
             return response()->json($e, 400);

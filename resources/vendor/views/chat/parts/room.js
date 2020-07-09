@@ -8,8 +8,9 @@ import filterItems from "@/utils/filterItems";
 export default {
     fetchRooms() {
         this.loadingRooms = true;
+        this.vLoading(true)
         //if there we are in last page of rooms
-        if (!this.paginate("room")) this.loadingRooms = false;
+        if (!this.paginate("room")) { this.loadingRooms = false; this.vLoading(false) }
 
         fetchRoomsApi(this.pagination.room.current_page)
             .then(({ data, current_page, last_page }) => {
@@ -20,13 +21,14 @@ export default {
                 this.pagination.room = { current_page, last_page };
             })
             .catch(err => console.log(err))
-            .finally(() => (this.loadingRooms = false));
+            .finally(() => { this.loadingRooms = false; this.vLoading(false) });
     },
     searchRoom({ pattern }) {
         //save rooms in cache then use rooms saved as a init data  
         this.rooms = JSON.parse(localStorage.getItem("rooms"));
         if (pattern) {
             this.loadingRooms = true;
+            this.vLoading(true)
             //filter rooms in browser-side (search from existen data)
             this.rooms = filterItems(this.rooms, this.nameSeries, pattern);
             //durring the time of request of search in server-side
@@ -38,7 +40,7 @@ export default {
                 .catch(err => {
                     console.log(err);
                 })
-                .finally(() => (this.loadingRooms = false));
+                .finally(() => { this.loadingRooms = false; this.vLoading(false) });
         }
     },
     fetchRoom({ room }) {
@@ -99,13 +101,14 @@ export default {
 
     },
     pushRoom({ room }) {
-        this.indexRoom = this.rooms.push(room) - 1;
+        this.indexRoom = this.rooms && this.rooms.push(room) - 1;
     },
-    shiftRoom({ room }) {
+    shiftRoom({ room, room_id }) {
+        const _room_id = (room) ? room.room_id : room_id
         if (!this.indexRoom) {
-            this.indexRoom = this.rooms.findIndex(e => e.room_id === room.room_id);
+            this.indexRoom = this.rooms && this.rooms.findIndex(e => e.room_id === _room_id);
         }
-        this.rooms.splice(this.indexRoom, 1);
+        this.rooms.length && this.rooms && this.rooms.splice(this.indexRoom, 1);
         if (!this.rooms.length) this.messages = [];
     },
     pushRoomContent(Content) {
@@ -117,7 +120,7 @@ export default {
         this.indexRoom = "";
     },
     putRoomIndex(id) {
-        return (this.indexRoom = this.rooms.findIndex(e => e.room_id === id));
+        return (this.indexRoom = this.rooms && this.rooms.findIndex(e => e.room_id === id));
     },
     addRoom() {
         this.openAddRoom = true;
@@ -128,7 +131,7 @@ export default {
             .substring(1);
     },
     marge(rooms) {
-        return rooms.filter(
+        return rooms && rooms.filter(
             (e, i) => rooms.map(e => e.room_id).indexOf(e.room_id) === i
         );
     },

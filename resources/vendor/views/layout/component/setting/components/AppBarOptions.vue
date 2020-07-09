@@ -6,7 +6,6 @@
         <v-chip
           small
           v-for="tag in tags"
-          outlined
           :input-value="isActive(tag)"
           dark
           color="info"

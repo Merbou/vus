@@ -36,6 +36,7 @@ export default {
         subject: "Subject",
         actions: "Actions",
         invite_someone: 'Invite someone',
+        kick_someone: 'Kick someone',
         delete: "Delete {obj}",
         recycle: "Recycle {obj}",
         optionnal: "(optionnal)",
@@ -165,6 +166,9 @@ export default {
         inviteUser: "Invite user",
         removeUser: "Remove user",
         quitRoom: "Quit room",
+    },
+    $room: {
+        not_exist: "Room is not exist"
     },
     $menu_chat_message: {
         replyMessage: "Reply",
