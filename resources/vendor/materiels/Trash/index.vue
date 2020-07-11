@@ -9,11 +9,12 @@
       :select="true"
     >
       <template v-slot:top="{selected}">
-        <v-tooltip top>
+        <v-tooltip top v-can="'@delete from trash'">
           <template v-slot:activator="{ on }">
             <v-icon
               color="error"
               class="mx-4 mt-4"
+              v-can="'@delete from trash'"
               :disabled="!(selected && selected.length>0)"
               @click="ShowItem(selected,'delete')"
               v-on="on"
@@ -22,11 +23,12 @@
           </template>
           <span>{{$tc('tooltip.delete')}}</span>
         </v-tooltip>
-        <v-tooltip top>
+        <v-tooltip top v-can="'@recycle from trash'">
           <template v-slot:activator="{ on }">
             <v-icon
               color="success"
               class="mx-4 mt-4"
+              v-can="'@recycle from trash'"
               :disabled="!(selected && selected.length>0)"
               @click="ShowItem(selected,'recycle')"
               v-on="on"
@@ -37,7 +39,7 @@
         </v-tooltip>
       </template>
 
-      <template v-slot:delete="{ item }">
+      <template v-slot:delete="{ item }" v-can="'@delete from trash'">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-icon
@@ -50,7 +52,7 @@
           <span>{{$t('tooltip.delete',{obj:$tc(`label.${moduleName}`,1)})}}</span>
         </v-tooltip>
       </template>
-      <template v-slot:recycle="{ item }">
+      <template v-slot:recycle="{ item }" v-can="'@recycle from trash'">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-icon

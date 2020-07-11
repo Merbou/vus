@@ -21,7 +21,7 @@
         </ValidationProvider>
       </v-flex>
       <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider :name="$tc('label.sex',0)" rules="alpha_spaces">
+        <ValidationProvider :name="$tc('label.sex',0)" rules="alpha_dash">
           <v-select
             slot-scope="{
                             errors
@@ -50,7 +50,7 @@
 <script>
 import VuePhoneNumberInput from "vue-phone-number-input";
 import "vue-phone-number-input/dist/vue-phone-number-input.css";
-import { alpha_spaces } from "../../validate";
+import { alpha_dash } from "../../validate";
 
 import { ValidationProvider } from "vee-validate";
 import { mapGetters } from "vuex";

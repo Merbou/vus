@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import LangSelect from "@/materiels/LangSelect";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import { integer } from "../validate";
 import { confirm, send } from "@/api/mail";
@@ -56,6 +57,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "confirmation",
   components: {
+    LangSelect,
     ValidationObserver,
     ValidationProvider
   },

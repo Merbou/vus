@@ -1,6 +1,7 @@
 <template>
   <div>
     <assign-role
+      v-can="'@assign role'"
       :item="item"
       :roles="roles"
       @storeRole="assignRole"
@@ -31,7 +32,7 @@
             <span v-else>{{$t('_user_table.not_verified')}}</span>
           </v-tooltip>
 
-          <v-tooltip bottom>
+          <v-tooltip bottom v-can="'@block user'">
             <template v-slot:activator="{ on }">
               <v-chip
                 class="state"
@@ -39,6 +40,7 @@
                 v-on="on"
                 v-if="!item.is_active"
                 color="error"
+                v-can="'@block user'"
                 x-small
                 dark
               >{{$t('qst.yes')}}</v-chip>
@@ -48,6 +50,7 @@
                 x-small
                 v-on="on"
                 v-else
+                v-can="'@block user'"
                 color="success"
                 dark
               >{{$t('qst.no')}}</v-chip>

@@ -5,10 +5,10 @@ namespace App\Http\Controllers\api\user;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
 use App\User;
 use Exception;
+use \Auth;
 use Illuminate\Database\QueryException;
 
 class indexController extends Controller
@@ -34,7 +34,12 @@ class indexController extends Controller
 
     public function index()
     {
+        Auth::user()->can('users.table@block user');
+        Auth::user()->can('users.table@search user');
+
         try {
+
+
             $selected = ["id", "email", "username", "firstname", "lastname", "created_at", "sex", "email_verified_at", "is_active"];
 
             $users = User::select($selected)->where("id", "!=", Auth::id())
@@ -57,6 +62,7 @@ class indexController extends Controller
 
     public function quickSearch(Request $request)
     {
+        Auth::user()->can('users.table@search user');
         try {
             if (!$request->u_query) response()->json(204);
             $request->validate(['ids.*' => 'integer']);
@@ -77,6 +83,8 @@ class indexController extends Controller
 
     public function globalSearch(Request $request)
     {
+        Auth::user()->can('users.table@search user');
+
         try {
 
             if (!$request->u_query) response()->json(204);

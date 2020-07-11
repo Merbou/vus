@@ -28,11 +28,10 @@ class AuthController extends Controller
 
             $user = $this->createWithHashing($request->all());
 
-
-            if (!$user->assignRole("writer")) throw new \Exception("Role did not grant user");
-
-            $user->picture_path = $this->SetInitAvatar();
             $roles = Role::where('name', 'writer')->with("permissions")->get();
+
+            if (!$user->assignRole($roles->first())) throw new \Exception("Role did not grant user");
+
 
             // Creating a token
             $access_token = $user->createToken('access_token')->accessToken;
@@ -41,7 +40,7 @@ class AuthController extends Controller
             return response()->json(["user" => $user, "roles"  => $roles, "token" => $access_token], 200);
         } catch (\Exception $th) {
             $user->delete();
-            return response()->json($th, 500);
+            return response()->json($th, 400);
         } catch (QueryException $th) {
             return response()->json($th, 400);
         }
@@ -108,12 +107,5 @@ class AuthController extends Controller
         $user = User::create($data);
 
         return $user;
-    }
-
-
-    private function SetInitAvatar()
-    {
-        $root_path_avatar = config("auth.avatars");
-        return "$root_path_avatar/man.png";
     }
 }

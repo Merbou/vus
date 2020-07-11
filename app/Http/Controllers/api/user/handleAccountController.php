@@ -3,14 +3,15 @@
 namespace App\Http\Controllers\api\user;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\userRequest;
+use App\Jobs\ResizeImage;
+use Exception;
 use App\User;
 use \Auth;
-use Exception;
 use Hash;
-use Illuminate\Support\Facades\Storage;
+
 
 class handleAccountController extends Controller
 {
@@ -25,7 +26,9 @@ class handleAccountController extends Controller
     public function blocked($id)
     {
 
+        Auth::user()->can('users.table@block user');
         try {
+
             if ($id == Auth::id()) throw new Exception();
             $user = User::findOrFail($id);
             $user->is_active = !$user->is_active;
@@ -52,6 +55,7 @@ class handleAccountController extends Controller
      */
     public function update(userRequest $request)
     {
+        Auth::user()->can('setting');
         try {
 
             $user = User::findOrFail(Auth::id());
@@ -71,7 +75,7 @@ class handleAccountController extends Controller
                 $user->phone = $request->phone;
 
             if (!empty($avatar) && $request->avatar !== "null" && $request->avatar !== "undefined")
-                $user->picture_path = $this->store($avatar);
+                $user->picture_path = $this->storeAvatar($avatar);
 
 
             if ($request->sex == 1 || $request->sex == 0)
@@ -99,12 +103,19 @@ class handleAccountController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    private function store($image)
+    private function storeAvatar($image)
     {
         $id = Auth::id();
         $dir_user_avatar = "public/User$id/avatar";
+
+
+        ///delete all avatars of auth:user
         $files =   Storage::allFiles($dir_user_avatar);
         Storage::delete($files);
-        return $image->store($dir_user_avatar);
+
+        $path = $image->store($dir_user_avatar);
+        //fire job(resizeImage) on queue
+        ResizeImage::dispatch($path)->onQueue('ResizeImage');
+        return $path;
     }
 }

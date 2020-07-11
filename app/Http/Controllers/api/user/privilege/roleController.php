@@ -7,11 +7,15 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
+use \Auth;
+
 
 class roleController extends Controller
 {
     public function only()
     {
+        Auth::user()->can('users.privilege');
+
         try {
             $roles = Role::where("name", "!=", "super-admin")->get();
             return response()->json($roles, 200);
@@ -23,6 +27,8 @@ class roleController extends Controller
 
     public function roles()
     {
+        Auth::user()->can('users.privilege');
+
         try {
             $roles = Role::where("name", "!=", "super-admin")
                 ->with("permissions:permissions.id")
@@ -59,14 +65,13 @@ class roleController extends Controller
 
     public function assignRole(Request $request, $id)
     {
-        try {
-            $request->validate(['roles.*' => 'required|string']);
-            $user = User::findOrFail($id);
-            $user->syncRoles($request->roles);
-            return response()->json(204);
-        } catch (\Exception $e) {
-            return response()->json($e, 400);
-        }
+        Auth::user()->can('users.table@assign role');
+
+        $request->validate(['roles.*' => 'required|string']);
+        $roles = Role::whereIn('name', $request->roles)->get();
+        $user = User::findOrFail($id);
+        $user->syncRoles($roles);
+        return response()->json(204);
     }
 
 
@@ -75,6 +80,8 @@ class roleController extends Controller
 
     public function deleteRole($id)
     {
+        Auth::user()->can('users.privilege');
+
         try {
             $role = Role::findOrFail($id)->delete();
             return response()->json(204);

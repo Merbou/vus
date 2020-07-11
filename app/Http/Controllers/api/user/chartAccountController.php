@@ -5,12 +5,13 @@ namespace App\Http\Controllers\api\user;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
-
+use Auth;
 class chartAccountController extends Controller
 {
     public function count()
     {
 
+        Auth::user()->can('users.chart');
         try {
 
             $users_created = DB::table('users')
@@ -29,6 +30,7 @@ class chartAccountController extends Controller
     public function rolesUserPercentage()
     {
 
+        Auth::user()->can('users.privilege');
         try {
 
             $total = DB::table('model_has_roles')->count();

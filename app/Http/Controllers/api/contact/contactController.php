@@ -12,7 +12,8 @@ use Illuminate\Support\Arr;
 class contactController extends Controller
 {
 
-    function __construct(){
+    function __construct()
+    {
         Builder::macro('whereLike', function ($attbs, $patterns) {
             $this->where(function ($query) use ($attbs, $patterns) {
                 foreach (Arr::wrap($attbs) as $attb) {
@@ -34,6 +35,8 @@ class contactController extends Controller
     public function index()
     {
         try {
+            Auth::user()->can('contacts.@delete contacts');
+            Auth::user()->can('contacts.@read contacts');
 
             $contacts = contact::where([["to", Auth::id()], ["deleted", 0]])->orderBy('created_at', 'asc')
                 ->paginate(20);
@@ -54,7 +57,7 @@ class contactController extends Controller
     public function destroy(Request $request)
     {
         try {
-
+            Auth::user()->can('contacts.@delete contacts');
             $contacts = contact::whereIn('id', $request->ids)->update(['deleted' => 1]);
 
             return response()->json(204);
@@ -76,7 +79,7 @@ class contactController extends Controller
     public function read($id)
     {
         try {
-
+            Auth::user()->can('contacts.@read contacts');
             if (contact::find($id)->update(["vu" => 1]))
                 return response()->json(204);
         } catch (ModelNotFoundException $e) {
@@ -89,7 +92,8 @@ class contactController extends Controller
     public function globalSearch(Request $request)
     {
         try {
-
+            Auth::user()->can('contacts.@delete contacts');
+            Auth::user()->can('contacts.@read contacts');
             if (!$request->c_query) response()->json(204);
 
 
@@ -114,7 +118,8 @@ class contactController extends Controller
     public function trashGglobalSearch(Request $request)
     {
         try {
-
+            Auth::user()->can('contacts.@delete contacts');
+            Auth::user()->can('contacts.@read contacts');
             if (!$request->c_query) response()->json(204);
 
 
@@ -142,6 +147,8 @@ class contactController extends Controller
     public function countViews()
     {
         try {
+            Auth::user()->can('contacts.@delete contacts');
+            Auth::user()->can('contacts.@read contacts');
             $views = contact::where([["to", Auth::id()], ["vu", 0], ["deleted", 0]])
                 ->count();
             return response()->json(["views" => $views], 200);

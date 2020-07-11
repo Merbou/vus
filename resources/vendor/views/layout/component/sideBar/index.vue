@@ -25,6 +25,10 @@ export default {
   computed: {
     ...mapGetters(["routes", "sidebar", "RTL"]),
     links() {
+      debugger
+      
+      console.log(this.routes)
+      console.log(this.routes.filter(_r => !_r.hidden))
       return this.routes.filter(_r => !_r.hidden);
     }
   },

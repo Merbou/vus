@@ -16,6 +16,7 @@ class mailConfirmation extends Mailable
      *
      * @return void
      */
+    private $code;
     public function __construct($code)
     {
         $this->code = $code;

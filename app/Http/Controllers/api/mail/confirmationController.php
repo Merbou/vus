@@ -8,9 +8,7 @@ use App\Mail\mailConfirmation;
 use Illuminate\Support\Facades\Mail;
 use App\User;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-
-
+use Illuminate\Database\QueryException;
 
 class confirmationController extends Controller
 {
@@ -33,15 +31,14 @@ class confirmationController extends Controller
             //create activation Code for a secifique user
             //if a reedy exit assignment a new code activation Code
             $code = $this->setActiviationCode($user);
+            $mailConfirmation = new mailConfirmation($code);
 
-
-
-            Mail::to($user)->send(new mailConfirmation($code));
+            Mail::to($user)->queue($mailConfirmation->onQueue('Emails'));
 
 
 
             return  response()->json(202);
-        } catch (ModelNotFoundException $e) {
+        } catch (QueryException $e) {
 
 
 
@@ -82,7 +79,7 @@ class confirmationController extends Controller
 
 
                 return  response()->json(["email_verified_at" => $user->email_verified_at], 200);
-            } else throw new Exception("code activation not acceptable !");
+            } else throw new Exception("code activation not acceptable !",1);
         } catch (Exception $e) {
 
 

@@ -7,13 +7,15 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use \Auth;
 class permissionController extends Controller
 {
 
     public function permissions()
     {
+        Auth::user()->can('users.privilege');
         try {
+
             $permissions = Permission::where("name", "!=", "users.privilege")->get();
 
             return response()->json($permissions, 200);
@@ -25,6 +27,8 @@ class permissionController extends Controller
 
     public function storePermissions(Request $request)
     {
+        Auth::user()->can('users.privilege');
+
         try {
 
             $request->validate([

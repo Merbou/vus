@@ -10,7 +10,7 @@
       @globalSearch="globalSearchContact"
       :searched="res_server_side"
     >
-      <template v-slot:top="{selected}">
+      <template v-slot:top="{selected}" v-can="'@delete contacts'">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-icon
@@ -26,7 +26,7 @@
         </v-tooltip>
       </template>
 
-      <template v-slot:actions="{ item }">
+      <template v-slot:actions="{ item }" v-can="'@delete contacts'" >
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-icon small class="mx-2 mx-2" @click="ShowDeleteItem([item])" v-on="on">fas fa-trash</v-icon>
@@ -35,7 +35,7 @@
         </v-tooltip>
       </template>
 
-      <template v-slot:view="{ item }">
+      <template v-slot:view="{ item }" v-can="'@read contacts'">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-icon

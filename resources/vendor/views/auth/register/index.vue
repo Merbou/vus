@@ -150,7 +150,7 @@ import {
 } from "vee-validate";
 import { required, email, min, confirmed,alpha_spaces,alpha_num } from "../validate";
 import LangSelect from "@/materiels/LangSelect";
-
+import { mapGetters } from "vuex";
 export default {
   name: "Login",
   components: {

@@ -17,10 +17,14 @@ class DatabaseSeeder extends Seeder
 
         // create permissions
         Permission::create(['guard_name' => 'api', 'name' => 'dashboard']);
-        Permission::create(['guard_name' => 'api', 'name' => 'users.table']);
+        Permission::create(['guard_name' => 'api', 'name' => 'users.table@block user']);
+        Permission::create(['guard_name' => 'api', 'name' => 'users.table@search user']);
+        Permission::create(['guard_name' => 'api', 'name' => 'users.table@assign role']);
         Permission::create(['guard_name' => 'api', 'name' => 'users.chart']);
         Permission::create(['guard_name' => 'api', 'name' => 'users.privilege']);
         Permission::create(['guard_name' => 'api', 'name' => 'chat']);
+        Permission::create(['guard_name' => 'api', 'name' => 'trash.@delete from trash']);
+        Permission::create(['guard_name' => 'api', 'name' => 'trash.@recycle from trash']);
         Permission::create(['guard_name' => 'api', 'name' => 'trash']);
         Permission::create(['guard_name' => 'api', 'name' => 'setting']);
         Permission::create(['guard_name' => 'api', 'name' => 'contacts.@delete contacts']);
@@ -30,9 +34,7 @@ class DatabaseSeeder extends Seeder
         // create roles and assign existing permissions
         $role1 = Role::create(['guard_name' => 'api', 'name' => 'writer']);
         $role1->givePermissionTo('dashboard');
-        $role1->givePermissionTo('users.chart');
         $role1->givePermissionTo('chat');
-        $role1->givePermissionTo('users.table');
         $role1->givePermissionTo('contacts.@read contacts');
         $role1->givePermissionTo('setting');
         $role1->givePermissionTo('trash');
@@ -40,13 +42,17 @@ class DatabaseSeeder extends Seeder
         $role2 = Role::create(['guard_name' => 'api', 'name' => 'admin']);
         $role2->givePermissionTo('dashboard');
         $role2->givePermissionTo('users.chart');
-        $role2->givePermissionTo('users.table');
+        $role2->givePermissionTo('users.table@block user');
+        $role2->givePermissionTo('users.table@search user');
+        $role2->givePermissionTo('users.table@assign role');
         $role2->givePermissionTo('chat');
         $role2->givePermissionTo('chat.@view all messages');
         $role2->givePermissionTo('contacts.@read contacts');
         $role2->givePermissionTo('contacts.@delete contacts');
+
         $role2->givePermissionTo('setting');
-        $role2->givePermissionTo('trash');
+        $role2->givePermissionTo('trash.@delete from trash');
+        $role2->givePermissionTo('trash.@recycle from trash');
 
         $role3 = Role::create(['guard_name' => 'api', 'name' => 'super-admin']);
         // gets all permissions via Gate::before rule; see AuthServiceProvider
