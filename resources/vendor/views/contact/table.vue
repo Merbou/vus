@@ -2,7 +2,14 @@
   <div>
     <dialog-contact :dialog="showContent" :item="item" @close="closeDialog" />
 
-    <materiel-table :headers="headers" :modulePath="modulePath" ref="table" :select="true">
+    <materiel-table
+      :headers="headers"
+      :modulePath="modulePath"
+      ref="table"
+      :select="true"
+      @globalSearch="globalSearchContact"
+      :searched="res_server_side"
+    >
       <template v-slot:top="{selected}">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -56,6 +63,7 @@
 import dialogContact from "./component/dialogContact";
 import materielTable from "@/materiels/Table";
 import { deleteContactsApi, readContactApi } from "@/api/contact";
+import { globalSearchContactApi } from "@/api/contact/search";
 import { mapGetters } from "vuex";
 export default {
   components: { materielTable, dialogContact },
@@ -77,6 +85,7 @@ export default {
         }
       ],
       modulePath: "contact/index.js",
+      res_server_side: {},
       item: {},
       showContent: false,
       selected: []
@@ -146,6 +155,15 @@ export default {
           this.getData().splice(index, 1);
         }
       });
+    },
+    globalSearchContact({ query, page }) {
+      globalSearchContactApi({ c_query: query }, page)
+        .then(({ contacts }) => {
+          this.res_server_side = contacts;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     getData() {
       return this.$refs.table.getData();

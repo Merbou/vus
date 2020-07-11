@@ -1,6 +1,13 @@
 <template>
   <div>
-    <materiel-table :headers="__headers" :modulePath="modulePath" ref="table" :select="true">
+    <materiel-table
+      :headers="__headers"
+      :modulePath="modulePath"
+      ref="table"
+      @globalSearch="globalSearchModel"
+      :searched="res_server_side"
+      :select="true"
+    >
       <template v-slot:top="{selected}">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
@@ -40,7 +47,7 @@
               v-on="on"
             >fas fa-trash</v-icon>
           </template>
-          <span>{{$t('tooltip.delete',{obj:$t(`label.${moduleName}`)})}}</span>
+          <span>{{$t('tooltip.delete',{obj:$tc(`label.${moduleName}`,1)})}}</span>
         </v-tooltip>
       </template>
       <template v-slot:recycle="{ item }">
@@ -53,7 +60,7 @@
               v-on="on"
             >fas fa-recycle</v-icon>
           </template>
-          <span>{{$t('tooltip.recycle',{obj:$t(`label.${moduleName}`)})}}</span>
+          <span>{{$t('tooltip.recycle',{obj:$tc(`label.${moduleName}`,1)})}}</span>
         </v-tooltip>
       </template>
     </materiel-table>
@@ -81,8 +88,10 @@ export default {
       item: {},
       option: "",
       apiFunctions: {},
+      apiSearchs: {},
       moduleName: "",
-      selected: []
+      selected: [],
+      res_server_side: {}
     };
   },
   mounted() {
@@ -108,12 +117,13 @@ export default {
   },
   methods: {
     async renderApiFunctions() {
-      this.moduleName = getModule(this.modulePath);
+      this.moduleName = getModule(this.modulePath).toLowerCase();
 
       //import dynamically api Functions
       //useing asyn function import
       //save api function
       this.apiFunctions = await import("@/api/" + this.modulePath);
+      this.apiSearchs = await import("@/api/" + this.moduleName + "/search");
     },
     ShowItem(selected, option) {
       this.selected = selected;
@@ -122,9 +132,9 @@ export default {
     },
     ShowItemDialog() {
       this.$store.dispatch("toggleDialog", {
-        message: this.i18n.t("asker.message", {
+        message: this.$i18n.t("asker.message", {
           obj: this.$i18n.tc(`label.${this.moduleName}`, 1),
-          opt: this.$i18n.tc(`tooltip.${option}`)
+          opt: this.$i18n.tc(`tooltip.${this.option}`)
         }),
         open: true,
         value: false
@@ -154,6 +164,22 @@ export default {
           this.getData().push(this.selected);
         });
     },
+    globalSearchModel({ query, page }) {
+      let m_query = {};
+      m_query[`${this.moduleName[0]}_query`] = query;
+      const globalSearchModelApi = this.apiSearchs[
+        `trashGlobalSearch${this.moduleName.replace(/^\w/, c =>
+          c.toUpperCase()
+        )}Api`
+      ];
+      globalSearchModelApi(m_query, page)
+        .then(data => {
+          this.res_server_side = data[`${this.moduleName}s`];
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     Removeitems() {
       this.selected.forEach(item => {
         var index = this.getData().indexOf(item);
@@ -179,7 +205,10 @@ export default {
   watch: {
     restraint(val) {
       const $callback = this.apiFunctions[
-        this.option + this.moduleName + "s" + "Api"
+        this.option +
+          this.moduleName.replace(/^\w/, c => c.toUpperCase()) +
+          "s" +
+          "Api"
       ];
       if (val) this.handleItems($callback);
     }
@@ -189,11 +218,6 @@ export default {
 function getModule(modulePath) {
   let modulePiece = modulePath.split(new RegExp("\\/|\\."));
   let modu = modulePiece[modulePiece.length - 2];
-  return upperFirstChar(modu);
-}
-function upperFirstChar(str) {
-  str = str.split("");
-  str[0] = str[0].toUpperCase();
-  return str.join("");
+  return modu.replace(/^\w/, c => c.toUpperCase());
 }
 </script>

@@ -10,7 +10,7 @@
 
         <v-btn dark color="info" @click="accepte">{{$t('qst.yes')}}</v-btn>
 
-        <v-btn :color="dark?'light':'secondary'" @click="cancel">{{$t('qst.cancel')}}</v-btn>
+        <v-btn :color="dark?'light':'secondary'" text @click="cancel">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

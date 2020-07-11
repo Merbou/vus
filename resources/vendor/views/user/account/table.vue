@@ -173,7 +173,7 @@ export default {
     },
 
     globalSearchUser({ query, page }) {
-      globalSearchUserApi({ user_query: query }, page)
+      globalSearchUserApi({ u_query: query }, page)
         .then(({ users }) => {
           this.res_server_side = users;
         })

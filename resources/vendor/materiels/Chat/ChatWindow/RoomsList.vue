@@ -75,6 +75,9 @@
           </div>
         </div>
       </div>
+      <div>
+        <button @click="loadMore" v-if="!isLastRoomList" :style="{ 'width':'100%' }">{{ textMessages.LOADMORE }}</button>
+      </div>
     </div>
   </div>
 </template>
@@ -100,13 +103,15 @@ export default {
     isMobile: { type: Boolean, required: true },
     rooms: { type: Array, required: true },
     loadingRooms: { type: Boolean, required: true },
+    isLastRoomList: { type: Boolean, required: true },
     room: { type: Object, required: true }
   },
 
   data() {
     return {
       filteredRooms: this.rooms || [],
-      selectedRoomId: ""
+      selectedRoomId: "",
+      query:""
     };
   },
 
@@ -121,14 +126,15 @@ export default {
 
   methods: {
     searchRoom(ev) {
+      this.query=ev.target.value
       if (this.filterRoom)
         this.filteredRooms = filteredUsers(
           this.rooms,
           "room_name",
-          ev.target.value
+          this.query
         );
       this.$emit("searchRoom", {
-        pattern: ev.target.value,
+        pattern: this.query,
         rooms: this.filteredRooms
       });
     },
@@ -179,6 +185,9 @@ export default {
           .reduce((acc, curr) => acc + "," + curr.username, "")
           .substring(1)
       );
+    },
+    loadMore(){
+      this.$emit('loadMore',{query:this.query})
     }
   }
 };

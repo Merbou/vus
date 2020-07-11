@@ -13,6 +13,8 @@
         :showRoomsList="showRoomsList"
         :textFormatting="textFormatting"
         :isMobile="isMobile"
+        :isLastRoomList="isLastRoomList"
+        @loadMore="loadMore"
         @fetchRoom="fetchRoom"
         @addRoom="addRoom"
         @searchRoom="searchRoom"
@@ -99,7 +101,8 @@ export default {
     showEmojis: { type: Boolean, default: true },
     showReactionEmojis: { type: Boolean, default: true },
     textFormatting: { type: Boolean, default: true },
-    newMessage: { type: Object, default: null }
+    newMessage: { type: Object, default: null },
+    isLastRoomList: { type: Boolean, required: true }
   },
   data() {
     return {
@@ -176,9 +179,12 @@ export default {
         const bVal = b.last_message || { date: 0 };
         return aVal.date > bVal.date ? -1 : bVal.date > aVal.date ? 1 : 0;
       });
-    },
+    }
   },
   methods: {
+    loadMore(query) {
+      this.$emit("loadMore", query);
+    },
     searchRoom(elm) {
       this.$emit("searchRoom", elm);
     },
@@ -190,7 +196,7 @@ export default {
       if (this.isMobile) this.room = {};
     },
     fetchRoom({ room }) {
-      this.$emit("fetchRoom", {room});
+      this.$emit("fetchRoom", { room });
       this.room = room;
       // this.fetchMessages({ reset: true });
       if (this.isMobile) this.showRoomsList = false;
@@ -217,7 +223,10 @@ export default {
       this.$emit("openFile", message);
     },
     menuActionHandler(ev) {
-      this.$emit("menuActionHandler", { action: ev, room_id: this.room.room_id });
+      this.$emit("menuActionHandler", {
+        action: ev,
+        room_id: this.room.room_id
+      });
     },
     messageActionHandler(ev) {
       this.$emit("messageActionHandler", {
@@ -244,7 +253,6 @@ export default {
     }
   }
 };
-
 </script>
 
 <style lang="scss">

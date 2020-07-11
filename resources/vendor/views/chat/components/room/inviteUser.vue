@@ -22,6 +22,23 @@
           rounded
           chips
         >
+          <template v-slot:append-item>
+            <v-container>
+              <template>
+                <v-list-item-content>
+                  <v-pagination
+                    v-if="pagination.last_page>1"
+                    :length="pagination.last_page"
+                    @input="loadMore"
+                    v-model="pagination.current_page"
+                    color="info"
+                    total-visible="5"
+                    circle
+                  ></v-pagination>
+                </v-list-item-content>
+              </template>
+            </v-container>
+          </template>
           <template v-slot:selection="data">
             <v-chip
               v-bind="data.attrs"
@@ -62,12 +79,7 @@
           @click="inviteUser()"
           :disabled="clicked"
         >{{$t('$invite_user_room.submit')}}</v-btn>
-        <v-btn
-          :color="dark?'light':'secondary'"
-          text
-          class="white--text"
-          @click="close()"
-        >{{$t('qst.cancel')}}</v-btn>
+        <v-btn :color="dark?'light':'secondary'" text @click="close()">{{$t('qst.cancel')}}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -76,6 +88,7 @@
 <script>
 import { inviteRoomApi } from "@/api/chat/room.js";
 import { searchUserApi } from "@/api/user/search.js";
+import { debounce } from "lodash";
 
 export default {
   name: "inviteUser",
@@ -101,26 +114,66 @@ export default {
   data() {
     return {
       people: [],
-      select: null,
+      select: [],
       loading: false,
-      clicked: false
+      clicked: false,
+      pagination: {
+        current_page: 1,
+        last_page: 1
+      },
+      u_query: ""
     };
   },
+  created() {
+    this.debouncedServiceSearchPeople = debounce(this.serviceSearchPeople, 500);
+  },
   methods: {
-    searchPeople(data) {
-      if (data) {
-        const ids = this.room && this.room.users.map(e => e.id).filter(e => e);
-        this.loading = true;
-        searchUserApi({ selected: data, ids })
-          .then(res => {
-            this.people = res.users;
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => (this.loading = false));
-      }
+    loadMore() {
+      let current_page = this.pagination.current_page;
+      if (current_page <= this.pagination.last_page)
+        this.debouncedServiceSearchPeople(
+          { u_query: this.u_query },
+          current_page
+        );
     },
+    searchPeople(u_query) {
+      this.u_query = u_query;
+      this.debouncedServiceSearchPeople({ u_query });
+    },
+    serviceSearchPeople({ u_query }, page) {
+      if (!u_query || u_query.length < 2) return;
+      this.loading = true;
+      let select = [
+        ...(this.select && this.select.filter(e => typeof e === "object"))
+      ];
+
+      searchUserApi({ u_query }, page)
+        .then(({ users }) => {
+          let { data, ...res } = users;
+
+          this.people = [...select, ...data];
+          this.select = select;
+          this.pagination = Object.assign(this.pagination, res);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => (this.loading = false));
+    },
+    //    searchPeople(data) {
+    //      if (data) {
+    //        const ids = this.room && this.room.users.map(e => e.id).filter(e => e);
+    //        this.loading = true;
+    //        searchUserApi({ selected: data, ids })
+    //          .then(res => {
+    //            this.people = res.users;
+    //          })
+    //          .catch(err => {
+    //            console.log(err);
+    //          })
+    //          .finally(() => (this.loading = false));
+    //      }
+    //    },
     inviteUser() {
       if (!this.select || !this.select.length) return;
       this.vLoading(true);
@@ -180,6 +233,6 @@ export default {
   display: none;
 }
 .v-dialog {
-    overflow-y: initial !important;
+  overflow-y: initial !important;
 }
 </style>

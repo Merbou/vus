@@ -115,6 +115,7 @@ export default {
     },
     _chat: {
         rooms_empty: "no rooms",
+        load_more: "More rooms",
         new_messages: "New messages",
         messages_deleted: "Messages deleted",
         messages_empty: "Messages empty",

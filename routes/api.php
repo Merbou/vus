@@ -33,18 +33,20 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::get("/users", "api\user\indexController@index");
     Route::put("/block-account/{id}", "api\user\handleAccountController@blocked");
     Route::put("/update-user", "api\user\handleAccountController@update");
-    Route::post("/users-q-search", "api\user\indexController@quickSearch");
+    Route::get("/users-q-search/{u_query}", "api\user\indexController@quickSearch");
     Route::get("/users-g-q-search/{u_query}", "api\user\indexController@globalSearch");
-
+    
     //chart account
     Route::get("/count-account", "api\user\chartAccountController@count");
     Route::get("/roles-percentage", "api\user\chartAccountController@rolesUserPercentage");
-
+    
     //Contact
     Route::get("/contacts", "api\contact\contactController@index");
     Route::delete("/destroy-contacts", "api\contact\contactController@destroy");
     Route::put("/contact/{id}", "api\contact\contactController@read");
     Route::get("/contacts-view-count", "api\contact\contactController@countViews");
+    Route::get("/contacts-g-q-search/{c_query}", "api\contact\contactController@globalSearch");
+    Route::get("/trash-contacts-g-q-search/{c_query}", "api\contact\contactController@trashGglobalSearch");
 
 
     //chats
@@ -55,7 +57,7 @@ Route::middleware(['auth:api', 'verified'])->group(function () {
     Route::post("/kick-room/{id}", "chat\\roomController@kick");
     Route::post("/invite-room/{id}", "chat\\roomController@invite");
     Route::post("/create-room", "chat\\roomController@store");
-    Route::post("/room-q-search", "chat\\roomController@quickSearch");
+    Route::get("/room-q-search/{r_query}", "chat\\roomController@quickSearch");
     //message
     Route::get("/messages/{id}", "chat\\messageController@index");
     Route::get("/view-messages/{id}", "chat\\messageController@view");

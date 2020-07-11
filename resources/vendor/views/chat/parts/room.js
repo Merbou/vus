@@ -8,40 +8,63 @@ import filterItems from "@/utils/filterItems";
 export default {
     fetchRooms() {
         this.loadingRooms = true;
-        this.vLoading(true)
         //if there we are in last page of rooms
         if (!this.paginate("room")) { this.loadingRooms = false; this.vLoading(false) }
 
         fetchRoomsApi(this.pagination.room.current_page)
             .then(({ data, current_page, last_page }) => {
-                this.rooms.push(...data);
+                this.rooms = this.marge([...data, ...this.rooms]);
                 //store rooms in cache
-                localStorage.setItem("rooms", JSON.stringify([...this.rooms]));
+                this.rooms_cache = [...this.rooms]
                 //update pagination
                 this.pagination.room = { current_page, last_page };
+                this.pagination_cache = { ...this.pagination.room }
+                this.isLastRoomList = current_page >= last_page
+
             })
             .catch(err => console.log(err))
-            .finally(() => { this.loadingRooms = false; this.vLoading(false) });
+            .finally(() => this.loadingRooms = false);
+    },
+    loadMore({ query }) {
+        if (!this.pagination && !this.pagination.room)
+            return;
+        let current_page = this.pagination.room.current_page
+
+        current_page++
+        if (current_page <= this.pagination.room.last_page)
+            if (query)
+                this.debouncedServiceSearchRoom({ pattern: query }, current_page)
+            else this.fetchRooms()
     },
     searchRoom({ pattern }) {
-        //save rooms in cache then use rooms saved as a init data  
-        this.rooms = JSON.parse(localStorage.getItem("rooms"));
-        if (pattern) {
-            this.loadingRooms = true;
-            this.vLoading(true)
-            //filter rooms in browser-side (search from existen data)
-            this.rooms = filterItems(this.rooms, this.nameSeries, pattern);
-            //durring the time of request of search in server-side
-            searchRoomsApi({ pattern })
-                .then(res => {
-                    //marge result in one list (delete deplicate)
-                    this.rooms = this.marge([...res.rooms, ...this.rooms]);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-                .finally(() => { this.loadingRooms = false; this.vLoading(false) });
-        }
+        //filter rooms in browser-side (search from existen data)
+        this.rooms = [...this.rooms_cache]
+        this.rooms = filterItems(this.rooms, this.nameSeries, pattern);
+        this.debouncedServiceSearchRoom({ pattern })
+    },
+    serviceSearchRoom({ pattern }, page) {
+        //save rooms in cache then use rooms saved as a init data 
+        this.pagination.room = { ...this.pagination_cache };
+        if (!pattern || pattern.length < 2)
+            return;
+
+        this.loadingRooms = true;
+        //durring the time of request of search in server-side
+        searchRoomsApi({ r_query: pattern }, page)
+            .then(({ rooms }) => {
+                //marge result in one list (delete deplicate)
+                let { data, ...res } = rooms
+                this.rooms = this.marge([...data, ...this.rooms]);
+                this.pagination.room = Object.assign(this.pagination.room, res)
+
+                this.isLastRoomList = this.pagination.room.current_page >= this.pagination.room.last_page
+
+            })
+            .catch(err => {
+                console.log(err);
+            })
+            .finally(() => this.loadingRooms = false);
+
     },
     fetchRoom({ room }) {
         this.room = room;
@@ -57,7 +80,6 @@ export default {
         this.fetchMessages({ room });
     },
     channelRoomUser({ users, user_ids, room_id, is_invited, is_deleted }) {
-        console.log(users)
         if (!users && !user_ids && !room_id) return;
         let index = this.rooms.findIndex(e => e.room_id === parseInt(room_id));
 
@@ -131,9 +153,7 @@ export default {
             .substring(1);
     },
     marge(rooms) {
-        return rooms && rooms.filter(
-            (e, i) => rooms.map(e => e.room_id).indexOf(e.room_id) === i
-        );
+        return rooms && rooms.filter((e, i) => rooms.map(e => e.room_id).indexOf(e.room_id) === i);
     },
 }
 

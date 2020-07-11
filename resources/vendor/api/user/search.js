@@ -2,17 +2,16 @@
 
 import request from "@/utils/request";
 
-export function searchUserApi(data) {
+export function searchUserApi({ u_query }, page) {
     return request({
-        url: `/users-q-search`,
-        method: "post",
-        data
+        url: `/users-q-search/${u_query}?page=${page || 1}`,
+        method: "get",
     })
 }
 
-export function globalSearchUserApi({user_query}, page) {
+export function globalSearchUserApi({ u_query }, page) {
     return request({
-        url: `/users-g-q-search/${user_query}?page=${page || 1}`,
+        url: `/users-g-q-search/${u_query}?page=${page || 1}`,
         method: "get",
     })
 }

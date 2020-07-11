@@ -10,9 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\idsRequest;
 use App\ModelsChat\room;
 use App\User;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\DB;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+
 
 class roomController extends Controller
 {
@@ -31,7 +29,7 @@ class roomController extends Controller
                         ->where('users.id', '=', Auth::id());
                 })
                 ->select('id', 'id as room_id', 'name as room_name', "owner")
-                ->paginate(100);
+                ->paginate(10);
 
             return response()->json($rooms, 200);
         } catch (QueryException $e) {
@@ -94,21 +92,30 @@ class roomController extends Controller
     public function quickSearch(Request $request)
     {
         try {
-            if (!$request->pattern) response()->json(204);
+            if (!$request->r_query) response()->json(204);
+            $r_query = $request->r_query;
 
-            $rooms = room::where("name", "like", "%{$request->pattern}%")
-                ->with([
-                    'users:users.id as _id,users.username',
-                    'last_message'
-                ])
+            $rooms = room::with([
+                'users:users.id as id,users.username',
+                'last_message'
+            ])
+                ->orWhere("name", "like", "%{$request->r_query}%")
                 ->whereHas('users', function ($query) {
                     return $query
-                        ->where('users.id', '=', Auth::id());
+                        ->where([
+                            ['users.id', '=', Auth::id()],
+                        ]);
                 })
-                ->select('id', 'id as roomId', 'name as roomName')
-                ->get();
+                ->whereHas('users', function ($query) use ($r_query) {
+                    return $query
+                        ->where([
+                            ["users.username", "like", "%$r_query%"]
+                        ]);
+                })
+                ->select('id', 'id as room_id', 'name as room_name')
+                ->paginate(10);
 
-            return response()->json(["rooms" => $rooms], 206);
+            return response()->json(["rooms" => $rooms], 200);
         } catch (QueryException $e) {
             return response()->json($e, 400);
         }

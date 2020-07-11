@@ -152,12 +152,16 @@ class messageController extends Controller
     public function countViews()
     {
         try {
-            $views = DB::table('room_user')
-                ->where("user_id", Auth::id())
-                ->join('rooms', 'room_user.room_id', '=', 'rooms.id')
-                ->join('messages', 'rooms.id', '=', 'messages.room_id')
-                ->where('seen', 0)
-                ->count();
+            $views = room::with(['users', 'messages'])
+                ->whereHas('users', function ($query) {
+                    return $query
+                        ->where('users.id', '=', Auth::id());
+                })
+                ->whereHas('messages', function ($query) {
+                    return $query
+                        ->where('messages.seen', '=', 0)
+                        ->where('messages.sender_id', '!=', Auth::id());
+                })->count();
             return response()->json(["views" => $views], 200);
         } catch (QueryException $e) {
             return response()->json($e, 400);

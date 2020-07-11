@@ -300,115 +300,123 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	],
 	"./chat/message": [
 		"./resources/vendor/api/chat/message.js",
-		14
+		17
 	],
 	"./chat/message.js": [
 		"./resources/vendor/api/chat/message.js",
-		14
+		17
 	],
 	"./chat/room": [
 		"./resources/vendor/api/chat/room.js",
-		15
+		18
 	],
 	"./chat/room.js": [
 		"./resources/vendor/api/chat/room.js",
-		15
+		18
 	],
 	"./contact": [
 		"./resources/vendor/api/contact/index.js",
-		1
+		2
 	],
 	"./contact/": [
 		"./resources/vendor/api/contact/index.js",
-		1
+		2
 	],
 	"./contact/index": [
 		"./resources/vendor/api/contact/index.js",
-		1
+		2
 	],
 	"./contact/index.js": [
 		"./resources/vendor/api/contact/index.js",
-		1
+		2
+	],
+	"./contact/search": [
+		"./resources/vendor/api/contact/search.js",
+		6
+	],
+	"./contact/search.js": [
+		"./resources/vendor/api/contact/search.js",
+		6
 	],
 	"./mail": [
 		"./resources/vendor/api/mail/index.js",
-		2
+		3
 	],
 	"./mail/": [
 		"./resources/vendor/api/mail/index.js",
-		2
+		3
 	],
 	"./mail/index": [
 		"./resources/vendor/api/mail/index.js",
-		2
+		3
 	],
 	"./mail/index.js": [
 		"./resources/vendor/api/mail/index.js",
-		2
+		3
 	],
 	"./notification": [
 		"./resources/vendor/api/notification/index.js",
-		3
+		4
 	],
 	"./notification/": [
 		"./resources/vendor/api/notification/index.js",
-		3
+		4
 	],
 	"./notification/index": [
 		"./resources/vendor/api/notification/index.js",
-		3
+		4
 	],
 	"./notification/index.js": [
 		"./resources/vendor/api/notification/index.js",
-		3
+		4
 	],
 	"./trash/contact": [
 		"./resources/vendor/api/trash/contact.js",
-		16
+		19
 	],
 	"./trash/contact.js": [
 		"./resources/vendor/api/trash/contact.js",
-		16
+		19
 	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		17
+		20
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		17
+		20
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		18
+		21
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		18
+		21
 	],
 	"./user/privilege/permission": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		19
+		22
 	],
 	"./user/privilege/permission.js": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		19
+		22
 	],
 	"./user/privilege/role": [
 		"./resources/vendor/api/user/privilege/role.js",
-		20
+		23
 	],
 	"./user/privilege/role.js": [
 		"./resources/vendor/api/user/privilege/role.js",
-		20
+		23
 	],
 	"./user/search": [
 		"./resources/vendor/api/user/search.js",
-		63
+		7
 	],
 	"./user/search.js": [
 		"./resources/vendor/api/user/search.js",
-		63
+		7
 	]
 };
 function webpackAsyncContext(req) {
@@ -429,4 +437,32 @@ webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
 webpackAsyncContext.id = "./resources/vendor/api lazy recursive ^\\.\\/.*$";
+module.exports = webpackAsyncContext;var map = {
+	"./contact/search": [
+		"./resources/vendor/api/contact/search.js",
+		6
+	],
+	"./user/search": [
+		"./resources/vendor/api/user/search.js",
+		7
+	]
+};
+function webpackAsyncContext(req) {
+	if(!__webpack_require__.o(map, req)) {
+		return Promise.resolve().then(function() {
+			var e = new Error("Cannot find module '" + req + "'");
+			e.code = 'MODULE_NOT_FOUND';
+			throw e;
+		});
+	}
+
+	var ids = map[req], id = ids[0];
+	return __webpack_require__.e(ids[1]).then(function() {
+		return __webpack_require__(id);
+	});
+}
+webpackAsyncContext.keys = function webpackAsyncContextKeys() {
+	return Object.keys(map);
+};
+webpackAsyncContext.id = "./resources/vendor/api lazy recursive ^\\.\\/.*\\/search$";
 module.exports = webpackAsyncContext;

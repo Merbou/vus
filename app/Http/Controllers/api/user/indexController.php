@@ -13,11 +13,25 @@ use Illuminate\Database\QueryException;
 
 class indexController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+
+
+
+    function __construct()
+    {
+        Builder::macro('whereLike', function ($attbs, $patterns) {
+            $this->where(function ($query) use ($attbs, $patterns) {
+                foreach (Arr::wrap($attbs) as $attb) {
+                    foreach (Arr::wrap($patterns) as $pattern) {
+                        $query->orWhere($attb, "like", "%{$pattern}%");
+                    }
+                }
+            });
+            return $this;
+        });
+    }
+
+
     public function index()
     {
         try {
@@ -44,28 +58,16 @@ class indexController extends Controller
     public function quickSearch(Request $request)
     {
         try {
-            if (!$request->selected) response()->json(204);
+            if (!$request->u_query) response()->json(204);
             $request->validate(['ids.*' => 'integer']);
-
-
-            Builder::macro('whereLike', function ($attbs, $patterns) {
-                $this->where(function ($query) use ($attbs, $patterns) {
-                    foreach (Arr::wrap($attbs) as $attb) {
-                        foreach (Arr::wrap($patterns) as $pattern) {
-                            $query->orWhere($attb, "like", "%{$pattern}%");
-                        }
-                    }
-                });
-                return $this;
-            });
 
             $selected = ["id as _id", "id", "username", "email", "picture_path"];
             $users = User::query()
                 ->select($selected)
-                ->where("id", "!=", Auth::id())
+                ->where([["id", "!=", Auth::id()], ["is_active", "=", 1]])
                 ->whereNotIn("id", $request->ids ?? [])
-                ->whereLike(['username', 'email', 'firstname', 'lastname'], $request->selected)
-                ->get();
+                ->whereLike(['username', 'email', 'firstname', 'lastname'], $request->u_query)
+                ->paginate(20);
 
             return response()->json(["users" => $users], 206);
         } catch (QueryException $e) {
@@ -80,17 +82,6 @@ class indexController extends Controller
             if (!$request->u_query) response()->json(204);
             $request->validate(['ids.*' => 'integer']);
 
-
-            Builder::macro('whereLike', function ($attbs, $patterns) {
-                $this->where(function ($query) use ($attbs, $patterns) {
-                    foreach (Arr::wrap($attbs) as $attb) {
-                        foreach (Arr::wrap($patterns) as $pattern) {
-                            $query->orWhere($attb, "like", "%{$pattern}%");
-                        }
-                    }
-                });
-                return $this;
-            });
 
             $selected = ["id", "email", "username", "firstname", "lastname", "created_at", "sex", "email_verified_at", "is_active"];
             $users = User::query()

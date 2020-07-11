@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="open" max-width="500" @click:outside="close" >
+  <v-dialog :value="open" max-width="500" @click:outside="close">
     <v-card v-on:keyup.enter="validate()">
       <v-card-title>
         <span class="headline">{{$t('$new_room.title')}}</span>
@@ -21,6 +21,7 @@
             no-filter
             outlined
             multiple
+            return-object
             solo
             small-chips
             rounded
@@ -35,6 +36,23 @@
                 @click:close="remove(data.item)"
               >{{ data.item.username|etc }}</v-chip>
             </template>
+            <template v-slot:append-item>
+              <v-container>
+                <template>
+                  <v-list-item-content>
+                    <v-pagination
+                      v-if="pagination.last_page>1"
+                      :length="pagination.last_page"
+                      @input="loadMore"
+                      v-model="pagination.current_page"
+                      color="info"
+                      total-visible="5"
+                      circle
+                    ></v-pagination>
+                  </v-list-item-content>
+                </template>
+              </v-container>
+            </template>
             <template v-slot:item="data">
               <template v-if="typeof data.item !== 'object'">
                 <v-list-item-content v-text="data.item"></v-list-item-content>
@@ -45,8 +63,9 @@
                 </v-list-item-avatar>
                 <v-list-item-avatar
                   v-else
-                  class="accent white--text"
+                  class="white--text"
                   left
+                  color="info"
                 >{{data.item.username.slice(0, 1).toUpperCase()}}</v-list-item-avatar>
                 <v-list-item-content>
                   <v-list-item-title>{{data.item.username}}</v-list-item-title>
@@ -89,6 +108,7 @@
   </v-dialog>
 </template>
 <script>
+import { debounce } from "lodash";
 import { max, alpha_spaces } from "./validate";
 import { ValidationObserver, ValidationProvider } from "vee-validate";
 import { searchUserApi } from "@/api/user/search.js";
@@ -120,25 +140,50 @@ export default {
   data() {
     return {
       people: [],
-      select: null,
+      select: [],
       loading: false,
       clicked: false,
-      room_name: ""
+      pagination: {
+        current_page: 1,
+        last_page: 1
+      },
+      room_name: "",
+      u_query: ""
     };
   },
+  created() {
+    this.debouncedServiceSearchPeople = debounce(this.serviceSearchPeople, 500);
+  },
   methods: {
-    searchPeople(data) {
-      if (data) {
-        this.loading = true;
-        searchUserApi({ selected: data })
-          .then(res => {
-            this.people = res.users;
-          })
-          .catch(err => {
-            console.log(err);
-          })
-          .finally(() => (this.loading = false));
-      }
+    loadMore() {
+      let current_page = this.pagination.current_page;
+      if (current_page <= this.pagination.last_page)
+        this.debouncedServiceSearchPeople(
+          { u_query: this.u_query },
+          current_page
+        );
+    },
+    searchPeople(u_query) {
+      this.u_query = u_query;
+      this.debouncedServiceSearchPeople({ u_query });
+    },
+    serviceSearchPeople({ u_query }, page) {
+      if (!u_query || u_query.length < 2) return;
+      this.loading = true;
+      let select = [...this.select.filter(e => typeof e === "object")];
+
+      searchUserApi({ u_query }, page)
+        .then(({ users }) => {
+          let { data, ...res } = users;
+
+          this.people = [...select, ...data];
+          this.select = select;
+          this.pagination = Object.assign(this.pagination, res);
+        })
+        .catch(err => {
+          console.log(err);
+        })
+        .finally(() => (this.loading = false));
     },
     create() {
       if (!this.select || !this.select.length) return;
@@ -217,6 +262,6 @@ function nameSeries(_obj) {
   display: none;
 }
 .v-dialog {
-    overflow-y: initial !important;
+  overflow-y: initial !important;
 }
 </style>

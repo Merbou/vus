@@ -64,6 +64,7 @@
       :textMessages="textMessages"
       :loadingRooms="loadingRooms"
       :messagesLoaded="messagesLoaded"
+      :isLastRoomList="load_more"
       @fetchMessages="fetchMessages"
       @fetchRoom="fetchRoom"
       @sendMessage="sendMessage"
@@ -72,7 +73,7 @@
       @addRoom="addRoom"
       @searchRoom="searchRoom"
       @focusMessageFrom="focusMessageFrom"
-      @typingMessage="typingMessage"
+      @loadMore="loadMore"
       @menuActionHandler="menuActionHandler"
     ></chat-window>
   </div>
@@ -83,7 +84,7 @@ import { mapGetters } from "vuex";
 import ChatWindow from "@/materiels/Chat/ChatWindow";
 import { addRoom, quitRoom, removeUser, inviteUser } from "./components/room";
 import methods from "./parts";
-
+import { debounce } from "lodash";
 export default {
   components: {
     ChatWindow,
@@ -108,12 +109,17 @@ export default {
       pagination: {
         room: {
           current_page: 1,
-          last_page: ""
+          last_page: 1
         },
         message: {
           current_page: 1,
-          last_page: ""
+          last_page: 1
         }
+      },
+      rooms_cache: [],
+      pagination_cache: {
+        current_page: 1,
+        last_page: 1
       },
       menuActions: [
         {
@@ -139,6 +145,7 @@ export default {
       ],
       textMessages: {
         ROOMS_EMPTY: this.$i18n.t("_chat.rooms_empty"),
+        LOADMORE: this.$i18n.t("_chat.load_more"),
         NEW_MESSAGES: this.$i18n.t("_chat.new_messages"),
         MESSAGE_DELETED: this.$i18n.t("_chat.echo_messages_deleted"),
         MESSAGES_EMPTY: this.$i18n.t("_chat.messages_empty"),
@@ -149,12 +156,19 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user", "channel", "dark", "RTL"])
+    ...mapGetters(["user", "channel", "dark", "RTL"]),
+    load_more() {
+      if (this.pagination && this.pagination.room)
+        return (
+          this.pagination.room.current_page >= this.pagination.room.last_page
+        );
+    }
   },
   created() {
     //load the laravel-echo
     this.MessageEcho();
     this.fetchRooms();
+    this.debouncedServiceSearchRoom = debounce(this.serviceSearchRoom, 500);
   },
   destroyed() {
     localStorage.removeItem("rooms");

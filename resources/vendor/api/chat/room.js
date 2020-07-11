@@ -31,7 +31,7 @@ export function quitRoomApi(id) {
     })
 }
 
-export function kickRoomApi(id,data) {
+export function kickRoomApi(id, data) {
     return request({
         url: `/kick-room/${id}`,
         method: "post",
@@ -40,7 +40,7 @@ export function kickRoomApi(id,data) {
 }
 
 
-export function inviteRoomApi(id,data) {
+export function inviteRoomApi(id, data) {
     return request({
         url: `/invite-room/${id}`,
         method: "post",
@@ -48,10 +48,9 @@ export function inviteRoomApi(id,data) {
     })
 }
 
-export function searchRoomsApi(data) {
+export function searchRoomsApi({ r_query }, page) {
     return request({
-        url: `/room-q-search`,
-        method: "post",
-        data
+        url: `/room-q-search/${r_query}?page=${page || 1}`,
+        method: "get",
     })
 }
