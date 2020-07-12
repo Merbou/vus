@@ -1,38 +1,10 @@
 <template>
-  <ValidationObserver ref="obs" class="container">
-    <v-row no-gutters justify="space-around" align="center">
-      <v-col lg="5" md="5" sm="12" cols="12">
-        <v-tabs :background-color="!alarm?'info':'red lighten-1'" centered dark v-model="tab">
-          <v-tabs-slider></v-tabs-slider>
-
-          <v-tab href="#tab-1">{{$t('_setting.tab_1')}}</v-tab>
-          <v-tab href="#tab-2">{{$t('_setting.tab_2')}}</v-tab>
-
-          <v-tabs-items v-model="tab">
-            <v-tab-item value="tab-1">
-              <personal-information
-                @alarm="handleAlarm"
-                @fireInfo="assignForm"
-                :user="user"
-                :loading="loading"
-              ></personal-information>
-            </v-tab-item>
-            <v-tab-item value="tab-2">
-              <passwd
-                @alarm="handleAlarm"
-                :errors="errors&&errors.password?errors.password:[]"
-                @fireInfo="assignForm"
-                :user="user"
-                :loading="loading"
-              ></passwd>
-            </v-tab-item>
-          </v-tabs-items>
-        </v-tabs>
-      </v-col>
-
-      <v-col lg="5" md="5" sm="12" cols="12">
-        <v-row align="center" justify="space-around">
+  <div class="setting-section">
+    <v-row justify="center" align="center" class="setting-top-section">
+      <v-col lg="12" md="12" sm="12" cols="12">
+        <v-row justify="center">
           <file-form
+            class="setting-avatar"
             @processFile="setAvatar"
             :picture_path="form.picture_path"
             :user="user"
@@ -40,16 +12,42 @@
             :loading="loading"
           />
         </v-row>
-        <identity @alarm="handleAlarm" @fireInfo="assignForm" :user="user" :loading="loading"></identity>
       </v-col>
     </v-row>
 
-    <v-layout>
-      <v-flex xs12 md12 lg12 sm12 class="mt-5" :class="{'ltr-class':RTL,'rtl-class':!RTL}">
-        <v-btn color="info" @click="validate()" rounded>{{$t('_setting.submit')}}</v-btn>
-      </v-flex>
-    </v-layout>
-  </ValidationObserver>
+    <v-card class="setting-bottom-section">
+      <v-card-text>
+        <ValidationObserver ref="obs" class="container">
+          <v-row justify="center" align="center">
+            <v-col lg="5" md="5" sm="12" cols="12">
+              <identity @alarm="handleAlarm" @fireInfo="assignForm" :user="user" :loading="loading"></identity>
+            </v-col>
+            <v-col lg="5" md="5" sm="12" cols="12">
+              <personal-information
+                @alarm="handleAlarm"
+                @fireInfo="assignForm"
+                :user="user"
+                :loading="loading"
+              ></personal-information>
+              <passwd
+                @alarm="handleAlarm"
+                :errors="errors&&errors.password?errors.password:[]"
+                @fireInfo="assignForm"
+                :user="user"
+                :loading="loading"
+              ></passwd>
+            </v-col>
+          </v-row>
+
+          <v-layout>
+            <v-flex xs12 md12 lg12 sm12 class="mt-2" :class="{'ltr-class':RTL,'rtl-class':!RTL}">
+              <v-btn color="info" @click="validate()" rounded>{{$t('_setting.submit')}}</v-btn>
+            </v-flex>
+          </v-layout>
+        </ValidationObserver>
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -131,7 +129,21 @@ export default {
   }
 };
 </script>
-<style>
+<style scoped>
+.setting-section {
+  margin-top: -20px;
+}
+.setting-top-section {
+  margin-bottom: -53px;
+}
+.setting-avatar {
+  z-index: 2;
+}
+.setting-bottom-section {
+  z-index: 1;
+  margin-left: 70px;
+  margin-right: 70px;
+}
 .ltr-class {
   direction: ltr;
 }

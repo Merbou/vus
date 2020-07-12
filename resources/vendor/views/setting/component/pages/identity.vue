@@ -1,70 +1,68 @@
 <template>
-  <v-card :loading="loading" :disabled="loading" shaped>
-    <v-card-text>
-      <v-col wrap>
-        <div xs12 md12 lg12 sm12>
-          <ValidationProvider :name="$tc('label.lastname')" rules="alpha_spaces">
-            <v-text-field
-              @change="fireInfo"
-              slot-scope="{
+  <div :loading="loading" :disabled="loading" shaped>
+    <v-col wrap>
+      <div xs12 md12 lg12 sm12>
+        <ValidationProvider :name="$tc('label.lastname')" rules="alpha_spaces">
+          <v-text-field
+            @change="fireInfo"
+            slot-scope="{
                             errors,
                             valid
                         }"
-              v-model="form.lastname"
-              :error-messages="errors"
-              @update:error="firePage(errors)"
-              :success="form.lastname?valid:null"
-              :label="$tc('label.lastname')"
-              outlined
-              solo
-              rounded
-              single-line
-            ></v-text-field>
-          </ValidationProvider>
-        </div>
-        <div xs12 md12 lg12 sm12>
-          <ValidationProvider :name="$tc('label.firstname')" rules="alpha_spaces">
-            <v-text-field
-              @change="fireInfo"
-              slot-scope="{
+            v-model="form.lastname"
+            :error-messages="errors"
+            @update:error="firePage(errors)"
+            :success="form.lastname?valid:null"
+            :label="$tc('label.lastname')"
+            outlined
+            solo
+            rounded
+            single-line
+          ></v-text-field>
+        </ValidationProvider>
+      </div>
+      <div xs12 md12 lg12 sm12>
+        <ValidationProvider :name="$tc('label.firstname')" rules="alpha_spaces">
+          <v-text-field
+            @change="fireInfo"
+            slot-scope="{
                             errors,
                             valid
                         }"
-              v-model="form.firstname"
-              :error-messages="errors"
-              @update:error="firePage(errors)"
-              :success="form.firstname?valid:null"
-              :label="$tc('label.firstname')"
-              outlined
-              solo
-              rounded
-              single-line
-            ></v-text-field>
-          </ValidationProvider>
-        </div>
-        <div xs12 md12 lg12 sm12>
-          <ValidationProvider :name="$tc('label.username')" rules="alpha_spaces">
-            <v-text-field
-              @change="fireInfo"
-              slot-scope="{
+            v-model="form.firstname"
+            :error-messages="errors"
+            @update:error="firePage(errors)"
+            :success="form.firstname?valid:null"
+            :label="$tc('label.firstname')"
+            outlined
+            solo
+            rounded
+            single-line
+          ></v-text-field>
+        </ValidationProvider>
+      </div>
+      <div xs12 md12 lg12 sm12>
+        <ValidationProvider :name="$tc('label.username')" rules="alpha_spaces">
+          <v-text-field
+            @change="fireInfo"
+            slot-scope="{
                             errors,
                             valid
                         }"
-              v-model="form.username"
-              :error-messages="errors"
-              @update:error="firePage(errors)"
-              :success="form.username?valid:null"
-              :label="$tc('label.username')"
-              outlined
-              solo
-              rounded
-              single-line
-            ></v-text-field>
-          </ValidationProvider>
-        </div>
-      </v-col>
-    </v-card-text>
-  </v-card>
+            v-model="form.username"
+            :error-messages="errors"
+            @update:error="firePage(errors)"
+            :success="form.username?valid:null"
+            :label="$tc('label.username')"
+            outlined
+            solo
+            rounded
+            single-line
+          ></v-text-field>
+        </ValidationProvider>
+      </div>
+    </v-col>
+  </div>
 </template>
 
 <script>

@@ -1,6 +1,5 @@
 <template>
-  <v-card :disabled="loading" raised :loading="loading">
-    <v-card-text>
+  <div :disabled="loading" raised :loading="loading">
       <v-flex xs12 md12 lg12 sm12>
         <ValidationProvider :name="$tc('label.phone',0)">
           <VuePhoneNumberInput
@@ -43,8 +42,7 @@
           ></v-select>
         </ValidationProvider>
       </v-flex>
-    </v-card-text>
-  </v-card>
+  </div>
 </template>
 
 <script>

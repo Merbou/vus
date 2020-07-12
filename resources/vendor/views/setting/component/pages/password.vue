@@ -1,93 +1,91 @@
 <template>
-  <v-card raised :disabled="loading" :loading="loading">
-    <v-card-text>
-      <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider
-          :name="$tc('label.password')"
-          :rules="_c_rule+'|min:8|alpha_spaces|alpha_num'"
-        >
-          <v-text-field
-            slot-scope="{
+  <div>
+    <v-flex xs12 md12 lg12 sm12>
+      <ValidationProvider
+        :name="$tc('label.password')"
+        :rules="_c_rule+'|min:8|alpha_spaces|alpha_num'"
+      >
+        <v-text-field
+          slot-scope="{
                             errors,
                             valid
                         }"
-            outlined
-            solo
-            rounded
-            single-line
-            v-model="form.last_password"
-            @change="fireInfo"
-            @update:error="firePage(errors)"
-            :error-messages="errors_d.length?errors_d:errors"
-            :success="form.last_password?valid:null"
-            :counter="30"
-            :label="$tc('label.password')"
-            @click:append="show = !show"
-            :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
-            :type="show ? 'text' : 'password'"
-          ></v-text-field>
-        </ValidationProvider>
-      </v-flex>
-      <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider
-          :name="$tc('label.new_password')"
-          vid="password"
-          ref="password"
-          :rules="_c_rule+'|min:8|alpha_spaces|alpha_num'"
-        >
-          <v-text-field
-            slot-scope="{
+          outlined
+          solo
+          rounded
+          single-line
+          v-model="form.last_password"
+          @change="fireInfo"
+          @update:error="firePage(errors)"
+          :error-messages="errors_d.length?errors_d:errors"
+          :success="form.last_password?valid:null"
+          :counter="30"
+          :label="$tc('label.password')"
+          @click:append="show = !show"
+          :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
+          :type="show ? 'text' : 'password'"
+        ></v-text-field>
+      </ValidationProvider>
+    </v-flex>
+    <v-flex xs12 md12 lg12 sm12>
+      <ValidationProvider
+        :name="$tc('label.new_password')"
+        vid="password"
+        ref="password"
+        :rules="_c_rule+'|min:8|alpha_spaces|alpha_num'"
+      >
+        <v-text-field
+          slot-scope="{
                             errors,
                             valid
                         }"
-            outlined
-            solo
-            rounded
-            single-line
-            v-model="form.password"
-            @change="fireInfo"
-            @update:error="firePage(errors)"
-            :error-messages="errors"
-            :success="form.password?valid:null"
-            :counter="30"
-            :label="$tc('label.new_password')"
-            @click:append="show = !show"
-            :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
-            :type="show ? 'text' : 'password'"
-          ></v-text-field>
-        </ValidationProvider>
-      </v-flex>
-      <v-flex xs12 md12 lg12 sm12>
-        <ValidationProvider
+          outlined
+          solo
+          rounded
+          single-line
+          v-model="form.password"
+          @change="fireInfo"
+          @update:error="firePage(errors)"
+          :error-messages="errors"
+          :success="form.password?valid:null"
+          :counter="30"
+          :label="$tc('label.new_password')"
+          @click:append="show = !show"
+          :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
+          :type="show ? 'text' : 'password'"
+        ></v-text-field>
+      </ValidationProvider>
+    </v-flex>
+    <v-flex xs12 md12 lg12 sm12>
+      <ValidationProvider
+        :name="$tc('label.password_confirmation')"
+        :rules="_c_rule+'|confirmed:password|alpha_spaces|alpha_num'"
+      >
+        <v-text-field
+          slot-scope="{
+                            errors,
+                            valid
+                        }"
+          outlined
+          solo
+          rounded
+          single-line
+          v-model="form.password_confirmation"
+          @change="fireInfo"
+          @update:error="firePage(errors)"
+          :error-messages="errors"
+          :success="form.password_confirmation?valid:null"
+          data-vv-as="password"
           :name="$tc('label.password_confirmation')"
-          :rules="_c_rule+'|confirmed:password|alpha_spaces|alpha_num'"
-        >
-          <v-text-field
-            slot-scope="{
-                            errors,
-                            valid
-                        }"
-            outlined
-            solo
-            rounded
-            single-line
-            v-model="form.password_confirmation"
-            @change="fireInfo"
-            @update:error="firePage(errors)"
-            :error-messages="errors"
-            :success="form.password_confirmation?valid:null"
-            data-vv-as="password"
-            :name="$tc('label.password_confirmation')"
-            :counter="30"
-            label="password confirm"
-            @click:append="show = !show"
-            :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
-            :type="show ? 'text' : 'password'"
-          ></v-text-field>
-        </ValidationProvider>
-      </v-flex>
-    </v-card-text>
-  </v-card>
+          :counter="30"
+          label="password confirm"
+          @click:append="show = !show"
+          :append-icon="show ? 'fas fa-eye' : 'fas fa-eye-slash'"
+          :type="show ? 'text' : 'password'"
+        ></v-text-field>
+      </ValidationProvider>
+    </v-flex>
+  </div>
 </template>
 
 <script>
