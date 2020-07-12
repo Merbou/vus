@@ -10,7 +10,7 @@
     class="side-bar"
   >
     <vs-list :items="links" v-if="links.length" />
-    <v-skeleton-loader v-else v-for="n in 5" :key="n" class="mx-2 my-3" type="avatar"></v-skeleton-loader>
+    <v-skeleton-loader v-else v-for="n in 5" :key="n" class="mx-1 my-3" type="avatar"></v-skeleton-loader>
   </v-navigation-drawer>
 </template>
 
@@ -25,10 +25,6 @@ export default {
   computed: {
     ...mapGetters(["routes", "sidebar", "RTL"]),
     links() {
-      debugger
-      
-      console.log(this.routes)
-      console.log(this.routes.filter(_r => !_r.hidden))
       return this.routes.filter(_r => !_r.hidden);
     }
   },

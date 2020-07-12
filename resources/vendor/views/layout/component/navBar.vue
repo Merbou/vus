@@ -18,7 +18,7 @@
 
     <!------------------------------------- components ------------------------------------->
     <!-- contacts icon -->
-    <contacts v-can="'@read contacts'"  />
+    <contacts v-can="'read contacts'"  />
 
     <!-- messages icon -->
     <messages />

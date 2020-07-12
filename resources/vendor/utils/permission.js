@@ -7,14 +7,18 @@ export function premissionsDrop(_routes, _permissions) {
     return _routes.map(_ro => {
 
         if (_ro.children) {
-            const child_perm = _permissions.
-                //groupe all first level name & pass result without first lvl name 
-                //exp:"users.table","users.chart"=>["table","chart"]
-                filter(e => e.split(".")[0] == _ro.name)
-                .map(e => e.split(".").slice(1).join("."))
+
+            //if route exist on _permissions
+            const root = _permissions.filter(e => {
+                return e.split(".")[0] == _ro.name
+            })
+            if (!root || !root.length) return;
+            //groupe all first level name & pass result without first lvl name 
+            //exp:"users.table","users.chart"=>["table","chart"]
+            const child_perm = root.map(e => e.split(".").slice(1).join("."))
 
             const children = premissionsDrop(_ro.children, child_perm)
-            if (children) {
+            if (children && children.length) {
                 _ro.children = children
                 return _ro
             }
@@ -98,11 +102,11 @@ function justPermissionsPage(_permissions) {
 // function translatePermissionsName(permissions, translations) {
 //     if (!translations) return permissions;
 //     const _permissions = [...permissions]
-    
+
 //     _permissions.map(e => {
 //         e.name = translations.hasOwnProperty(e.name) ? translations[e.name] : e.name;
 //         return e
 //     });
-    
+
 //     return _permissions
 // }
