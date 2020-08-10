@@ -81,12 +81,12 @@ export default {
     this.fetchNotificationsView();
   },
   created() {
-    this.channel &&
-      this.channel.listen("notificationEvent", e => {
-        this.notifications.push(e.notification);
-        this.view++;
-        notify.browser();
-      });
+    // this.channel &&
+    //   this.channel.listen("notificationEvent", e => {
+    //     this.notifications.push(e.notification);
+    //     this.view++;
+    //     notify.browser();
+    //   });
   },
   methods: {
     fetchNotifications(page) {

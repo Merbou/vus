@@ -46,6 +46,13 @@ export function permissionsExtraction(roles) {
 }
 
 
+export function PermissionsRoutes({ permissions, roles, routes, superAdmin }) {
+    if (roles.indexOf(superAdmin) > -1) return routes
+
+    return premissionsDrop(routes, permissions)
+
+}
+
 export function permissionsRoute(to, permissions) {
     permissions = justPermissionsPage(permissions)
 
@@ -98,6 +105,9 @@ function justPermissionsPage(_permissions) {
     })
     return [...new Set(_permissions)]
 }
+
+
+
 
 // function translatePermissionsName(permissions, translations) {
 //     if (!translations) return permissions;

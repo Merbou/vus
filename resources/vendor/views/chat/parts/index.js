@@ -4,13 +4,13 @@ export default {
     ...room,
     ...messages,
     MessageEcho() {
-        this.channel && this.channel
-            .listen("MessageEvent", e => {
-                this.channelChat(e)
-            })
-            .listen("userEvent", e => {
-                this.channelRoomUser(e);
-            });
+        // this.channel && this.channel
+        //     .listen("MessageEvent", e => {
+        //         this.channelChat(e)
+        //     })
+        //     .listen("userEvent", e => {
+        //         this.channelRoomUser(e);
+        //     });
     },
     paginate(name) {
         if (this.pagination[name].current_page && this.pagination[name].last_page)

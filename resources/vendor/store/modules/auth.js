@@ -54,7 +54,7 @@ export default {
                 login(email, password)
                     .then(response => {
                         const { token, user } = response
-                        commit("SET_CHANNEL", Echo.private(`App.User.${user.id}`));
+                        // commit("SET_CHANNEL", Echo.private(`App.User.${user.id}`));
                         commit("SET_TOKEN", token);
                         setToken(token);
                         commit("SET_COMPLATE", user);
@@ -86,7 +86,7 @@ export default {
                     .then(response => {
                         const { token, roles, user } = response
                         user.roles = roles
-                        commit("SET_CHANNEL", Echo.private(`App.User.${user.id}`));
+                        // commit("SET_CHANNEL", Echo.private(`App.User.${user.id}`));
                         commit("SET_TOKEN", token);
                         commit("SET_COMPLATE", user);
                         setToken(token);
@@ -127,7 +127,7 @@ export default {
                     userInfo()
                         .then(response => {
                             commit("SET_COMPLATE", response);
-                            commit("SET_CHANNEL", Echo.private(`App.User.${response.id}`));
+                            // commit("SET_CHANNEL", Echo.private(`App.User.${response.id}`));
                             resolve(margeState(state))
                         })
                         .catch(error => {

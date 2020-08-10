@@ -49,7 +49,7 @@ export default {
         initRoutes({ commit, state }, routes) {
             return new Promise((resolve) => {
                 if (state.routes.length < 1) {
-                    commit('SET_ROUTES', RoutesBrokes(routes))
+                    commit('SET_ROUTES', RoutesBrokes(routes).filter(_r=>_r.withLayout))
                     resolve(state.routes)
                 }
             })
