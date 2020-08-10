@@ -1,26 +1,26 @@
 <template>
-  <div @click="redirect" class="redirect">
+  <router-link to="/contacts" class="redirect">
     <v-badge color="info" :content="views" v-show="views>0" overlap right bottom>
       <v-icon small tile dark class="mx-3 my-2">fas fa-inbox</v-icon>
     </v-badge>
     <v-icon v-show="views==0" class="mx-3 my-2" small dark tile>fas fa-inbox</v-icon>
-  </div>
+  </router-link>
 </template>
 
 <script>
 import {
   //   viewNotificationApi,
-  fetchViewsContactsApi
+  fetchViewsContactsApi,
 } from "@/api/contact";
 export default {
   props: {
     dark: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data: () => ({
-    views: 0
+    views: 0,
   }),
   mounted() {
     this.fetchCountContactsView();
@@ -31,18 +31,16 @@ export default {
         .then(({ views }) => {
           this.views = views;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
-    redirect() {
-      this.$router.push({ path: "/contacts" }).catch(err => {});
-    }
-  }
+  },
 };
 </script>
 <style>
-.redirect{
+.redirect {
   cursor: pointer;
+  text-decoration: none;
 }
 </style>

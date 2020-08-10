@@ -1,20 +1,25 @@
 import store from "@/store"
 import route from "../route"
+import router from "../index"
 import { getToken } from '@/utils/token';
-import { PermissionsRoutes } from "@/utils/permission"
+import { premissionsDrop } from "@/utils/permission"
 
 export default {
     before: function ({ to }) {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             if (getToken()) {
                 store.dispatch("userInfo")
                     .then(({ roles, permissions, ...res }) => {
-                        const asyncRoutes = PermissionsRoutes({ permissions, roles, routes: route.get("auth"), superAdmin: "super-admin" })
 
-                        if (!store.getters.routes || store.getters.routes.length < 1)
+                        if (!store.getters.routes || store.getters.routes.length < 1) {
+
+                            const asyncRoutes = roles.indexOf("super-admin") > -1 ? route.get(false, "auth")
+                                : premissionsDrop(route.get(false, "auth"), permissions)
+
                             store.dispatch("initRoutes", asyncRoutes).then((_res) => {
-                                // router.addRoutes(asyncRoutes) // addRoutes not working must fix !!  
+                                router.addRoutes(asyncRoutes)
                             })
+                        }
                         resolve()
                     }).catch(err => {
                         store.dispatch("LogOut")

@@ -49,7 +49,7 @@ export default {
         initRoutes({ commit, state }, routes) {
             return new Promise((resolve) => {
                 if (state.routes.length < 1) {
-                    commit('SET_ROUTES', RoutesBrokes(routes).filter(_r=>_r.withLayout))
+                    commit('SET_ROUTES', RoutesBrokes(routes))
                     resolve(state.routes)
                 }
             })
@@ -112,9 +112,10 @@ export default {
 
 function RoutesBrokes(_rs) {
     const _rs_temp = _rs.map(_r => {
-        _r.children = _r.children && RoutesBrokes(_r.children)
-        let { component, ..._rp } = _r
+        let { component, ..._rp } = { ..._r }
+        _rp.children = _rp.children && RoutesBrokes(_r.children)
         return _rp
     });
+
     if (!isEmpty(_rs_temp)) return _rs_temp;
 }

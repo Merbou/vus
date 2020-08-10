@@ -32,4 +32,4 @@ export default new road(function () {
     ], "auth")
 
 
-}, routeCase)
+},routeCase)

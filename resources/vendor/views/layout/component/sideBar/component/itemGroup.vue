@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-list-group v-if="item.children&&item.children.length">
+    <v-list-group v-if="item.children&&item.children.length>1">
       <template v-slot:activator>
         <item-icon :icon="item.icon" />
         <item-title :title="item.name" />
@@ -25,6 +25,13 @@
         </v-list-item>
       </template>
     </v-list-group>
+    <v-list-item
+      v-else-if="item.children&&item.children.length==1"
+      @click="to(item.children[0].path)"
+    >
+      <item-icon :icon="item.children[0].icon" />
+      <item-title :title="item.children[0].name" />
+    </v-list-item>
     <v-list-item v-else @click="to(item.path)">
       <item-icon :icon="item.icon" />
       <item-title :title="item.name" />
@@ -42,17 +49,17 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   methods: {
     withParentPath(parentPath, childs) {
-      return childs.map(e => parentPath.path + "/" + e.path);
+      return childs.map((e) => parentPath.path + "/" + e.path);
     },
     to(path) {
-      this.$router.push({ path }).catch(err => {});
-    }
-  }
+      this.$router.push({ path }).catch((err) => {});
+    },
+  },
 };
 </script>
 

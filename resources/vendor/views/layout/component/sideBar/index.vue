@@ -20,18 +20,22 @@ import { mapGetters } from "vuex";
 export default {
   name: "sideBar",
   components: {
-    vsList
+    vsList,
   },
   computed: {
     ...mapGetters(["routes", "sidebar", "RTL"]),
     links() {
-      return this.routes.filter(_r => !_r.hidden);
-    }
+      return this.routes.filter((_ro) => {
+        if (_ro.children && _ro.children.length === 1)
+          return !_ro.children[0].hidden && _ro.is_layout;
+        return !_ro.hidden && _ro.is_layout;
+      });
+    },
   },
   methods: {
     toggleSideBar() {
       this.$store.dispatch("toggleRTL");
-    }
-  }
+    },
+  },
 };
 </script>
