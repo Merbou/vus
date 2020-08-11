@@ -5,8 +5,7 @@ export function premissionsDrop(_routes, _permissions) {
     _permissions = justPermissionsPage(_permissions)
 
     return _routes.map(_ro => {
-
-        if (_ro.children) {
+        if (_ro.children && _ro.children.length > 1) {
 
             //if route exist on _permissions
             const root = _permissions.filter(e => {
@@ -23,7 +22,9 @@ export function premissionsDrop(_routes, _permissions) {
                 return _ro
             }
         }
-        else
+        else if (_ro.children && _ro.children.length === 1) {
+            if (_permissions.findIndex(_p => [_ro.name, _ro.children[0].name].indexOf(_p) > -1) > -1) return _ro
+        } else
             if (_permissions.indexOf(_ro.name) > -1) return _ro
 
     }).filter(e => e)

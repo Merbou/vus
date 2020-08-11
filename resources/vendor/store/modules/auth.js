@@ -31,12 +31,16 @@ export default {
         SET_CHANNEL: (state, channel) => {
             state.channel = channel
         },
-
         SET_COMPLATE: (state, user) => {
             const { roles, ..._user } = user
             state.user = _user
             state.roles = roles.map(e => e.name)
             state.permissions = permissionsExtraction(roles)
+        },
+        UNSET_COMPLATE: (state) => {
+            state.user = {}
+            state.roles = []
+            state.permissions = []
         }
     },
     actions: {
@@ -104,9 +108,11 @@ export default {
          * @param {email,password} userInfo 
          */
 
-        LogOut: () => {
+        LogOut: ({ commit }) => {
 
             return new Promise((resolve, reject) => {
+
+                commit("UNSET_COMPLATE")
                 resolve(removeToken())
                     .catch(error => {
                         reject(error);
@@ -128,14 +134,17 @@ export default {
                         .then(response => {
                             commit("SET_COMPLATE", response);
                             // commit("SET_CHANNEL", Echo.private(`App.User.${response.id}`));
+                            console.log("userInfo resolve")
                             resolve(margeState(state))
                         })
                         .catch(error => {
+                            console.log("userInfo reject")
                             reject(error);
                         })
                 }
                 else {
 
+                    console.log("userInfo deja resolve")
                     resolve(margeState(state))
                 }
 

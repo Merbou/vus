@@ -300,35 +300,35 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	],
 	"./chat/message": [
 		"./resources/vendor/api/chat/message.js",
-		17
+		11
 	],
 	"./chat/message.js": [
 		"./resources/vendor/api/chat/message.js",
-		17
+		11
 	],
 	"./chat/room": [
 		"./resources/vendor/api/chat/room.js",
-		18
+		15
 	],
 	"./chat/room.js": [
 		"./resources/vendor/api/chat/room.js",
-		18
+		15
 	],
 	"./contact": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		3
 	],
 	"./contact/": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		3
 	],
 	"./contact/index": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		3
 	],
 	"./contact/index.js": [
 		"./resources/vendor/api/contact/index.js",
-		2
+		3
 	],
 	"./contact/search": [
 		"./resources/vendor/api/contact/search.js",
@@ -340,75 +340,75 @@ webpackContext.id = "./node_modules/moment/locale sync recursive ^\\.\\/.*$";var
 	],
 	"./mail": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		4
 	],
 	"./mail/": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		4
 	],
 	"./mail/index": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		4
 	],
 	"./mail/index.js": [
 		"./resources/vendor/api/mail/index.js",
-		3
+		4
 	],
 	"./notification": [
 		"./resources/vendor/api/notification/index.js",
-		4
+		5
 	],
 	"./notification/": [
 		"./resources/vendor/api/notification/index.js",
-		4
+		5
 	],
 	"./notification/index": [
 		"./resources/vendor/api/notification/index.js",
-		4
+		5
 	],
 	"./notification/index.js": [
 		"./resources/vendor/api/notification/index.js",
-		4
+		5
 	],
 	"./trash/contact": [
 		"./resources/vendor/api/trash/contact.js",
-		19
+		17
 	],
 	"./trash/contact.js": [
 		"./resources/vendor/api/trash/contact.js",
-		19
+		17
 	],
 	"./user/account": [
 		"./resources/vendor/api/user/account.js",
-		20
+		18
 	],
 	"./user/account.js": [
 		"./resources/vendor/api/user/account.js",
-		20
+		18
 	],
 	"./user/chart": [
 		"./resources/vendor/api/user/chart.js",
-		21
+		19
 	],
 	"./user/chart.js": [
 		"./resources/vendor/api/user/chart.js",
-		21
+		19
 	],
 	"./user/privilege/permission": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		22
+		20
 	],
 	"./user/privilege/permission.js": [
 		"./resources/vendor/api/user/privilege/permission.js",
-		22
+		20
 	],
 	"./user/privilege/role": [
 		"./resources/vendor/api/user/privilege/role.js",
-		23
+		21
 	],
 	"./user/privilege/role.js": [
 		"./resources/vendor/api/user/privilege/role.js",
-		23
+		21
 	],
 	"./user/search": [
 		"./resources/vendor/api/user/search.js",

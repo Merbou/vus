@@ -7,10 +7,11 @@
     width="200"
     :value="sidebar"
     :right="RTL"
+    v-if="links.length"
     class="side-bar"
   >
     <vs-list :items="links" v-if="links.length" />
-    <v-skeleton-loader v-else v-for="n in 5" :key="n" class="mx-1 my-3" type="avatar"></v-skeleton-loader>
+    <v-skeleton-loader v-else v-for="n in links.length" :key="n" class="mx-1 my-3" type="avatar"></v-skeleton-loader>
   </v-navigation-drawer>
 </template>
 
