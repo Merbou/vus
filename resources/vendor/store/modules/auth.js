@@ -38,9 +38,10 @@ export default {
             state.permissions = permissionsExtraction(roles)
         },
         UNSET_COMPLATE: (state) => {
-            state.user = {}
+            state.user = null
             state.roles = []
             state.permissions = []
+            state.token = ""
         }
     },
     actions: {
@@ -109,9 +110,7 @@ export default {
          */
 
         LogOut: ({ commit }) => {
-
             return new Promise((resolve, reject) => {
-
                 commit("UNSET_COMPLATE")
                 resolve(removeToken())
                     .catch(error => {
@@ -134,17 +133,13 @@ export default {
                         .then(response => {
                             commit("SET_COMPLATE", response);
                             // commit("SET_CHANNEL", Echo.private(`App.User.${response.id}`));
-                            console.log("userInfo resolve")
                             resolve(margeState(state))
                         })
                         .catch(error => {
-                            console.log("userInfo reject")
                             reject(error);
                         })
                 }
                 else {
-
-                    console.log("userInfo deja resolve")
                     resolve(margeState(state))
                 }
 

@@ -5,7 +5,7 @@ import { getToken } from '@/utils/token';
 import { premissionsDrop } from "@/utils/permission"
 
 export default {
-    before: function ({ to }) {
+    before: function ({ to, from }) {
         return new Promise((resolve) => {
             if (getToken()) {
                 store.dispatch("userInfo")
@@ -15,20 +15,18 @@ export default {
                             const asyncRoutes = roles.indexOf("super-admin") > -1 ? route.get(false, "auth")
                                 : premissionsDrop(route.get(false, "auth"), permissions)
 
-                            console.log(asyncRoutes)
                             store.dispatch("initRoutes", asyncRoutes).then((_res) => {
                                 router.addRoutes(asyncRoutes)
+                                router.push({ path: asyncRoutes.reduce((acc, curr) => acc.rank > curr.rank ? acc : curr).path })
                             })
                         }
                         resolve()
                     }).catch(err => {
-                        console.log("logOut")
                         store.dispatch("LogOut")
                         resolve("/login")
                     })
             }
             else {
-                console.log("no access")
                 resolve("/login")
             }
         })

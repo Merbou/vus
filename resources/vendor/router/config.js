@@ -27,7 +27,7 @@ function layoutAdoption({ withLayout, ...child }) {
     if (!child.view)
         return Object.assign({ view: 'layout/index', is_layout: true }, child)
 
-    const _ro_temp = { view: 'layout/index', is_layout: true, path: child.path }
+    const _ro_temp = { view: 'layout/index', is_layout: true, path: child.path, rank: child.rank }
     _ro_temp["children"] = [{ ...child }]
 
 

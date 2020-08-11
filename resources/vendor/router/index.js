@@ -7,7 +7,7 @@ Vue.use(Router);
 const opts = {
   mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
-  routes: route.get(false, ["init", "portail"]),
+  routes: route.get(false, ["init", "portail", "mail"]),
 }
 
 const router = new Router(opts);
