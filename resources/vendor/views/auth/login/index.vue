@@ -70,7 +70,7 @@
           </v-layout>
         </v-card-text>
         <v-card-actions class="d-flex justify-space-between">
-          <router-link to="/register" style="text-decoration: none">
+          <router-link to="/register" class="redirect">
             <v-btn text small>{{$t('_login.register')}}</v-btn>
           </router-link>
           <v-btn class="ma-2" color="success" dark @click="validate" rounded>{{$t('_login.submit')}}</v-btn>
@@ -84,7 +84,7 @@
 import {
   ValidationObserver,
   ValidationProvider,
-  withValidation
+  withValidation,
 } from "vee-validate";
 import { required, email, min } from "../validate";
 import LangSelect from "@/materiels/LangSelect";
@@ -95,26 +95,26 @@ export default {
     ValidationObserver,
     ValidationProvider,
     withValidation,
-    LangSelect
+    LangSelect,
   },
 
   data() {
     return {
       loginForm: {
         email: "",
-        password: ""
+        password: "",
       },
       backErrors: {
         email: "",
-        password: ""
+        password: "",
       },
       show: false,
       loading: false,
-      redirect: undefined
+      redirect: undefined,
     };
   },
   computed: {
-    ...mapGetters(["dark"])
+    ...mapGetters(["dark"]),
   },
   methods: {
     handleLogin() {
@@ -122,22 +122,22 @@ export default {
 
       this.$store
         .dispatch("login", this.loginForm)
-        .then(response => {
+        .then((response) => {
           this.loading = false;
           this.snackbar({
             text: this.$i18n.t("_login.successAuth"),
-            color: "success"
+            color: "success",
           });
-          this.$router.push({ path: "/dashboard" }).catch(err => {});
+          this.$router.push({ path: "/dashboard" }).catch((err) => {});
         })
-        .catch(error => {
+        .catch((error) => {
           this.loading = false;
           if (error && error.status == 422) {
             Object.assign(this.backErrors, error.data.errors);
           } else if (error && error.status == 403) {
             this.snackbar({
               text: this.$i18n.t("_login.errorAuth"),
-              color: "error"
+              color: "error",
             });
           }
         });
@@ -153,9 +153,13 @@ export default {
     errorRender(_errors, _backError) {
       if (_errors.length > 0) return _errors;
       else if (_backError) return _backError[0];
-    }
-  }
+    },
+  },
 };
 </script>
  
- 
+ <style scoped>
+.redirect {
+  text-decoration: none;
+}
+</style>

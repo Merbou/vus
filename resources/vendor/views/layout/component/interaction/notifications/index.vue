@@ -14,7 +14,7 @@
         @click.once="fetchNotifications(0)"
       >fas fa-bell</v-icon>
     </template>
-    <v-list width="400" :height="height" style="overflow-y:auto" two-line>
+    <v-list width="400" :height="height" class="list-two-line" two-line>
       <notify-item :notifications="notifications" v-if="notifications.length>0" />
       <template v-if="loading">
         <v-skeleton-loader
@@ -52,30 +52,30 @@
 import {
   fetchNotificationsApi,
   viewNotificationApi,
-  fetchNotificationsViewApi
+  fetchNotificationsViewApi,
 } from "@/api/notification";
 import { mapGetters } from "vuex";
 import notify from "@/utils/notify";
 import notifyItem from "./components/notifyItem.vue";
 export default {
   components: {
-    notifyItem
+    notifyItem,
   },
   props: {
     dark: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data: () => ({
     loading: false,
     height: 90,
     notifications: [],
     pagination: { page: 1, last_page: 0 },
-    view: 0
+    view: 0,
   }),
   computed: {
-    ...mapGetters(["user", "channel"])
+    ...mapGetters(["user", "channel"]),
   },
   mounted() {
     this.fetchNotificationsView();
@@ -102,7 +102,7 @@ export default {
           this.pagination.page = notifications.current_page;
           this.pagination.last_page = notifications.last_page;
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           console.log(err);
         });
@@ -115,7 +115,7 @@ export default {
           this.view = view;
           if (this.view) notify.icon();
         })
-        .catch(err => {
+        .catch((err) => {
           this.loading = false;
           console.log(err);
         });
@@ -132,12 +132,12 @@ export default {
       this.view = 0;
       viewNotificationApi()
         .then(() => {})
-        .catch(err => {
+        .catch((err) => {
           this.view = view;
           console.log(err);
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -147,5 +147,8 @@ export default {
 }
 .loadigData {
   zoom: 0.7;
+}
+.list-two-line {
+  overflow-y: auto;
 }
 </style>

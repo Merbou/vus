@@ -17,7 +17,14 @@ export default {
 
                             store.dispatch("initRoutes", asyncRoutes).then((_res) => {
                                 router.addRoutes(asyncRoutes)
-                                router.push({ path: asyncRoutes.reduce((acc, curr) => acc.rank > curr.rank ? acc : curr).path })
+                                if (from.path === "/login" || from.path === "/mail-confirmation")
+                                    router.push({
+                                        path: asyncRoutes.reduce((acc, curr) => {
+                                            if (!acc.rank) return curr
+                                            if (!curr.rank) return acc
+                                            return acc.rank > curr.rank ? acc : curr
+                                        }).path
+                                    })
                             })
                         }
                         resolve()

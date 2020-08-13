@@ -65,7 +65,6 @@
       <template v-slot:role="{item}">
         <v-icon :key="item.id" @click="openDialog(item)" small>fas fa-edit</v-icon>
       </template>
-      <template v-slot:fullname="{item}">{{item.lastname}} {{item.firstname}}</template>
 
       <template v-slot:sex="{item}">
         <v-tooltip bottom>
@@ -96,7 +95,7 @@ export default {
         {
           text: this.$i18n.tc("label.email"),
           align: "left",
-          value: "email"
+          value: "email",
         },
         { text: this.$i18n.tc("label.username"), value: "username" },
         { text: this.$i18n.tc("label.fullname"), value: "fullname" },
@@ -106,17 +105,17 @@ export default {
         {
           text: this.$i18n.tc("label.role", 2),
           value: "role",
-          sortable: false
-        }
+          sortable: false,
+        },
       ],
       modulePath: "user/account.js",
       roles: [],
       item: {
         id: null,
-        roles: []
+        roles: [],
       },
       dialog: false,
-      res_server_side: {}
+      res_server_side: {},
     };
   },
 
@@ -126,10 +125,10 @@ export default {
   methods: {
     fetchOnlyRoles() {
       fetchOnlyRolesApi()
-        .then(res => {
+        .then((res) => {
           this.roles = res;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -142,13 +141,13 @@ export default {
         .then(() => {
           this.snackbar({
             text: this.$i18n.t("_user_table.success_assign_role"),
-            color: "success"
+            color: "success",
           });
         })
-        .catch(err => {
+        .catch((err) => {
           this.snackbar({
             text: this.$i18n.t("alert.failed"),
-            color: "error"
+            color: "error",
           });
           this.getData()[index].roles = roles;
         });
@@ -160,16 +159,16 @@ export default {
       is_active = this.getData()[editedIndex].is_active = !is_active;
 
       blockUserApi(this.getData()[editedIndex].id)
-        .then(Response => {
+        .then((Response) => {
           this.snackbar({
             text: this.$i18n.t("alert.complete"),
-            color: "success"
+            color: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.snackbar({
             text: this.$i18n.t("alert.failed"),
-            color: "error"
+            color: "error",
           });
           this.getData()[editedIndex].is_active = !is_active;
         });
@@ -180,7 +179,7 @@ export default {
         .then(({ users }) => {
           this.res_server_side = users;
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     },
@@ -193,7 +192,7 @@ export default {
     },
     getData() {
       return this.$refs.table.getData();
-    }
-  }
+    },
+  },
 };
 </script>

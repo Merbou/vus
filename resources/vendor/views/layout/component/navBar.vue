@@ -72,7 +72,7 @@
           <router-link class="inlineBlock" to="/dashboard">
             <v-btn text>{{$t('$navbar.home')}}</v-btn>
           </router-link>
-          <v-btn style="display:block;" text @click="logout">{{$t('$navbar.logout')}}</v-btn>
+          <v-btn text @click="logout">{{$t('$navbar.logout')}}</v-btn>
         </v-card-actions>
       </v-card>
     </v-menu>

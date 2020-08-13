@@ -98,7 +98,7 @@ export default {
               color: "success"
             });
 
-            this.$router.push({ path: "/home" }).catch(err => {});
+            this.$router.push({ path: "/dashboard" }).catch(err => {});
           });
         })
         .catch(error => {

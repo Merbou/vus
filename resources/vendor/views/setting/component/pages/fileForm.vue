@@ -1,10 +1,5 @@
 <template>
-  <v-card
-    raised
-    style="border-radius: 50%;"
-    class="mb-2"
-    :color="errors_d.length?'red lighten-1':''"
-  >
+  <v-card raised class="mb-2 card-file" :color="errors_d.length?'red lighten-1':''">
     <v-avatar size="110" class="ma-1 avatar" v-if="path||url" @click="launchFilePicker()">
       <v-img :src="url?url:path" aspect-ratio="1" class="grey lighten-2">
         <template v-slot:default>
@@ -56,7 +51,7 @@
       </template>
     </v-avatar>
     <ValidationProvider name="image" rules="mimes:image/jpg,image/png,image/jpeg|size:1000">
-      <input type="file" ref="avatar" style="display:none" @change="processFile($event,errors)" />
+      <input type="file" ref="avatar" class="input-file" @change="processFile($event,errors)" />
     </ValidationProvider>
   </v-card>
 </template>
@@ -67,37 +62,37 @@ import { ValidationProvider } from "vee-validate";
 export default {
   name: "fileForm",
   components: {
-    ValidationProvider
+    ValidationProvider,
   },
   props: {
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     user: {
       type: Object,
-      default: () => {}
+      default: () => {},
     },
     picture_path: {
       type: String,
-      default: ""
+      default: "",
     },
     errors: {
       type: Array,
-      default: []
-    }
+      default: [],
+    },
   },
   data() {
     return {
       url: "",
-      errors_d: []
+      errors_d: [],
     };
   },
   computed: {
     path() {
       if (this.picture_path) return "/storage/" + this.picture_path;
       return null;
-    }
+    },
   },
 
   methods: {
@@ -114,13 +109,13 @@ export default {
     },
     getExten(file) {
       return file.type.split("/")[0];
-    }
+    },
   },
   watch: {
     errors(val) {
       this.errors_d = val;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -136,5 +131,11 @@ export default {
 }
 .avatar {
   cursor: pointer;
+}
+.input-file {
+  display: none;
+}
+.card-file {
+  border-radius: 50%;
 }
 </style>

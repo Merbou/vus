@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>{{$t('$assign_permission.title')}}</v-card-title>
       <v-divider></v-divider>
-      <v-card-text style="height: 300px;">
+      <v-card-text class="card-permission">
         <v-treeview
           shaped
           selectable
@@ -75,5 +75,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.card-permission{
+height: 300px;
+}
 </style>
