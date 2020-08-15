@@ -1,7 +1,6 @@
 
 import Vue from 'vue'
 import Vuetify from 'vuetify'
-import 'vuetify/dist/vuetify.min.css'
 import ar from "vuetify/es5/locale/ar"
 import en from "vuetify/es5/locale/en"
 import fr from "vuetify/es5/locale/fr"

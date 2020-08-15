@@ -7,25 +7,39 @@
     <title>{{env("APP_NAME")}}</title>
     <link rel="stylesheet" href="/css/app.css" nonce="{{csp_nonce()}}">
     <meta name="nonce" content="{{csp_nonce()}}" id="csp_nonce">
-    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" nonce="{{csp_nonce()}}" > -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.14.0/css/all.css" nonce="{{csp_nonce()}}">
     <!-- Fonts -->
-    <!-- <link rel="icon" id="favicon" href="{{ URL::asset('/images/favicon.png') }}" type="image/x-icon" /> -->
+    <link rel="icon" id="favicon" href="{{ URL::asset('/images/favicon.png') }}" type="image/x-icon" />
 
 </head>
 
 <body>
     <div id="app"></div>
-    <!-- <audio id="audioPlayer" muted></audio> -->
+    <audio id="audioPlayer" muted></audio>
 </body>
 <script src="/js/app.js" nonce="{{csp_nonce()}}"></script>
 <script src="/js/vendor.js" nonce="{{csp_nonce()}}"></script>
 <script src="/js/manifest.js" nonce="{{csp_nonce()}}"></script>
 
 </html>
-<!-- <style nonce="{{csp_nonce()}}" >
+<style nonce="{{csp_nonce()}}">
     html,
     body {
         height: 100%;
         margin: 0;
     }
-</style> -->
+
+    ::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgb(82, 80, 80);
+        border-radius: 40px;
+    }
+</style>

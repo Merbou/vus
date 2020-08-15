@@ -49,17 +49,3 @@ export default {
   }
 };
 </script>
-<style>
-::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgb(82, 80, 80);
-  border-radius: 40px;
-}
-</style>

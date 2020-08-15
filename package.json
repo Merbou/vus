@@ -1,25 +1,29 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
-        "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "script-dev": "npm run script-development",
+        "style-dev": "npm run style-development",
+        "script-development": "cross-env NODE_ENV=development process.env.section=script node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "style-development": "cross-env NODE_ENV=development process.env.section=style node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "npm run development -- --watch",
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "script-prod": "npm run script-production",
+        "style-prod": "npm run style-production",
+        "script-production": "cross-env NODE_ENV=production process.env.section=script node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "style-production": "cross-env NODE_ENV=production process.env.section=style node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
         "axios": "^0.19",
         "deepmerge": "^4.2.2",
-        "fibers": "^4.0.2",
+        "fibers": "^5.0.0",
         "laravel-mix": "^5.0.1",
         "lodash": "^4.17.19",
         "resolve-url-loader": "^3.1.0",
-        "sass": "^1.26.3",
+        "sass": "^1.26.10",
         "sass-loader": "^8.0.2",
-        "uglifyjs-webpack-plugin": "^2.2.0",
-        "vue-template-compiler": "^2.6.11"
+        "vue-template-compiler": "^2.6.11",
+        "vuetifyjs-mix-extension": "0.0.14"
     },
     "dependencies": {
         "apexcharts": "^3.17.1",
