@@ -5,7 +5,7 @@
   */
 
 /*!
- * ApexCharts v3.17.1
+ * ApexCharts v3.20.0
  * (c) 2018-2020 Juned Chhipa
  * Released under the MIT License.
  */
@@ -1246,12 +1246,12 @@ and limitations under the License.
 /*! no static exports found */
 
 /*! svg.draggable.js - v2.2.2 - 2019-01-08
-* https://github.com/svgdotjs/svg.draggable.js
-* Copyright (c) 2019 Wout Fierens; Licensed MIT */
+  * https://github.com/svgdotjs/svg.draggable.js
+  * Copyright (c) 2019 Wout Fierens; Licensed MIT */
 
 /*! svg.filter.js - v2.0.2 - 2016-02-24
-* https://github.com/wout/svg.filter.js
-* Copyright (c) 2016 Wout Fierens; Licensed MIT */
+  * https://github.com/wout/svg.filter.js
+  * Copyright (c) 2016 Wout Fierens; Licensed MIT */
 
 /*! vue */
 
@@ -3067,3 +3067,9 @@ and limitations under the License.
  * (c) 2020 Evan You
  * @license MIT
  */
+
+//! moment.js
+
+//! moment.js language configuration
+
+//! moment.js locale configuration

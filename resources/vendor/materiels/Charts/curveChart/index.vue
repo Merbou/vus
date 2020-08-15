@@ -108,7 +108,7 @@ export default {
     this.darkMode()
   },
   methods: {
-    darkMode() {
+    darkMode() { 
       this.chartOptions.theme.mode = this.dark?"dark":"light";
     },
     ChangeSelection(chartOptions) {
