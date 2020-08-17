@@ -7,20 +7,20 @@
 <script>
 import { fetchAccountCountApi } from "@/api/user/chart";
 import curveChart from "@/materiels/Charts/curveChart/index";
-import { mapGetters } from 'vuex';
+import { mapGetters } from "vuex";
 export default {
   name: "chartUser",
   components: {
-    curveChart
+    curveChart,
   },
   data() {
     return {
-      series: [{name:this.$i18n.t('_user_curve_chart.label'), data: [] }],
-      loading:false
+      series: [{ name: this.$i18n.t("_user_curve_chart.label"), data: [] }],
+      loading: false,
     };
   },
-  computed:{
-    ...mapGetters(["dark"])
+  computed: {
+    ...mapGetters(["dark"]),
   },
   mounted() {
     this.fetchData();
@@ -29,14 +29,15 @@ export default {
     fetchData() {
       this.loading = true;
       fetchAccountCountApi()
-        .then(Response => {
-          this.series[0].data = Response;
+        .then((Response) => {
+          console.log(Response)
+          this.series = Response;
           this.loading = false;
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
-    }
-  }
+    },
+  },
 };
 </script>

@@ -7,7 +7,10 @@ import store from "./store/index"
 import mixin from "./utils/mixin"
 import './src/plugins/laravel-echo'
 
-__webpack_nonce__ = document.getElementById("csp_nonce").content;
+
+
+
+__webpack_nonce__ = window.NONCE_ID;
 
 
 Vue.mixin(mixin)

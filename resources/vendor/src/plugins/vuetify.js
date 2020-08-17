@@ -10,7 +10,7 @@ Vue.use(Vuetify)
 const opts = {
     theme: {
         options: {
-            cspNonce: document.getElementById("csp_nonce").content,
+            cspNonce: window.NONCE_ID,
         },
     },
     icons: {

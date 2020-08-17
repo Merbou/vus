@@ -2,19 +2,19 @@
   <v-container>
     <v-card id="chart" :loading="loading" max-width="380">
       <v-card-text>
-        <apexchart type="pie" :options="chartOptions" :series="series" />
+        <!-- <apexchart type="pie" :options="chartOptions" :series="series" /> -->
       </v-card-text>
     </v-card>
   </v-container>
 </template>
 
 <script>
-import apexchart from "vue-apexcharts";
+// import apexchart from "vue-apexcharts";
 import { fetchRolesPercentageApi } from "@/api/user/privilege/role.js";
 export default {
   name: "pieChart",
   components: {
-    apexchart
+    // apexchart
   },
   props: {
     dark: {

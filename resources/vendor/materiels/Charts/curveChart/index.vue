@@ -1,119 +1,62 @@
 <template>
   <v-card elevation="10" class="py-2" :loading="loading" :disabled="loading">
-    <selection @handleSelection="ChangeSelection" :chartOptions="chartOptions" />
     <v-card-text>
-      <apexchart :type="type" height="400" :options="chartOptions" :series="series" />
+      <div id="main" style="width: 600px;height:400px;"></div>
     </v-card-text>
   </v-card>
 </template>
 
 <script>
-import apexchart from "vue-apexcharts";
-import selection from "./component/selection";
+import echarts from "echarts";
+
 export default {
   name: "curveChart",
-  components: {
-    apexchart,
-    selection
-  },
   props: {
     series: {
       type: Array,
-      required: true
+      required: true,
     },
     loading: {
       type: Boolean,
-      default: false
+      default: false,
     },
     type: {
       type: String,
-      required: true
+      required: true,
     },
-    dark:{
-      type:Boolean,
-      default:false
-    }
+    dark: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
-      selection: "all",
-
-      chartOptions: {
-        theme: {
-          mode: ""
+      options: {
+        xAxis: {
+          type: "category",
+          boundaryGap: false,
+          data: [],
         },
-        annotations: {
-          yaxis: [
-            {
-              y: 20,
-              borderColor: "#999",
-              label: {
-                show: true,
-                text: this.$i18n.t('_user_curve_chart.yaxis'),
-                style: {
-                  color: "#fff",
-                  background: "#00E396"
-                }
-              }
-            }
-          ],
-          xaxis: [
-            {
-              x: new Date().getTime(),
-              borderColor: "#999",
-              yAxisIndex: 0,
-              label: {
-                show: true,
-                text: this.$i18n.t('_user_curve_chart.xaxis'),
-
-                style: {
-                  color: "#fff",
-                  background: "#775DD0"
-                }
-              }
-            }
-          ]
+        yAxis: {
+          type: "value",
         },
-        dataLabels: {
-          enabled: false
-        },
-        markers: {
-          size: 0,
-          style: "hollow"
-        },
-        xaxis: {
-          type: "datetime",
-          min: undefined,
-          max: undefined,
-          tickAmount: 6
-        },
-        tooltip: {
-          x: {
-            format: "dd MMM yyyy"
-          }
-        },
-        fill: {
-          type: "gradient",
-          gradient: {
-            shadeIntensity: 1,
-            opacityFrom: 0.7,
-            opacityTo: 0.9,
-            stops: [0, 100]
-          }
-        }
-      }
+        series: [
+          {
+            data: [],
+            type: "line",
+            areaStyle: {},
+          },
+        ],
+      },
     };
   },
-  created(){
-    this.darkMode()
-  },
-  methods: {
-    darkMode() { 
-      this.chartOptions.theme.mode = this.dark?"dark":"light";
+  watch: {
+    series(val) {
+      var myChart = echarts.init(document.getElementById("main"));
+      this.options.xAxis.data = this.series.map((e) => e[0]);
+      this.options.series[0].data = this.series.map((e) => e[1]);
+      myChart.setOption(this.options);
     },
-    ChangeSelection(chartOptions) {
-      this.chartOptions = chartOptions;
-    }
-  }
+  },
 };
 </script>

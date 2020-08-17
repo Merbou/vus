@@ -480,7 +480,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-__webpack_require__.nc = document.getElementById("csp_nonce").content;
+__webpack_require__.nc = window.NONCE_ID;
 vue__WEBPACK_IMPORTED_MODULE_0__["default"].mixin(_utils_mixin__WEBPACK_IMPORTED_MODULE_6__["default"]);
 new vue__WEBPACK_IMPORTED_MODULE_0__["default"]({
   vuetify: _src_plugins_vuetify__WEBPACK_IMPORTED_MODULE_2__["default"],
@@ -1534,7 +1534,7 @@ vue__WEBPACK_IMPORTED_MODULE_0__["default"].use(vuetify__WEBPACK_IMPORTED_MODULE
 var opts = {
   theme: {
     options: {
-      cspNonce: document.getElementById("csp_nonce").content
+      cspNonce: window.NONCE_ID
     }
   },
   icons: {

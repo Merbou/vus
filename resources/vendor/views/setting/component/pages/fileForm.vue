@@ -119,7 +119,7 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style scoped>
 .shadow_upload_avatar {
   opacity: 0.1;
 }
@@ -136,6 +136,6 @@ export default {
   display: none;
 }
 .card-file {
-  border-radius: 50%;
+  border-radius: 50% !important;
 }
 </style>

@@ -12,7 +12,9 @@ class CustomPolicy extends Basic
     {
         parent::configure();
 
-        $this->addDirective(Directive::FONT, "use.fontawesome.com")
+        $this
+            ->addDirective(Directive::FONT, "use.fontawesome.com")
+            ->addDirective(Directive::STYLE, "use.fontawesome.com")
             ->addDirective(Directive::FRAME, Keyword::NONE)
             ->addDirective(Directive::IMG, "i.picsum.photos picsum.photos localhost:8000")
             ->reportOnly();
