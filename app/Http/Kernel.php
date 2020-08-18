@@ -3,6 +3,9 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use App\Http\Middleware\frameHeaderMiddleware;
+use App\Http\Middleware\jsonContentMiddleware;
+
 
 class Kernel extends HttpKernel
 {
@@ -22,6 +25,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \Spatie\Csp\AddCspHeaders::class,
+        frameHeaderMiddleware::class
 
     ];
 
@@ -44,6 +48,7 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:60,1',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            jsonContentMiddleware::class
         ],
     ];
 

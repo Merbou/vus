@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import * as echarts from "echarts";
+import * as echarts from "echarts/lib/echarts";
 import "echarts/lib/chart/bar";
 import "echarts/lib/component/title";
 import "echarts/lib/component/dataZoom";

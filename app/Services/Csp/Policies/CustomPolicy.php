@@ -16,7 +16,6 @@ class CustomPolicy extends Basic
             ->addDirective(Directive::FONT, "use.fontawesome.com")
             ->addDirective(Directive::STYLE, "use.fontawesome.com")
             ->addDirective(Directive::FRAME, Keyword::NONE)
-            ->addDirective(Directive::IMG, "i.picsum.photos picsum.photos localhost:8000")
-            ->reportOnly();
+            ->addDirective(Directive::IMG, "i.picsum.photos picsum.photos localhost:8000");
     }
 }
