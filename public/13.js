@@ -50,7 +50,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       this.loading = true;
       Object(_api_user_chart__WEBPACK_IMPORTED_MODULE_0__["fetchAccountCountApi"])().then(function (Response) {
-        console.log(Response);
         _this.series = Response;
         _this.loading = false;
       })["catch"](function (error) {

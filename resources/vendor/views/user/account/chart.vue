@@ -29,7 +29,6 @@ export default {
       this.loading = true;
       fetchAccountCountApi()
         .then((Response) => {
-          console.log(Response)
           this.series = Response;
           this.loading = false;
         })

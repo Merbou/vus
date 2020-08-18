@@ -15,7 +15,7 @@ class chartAccountController extends Controller
         try {
 
             $users_created = DB::table('users')
-                ->select(DB::raw('count(*) as x'), DB::raw('DATE_FORMAT(created_at, "%Y %b %e") y'))
+                ->select(DB::raw('count(*) as x'), DB::raw('DATE_FORMAT(created_at, "%Y %b %e %H:%i:%s") y'))
                 ->groupBy("y")
                 ->get()->map(function ($query) {
                     return [$query->y, $query->x];

@@ -9,7 +9,11 @@
 </template>
 
 <script>
-import echarts from "echarts";
+import * as echarts from "echarts/lib/echarts";
+import "echarts/lib/chart/pie";
+import "echarts/lib/component/tooltip";
+import "echarts/lib/component/title";
+import "echarts/lib/component/legend";
 import { fetchRolesPercentageApi } from "@/api/user/privilege/role.js";
 export default {
   name: "pieChart",
@@ -65,11 +69,11 @@ export default {
       this.loading = true;
       fetchRolesPercentageApi()
         .then((_res) => {
-          var myChart = echarts.init(
-            document.getElementById("main"),
-            this.dark ? "dark" : null
-          );
+          let elm = document.getElementById("main");
 
+          var myChart = echarts.init(
+            ...(this.dark ? [elm, "dark"] : [elm, "light"])
+          );
           this.loading = false;
           this.options.series[0].data = _res.map((e) => {
             this.options.legend.data.push(this.$i18n.t(`roles.${e.label}`));
@@ -78,7 +82,7 @@ export default {
               value: e.series,
             };
           });
-          myChart.setOption(this.options,true);
+          myChart.setOption(this.options, true);
         })
         .catch((err) => {
           this.loading = false;
@@ -88,11 +92,16 @@ export default {
   },
   watch: {
     dark(val) {
-      var myChart = echarts.init(
-        document.getElementById("main"),
-        val ? "dark" : null
-      );
-      myChart.setOption(this.options,true);
+      let elm = document.getElementById("main");
+      var myChart = echarts.init(...(val ? [elm, "dark"] : [elm, "light"]));
+
+      let textStyle = {
+        color: val ? "#ffff" : "rgba(0, 0, 0, 0.5)",
+      };
+
+      this.options.title["textStyle"] = textStyle;
+      this.options.legend["textStyle"] = textStyle;
+      myChart.setOption(this.options, true);
     },
   },
 };
