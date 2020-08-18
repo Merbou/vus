@@ -3,10 +3,9 @@
     <curve-chart :dark="dark" :series="series" type="line" :loading="loading" />
   </div>
 </template>
-
 <script>
 import { fetchAccountCountApi } from "@/api/user/chart";
-import curveChart from "@/materiels/Charts/curveChart/index";
+import curveChart from "./components/curveChart";
 import { mapGetters } from "vuex";
 export default {
   name: "chartUser",

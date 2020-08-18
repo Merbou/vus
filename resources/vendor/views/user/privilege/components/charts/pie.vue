@@ -1,77 +1,99 @@
 <template>
   <v-container>
-    <v-card id="chart" :loading="loading" max-width="380">
+    <v-card id="chart" :loading="loading">
       <v-card-text>
-        <!-- <apexchart type="pie" :options="chartOptions" :series="series" /> -->
+        <div id="main" style="width:100%;height:300px;"></div>
       </v-card-text>
     </v-card>
   </v-container>
 </template>
 
 <script>
-// import apexchart from "vue-apexcharts";
+import echarts from "echarts";
 import { fetchRolesPercentageApi } from "@/api/user/privilege/role.js";
 export default {
   name: "pieChart",
-  components: {
-    // apexchart
-  },
   props: {
     dark: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
       loading: false,
-      series: [],
-      chartOptions: {
-        theme: {
-          mode: ""
+      options: {
+        title: {
+          text: this.$i18n.tc(`label.role`, 2),
+          left: "center",
         },
-        labels: [],
-        responsive: [
+        tooltip: {
+          trigger: "item",
+          formatter: "{b} : {c} ({d}%)",
+        },
+        legend: {
+          left: "center",
+          top: "bottom",
+          data: [],
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            magicType: {
+              show: true,
+              type: ["funnel"],
+            },
+          },
+        },
+        series: [
           {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              },
-              legend: {
-                position: "bottom"
-              }
-            }
-          }
-        ]
-      }
+            type: "pie",
+            radius: [20, 110],
+            center: ["50%", "50%"],
+            roseType: "area",
+            data: [],
+          },
+        ],
+      },
     };
   },
   created() {
-    this.chartOptions.theme.mode = this.dark ? "dark" : "light";
     this.fetchRolesPercentage();
   },
   methods: {
     fetchRolesPercentage() {
       this.loading = true;
       fetchRolesPercentageApi()
-        .then(_res => {
-          this.loading = false;
-          _res.forEach(e => {
-            const label = this.$i18n.t(`roles.${e.label}`);
-            this.chartOptions.labels.push(label);
-          });
-          this.series = _res.map(e => parseFloat(e.series).toFixed(2) * 100);
-        })
-        .catch(err => {
-          this.loading = false;
+        .then((_res) => {
+          var myChart = echarts.init(
+            document.getElementById("main"),
+            this.dark ? "dark" : null
+          );
 
+          this.loading = false;
+          this.options.series[0].data = _res.map((e) => {
+            this.options.legend.data.push(this.$i18n.t(`roles.${e.label}`));
+            return {
+              name: this.$i18n.t(`roles.${e.label}`),
+              value: e.series,
+            };
+          });
+          myChart.setOption(this.options,true);
+        })
+        .catch((err) => {
+          this.loading = false;
           console.log(err);
         });
-    }
-  }
+    },
+  },
+  watch: {
+    dark(val) {
+      var myChart = echarts.init(
+        document.getElementById("main"),
+        val ? "dark" : null
+      );
+      myChart.setOption(this.options,true);
+    },
+  },
 };
 </script>
-
-<style>
-</style>

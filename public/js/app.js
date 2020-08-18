@@ -2525,17 +2525,17 @@ var map = {
 	"./auth/login/index.vue": [
 		"./resources/vendor/views/auth/login/index.vue",
 		"/js/vendor",
-		4
+		3
 	],
 	"./auth/mail/index.vue": [
 		"./resources/vendor/views/auth/mail/index.vue",
 		"/js/vendor",
-		8
+		7
 	],
 	"./auth/register/index.vue": [
 		"./resources/vendor/views/auth/register/index.vue",
 		"/js/vendor",
-		9
+		8
 	],
 	"./chat/components/room/addRoom.vue": [
 		"./resources/vendor/views/chat/components/room/addRoom.vue",
@@ -2565,15 +2565,15 @@ var map = {
 	"./contact/table.vue": [
 		"./resources/vendor/views/contact/table.vue",
 		"/js/vendor",
-		10
+		9
 	],
 	"./dashboard/index.vue": [
 		"./resources/vendor/views/dashboard/index.vue",
-		11
+		10
 	],
 	"./errors/404.vue": [
 		"./resources/vendor/views/errors/404.vue",
-		12
+		11
 	],
 	"./layout/component/appMain.vue": [
 		"./resources/vendor/views/layout/component/appMain.vue",
@@ -2638,7 +2638,7 @@ var map = {
 	"./layout/index.vue": [
 		"./resources/vendor/views/layout/index.vue",
 		"/js/vendor",
-		5
+		4
 	],
 	"./setting/component/forms.vue": [
 		"./resources/vendor/views/setting/component/forms.vue",
@@ -2663,26 +2663,30 @@ var map = {
 	"./setting/index.vue": [
 		"./resources/vendor/views/setting/index.vue",
 		"/js/vendor",
-		13
+		12
 	],
 	"./trash/index.vue": [
 		"./resources/vendor/views/trash/index.vue",
 		"/js/vendor",
-		3
+		2
 	],
 	"./user/account/chart.vue": [
 		"./resources/vendor/views/user/account/chart.vue",
 		"/js/vendor",
-		2
+		13
 	],
 	"./user/account/components/assignRole.vue": [
 		"./resources/vendor/views/user/account/components/assignRole.vue",
 		"/js/vendor"
 	],
+	"./user/account/components/curveChart.vue": [
+		"./resources/vendor/views/user/account/components/curveChart.vue",
+		"/js/vendor"
+	],
 	"./user/account/table.vue": [
 		"./resources/vendor/views/user/account/table.vue",
 		"/js/vendor",
-		6
+		5
 	],
 	"./user/privilege/components/assignPermissions.vue": [
 		"./resources/vendor/views/user/privilege/components/assignPermissions.vue",
@@ -2699,7 +2703,7 @@ var map = {
 	"./user/privilege/index.vue": [
 		"./resources/vendor/views/user/privilege/index.vue",
 		"/js/vendor",
-		7
+		6
 	],
 	"./welcome/index.vue": [
 		"./resources/vendor/views/welcome/index.vue",

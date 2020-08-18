@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="10" class="py-2" :loading="loading" :disabled="loading">
+  <v-card  elevation="10" class="py-2" :loading="loading" :disabled="loading">
     <v-card-text>
       <div id="main" style="width: 600px;height:400px;"></div>
     </v-card-text>

@@ -15,7 +15,7 @@ class chartAccountController extends Controller
         try {
 
             $users_created = DB::table('users')
-                ->select(DB::raw('count(*) as x'), DB::raw('DATE_FORMAT(created_at, "%Y %m %e %H:%i") y'))
+                ->select(DB::raw('count(*) as x'), DB::raw('DATE_FORMAT(created_at, "%Y %b %e") y'))
                 ->groupBy("y")
                 ->get()->map(function ($query) {
                     return [$query->y, $query->x];
@@ -33,11 +33,10 @@ class chartAccountController extends Controller
         Auth::user()->can('users.privilege');
         try {
 
-            $total = DB::table('model_has_roles')->count();
             $roles_percentages = DB::table('users')
                 ->join('model_has_roles', 'users.id', '=', 'model_id')
                 ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                ->select(DB::raw("count(*)/$total as series"), DB::raw('roles.name as label'))
+                ->select(DB::raw("count(*) as series"), DB::raw('roles.name as label'))
                 ->groupBy("label")
                 ->get();
 
