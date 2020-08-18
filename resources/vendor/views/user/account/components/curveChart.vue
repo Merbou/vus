@@ -5,8 +5,11 @@
 </template>
 
 <script>
-import * as echarts from "echarts/lib/echarts";
+import * as echarts from "echarts";
 import "echarts/lib/chart/bar";
+import "echarts/lib/component/title";
+import "echarts/lib/component/dataZoom";
+
 export default {
   name: "curveChart",
   props: {
@@ -33,6 +36,9 @@ export default {
         title: {
           text: "Users",
           subtext: "Number user registration per day",
+          textStyle: {
+            color: "#fff",
+          },
         },
         xAxis: {
           data: [],
@@ -65,7 +71,10 @@ export default {
         },
         dataZoom: [
           {
-            type: "inside",
+            type: "slider",
+            textStyle: {
+              color: "#fff",
+            },
           },
         ],
         series: [
@@ -110,24 +119,32 @@ export default {
       return this.series.map((e) => max + max * 0.288);
     },
   },
+  methods: {
+    ModeScreen(dark) {
+      let elm = document.getElementById("main");
+      var myChart = echarts.init(...(dark ? [elm, "dark"] : [elm, "light"]));
+      let textStyle = {
+        color: dark ? "#fff" : "rgba(0, 0, 0, 0.6)",
+      };
+      this.options.title["textStyle"] = textStyle;
+      this.options.yAxis.axisLabel["textStyle"] = textStyle;
+      this.options.xAxis.axisLabel["textStyle"] = textStyle;
+      this.options.dataZoom["textStyle"] = textStyle;
+      return myChart;
+    },
+  },
   watch: {
     series(val) {
-      var myChart = echarts.init(document.getElementById("main"));
+      let elm = document.getElementById("main");
+      var myChart = echarts.init(elm);
 
-      this.options.xAxis.data = this.series.map((e) => e[0]);
-      this.options.series[1].data = this.series.map((e) => e[1]);
+      this.options.xAxis.data = val.map((e) => e[0]);
+      this.options.series[1].data = val.map((e) => e[1]);
       this.options.series[0].data = this.dataShadow;
       myChart.setOption(this.options);
     },
     dark(val) {
-      let elm = document.getElementById("main");
-      console.log(val);
-      var myChart = echarts.init(...(val ? [elm, "dark"] : [elm, "light"]));
-      let textStyle = {
-        color: val ? "#ffff" : "rgba(0, 0, 0, 0.5)",
-      };
-      this.options.title["textStyle"] = textStyle;
-      myChart.setOption(this.options);
+      this.ModeScreen(val).setOption(this.options);
     },
   },
 };
