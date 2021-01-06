@@ -14,7 +14,7 @@
         "style-production": "cross-env NODE_ENV=production process.env.section=style node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
     },
     "devDependencies": {
-        "axios": "^0.19",
+        "axios": "^0.21",
         "deepmerge": "^4.2.2",
         "fibers": "^5.0.0",
         "laravel-mix": "^5.0.1",
